@@ -1,120 +1,694 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-
 <head>
   <meta charset="utf-8">
-  <title>Login/Sign Up</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/header.css">
-  <!-- Bootstrap -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Login or create your Chakradev Ayurveda patient account to manage consultations, prescriptions, and orders.">
+  <title>Login / Sign Up | Chakradev Ayurveda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green-dark:  #2d5a27;
+      --green-mid:   #4a8c3f;
+      --green-light: #7dbf72;
+      --gold:        #c8972a;
+      --gold-light:  #f0c96b;
+      --cream:       #fdf6e3;
+      --cream-dark:  #f5ead0;
+      --text-dark:   #1e2a1a;
+      --text-mid:    #3d4d38;
+      --text-light:  #6b7c65;
+      --white:       #ffffff;
+      --shadow:      0 4px 24px rgba(45,90,39,0.10);
+      --shadow-lg:   0 16px 48px rgba(45,90,39,0.18);
+      --radius:      16px;
+      --danger:      #c0392b;
+      --danger-bg:   #fde8e8;
+      --success:     #2f855a;
+      --success-bg:  #e8f5e3;
+    }
+    body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--text-dark); line-height: 1.7; min-height: 100vh; }
+    a { text-decoration: none; color: inherit; }
 
-  <!-- Optional Javascript-->
-  <!--jQuery and Popper.js, via a CDN preferably, before our JS.-->
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    /* TOP BAR */
+    .top-bar { background: var(--green-dark); color: #cce5c8; font-size: 13px; padding: 7px 0; }
+    .top-bar .inner { max-width: 1200px; margin: auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .top-bar a { color: #cce5c8; margin: 0 10px; transition: color .2s; }
+    .top-bar a:hover { color: var(--gold-light); }
+
+    /* HEADER */
+    .site-header { background: var(--white); border-bottom: 3px solid var(--gold); padding: 18px 24px; }
+    .site-header .inner { max-width: 1200px; margin: auto; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; text-align: center; }
+    .site-header .logo-wrap img { width: 80px; height: 80px; object-fit: contain; }
+    .site-header h1.brand { font-family: 'Playfair Display', serif; font-size: 1.9rem; color: var(--green-dark); }
+    .site-header .tagline { font-size: 12px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
+
+    /* NAV */
+    nav.main-nav { background: var(--green-mid); position: sticky; top: 0; z-index: 100; }
+    nav.main-nav ul { list-style: none; max-width: 1200px; margin: auto; display: flex; flex-wrap: wrap; justify-content: center; padding: 0 16px; }
+    nav.main-nav ul li a { display: block; padding: 14px 18px; color: #e8f5e3; font-size: 14px; font-weight: 700; transition: background .2s, color .2s; }
+    nav.main-nav ul li a:hover, nav.main-nav ul li a.active { background: var(--green-dark); color: var(--gold-light); }
+
+    /* AUTH SECTION */
+    .auth-section {
+      min-height: calc(100vh - 220px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px 64px;
+      background: linear-gradient(160deg, var(--cream) 0%, #e8f5e3 50%, var(--cream-dark) 100%);
+    }
+    .auth-wrapper {
+      width: 100%;
+      max-width: 980px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      box-shadow: var(--shadow-lg);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    /* LEFT PANEL */
+    .auth-panel-left {
+      background: linear-gradient(160deg, var(--green-dark) 0%, #1a3d16 100%);
+      padding: 52px 44px;
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .auth-panel-left::before {
+      content: '🌿';
+      position: absolute;
+      font-size: 220px;
+      opacity: 0.05;
+      bottom: -30px;
+      right: -30px;
+      pointer-events: none;
+    }
+    .auth-panel-left .brand-mark { font-size: 44px; margin-bottom: 16px; }
+    .auth-panel-left h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 12px; line-height: 1.25; }
+    .auth-panel-left h2 span { color: var(--gold-light); }
+    .auth-panel-left p { color: #a8d4a4; font-size: 14px; margin-bottom: 32px; line-height: 1.8; }
+    .benefit-list { display: flex; flex-direction: column; gap: 14px; }
+    .benefit-item { display: flex; align-items: flex-start; gap: 12px; }
+    .benefit-item .ico { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+    .benefit-item p { font-size: 13px; color: #c8e8c4; line-height: 1.5; }
+    .benefit-item p strong { color: var(--white); display: block; margin-bottom: 2px; }
+    .auth-divider { width: 40px; height: 3px; background: var(--gold); border-radius: 2px; margin: 24px 0; }
+
+    /* RIGHT PANEL */
+    .auth-panel-right { background: var(--white); display: flex; flex-direction: column; }
+
+    /* TABS */
+    .auth-tabs { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 2px solid var(--cream-dark); }
+    .auth-tab {
+      padding: 20px 16px; text-align: center;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      color: var(--text-light); border: none; background: none;
+      font-family: 'Lato', sans-serif;
+      transition: color .2s, background .2s;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+    }
+    .auth-tab:hover { color: var(--green-dark); background: var(--cream); }
+    .auth-tab.active { color: var(--green-dark); border-bottom-color: var(--green-mid); background: var(--white); }
+
+    /* FORMS */
+    .auth-form-wrap { padding: 36px 40px 40px; flex: 1; }
+    .auth-form { display: none; }
+    .auth-form.active { display: block; }
+    .auth-form h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--green-dark); margin-bottom: 6px; }
+    .auth-form .form-sub { font-size: 13px; color: var(--text-light); margin-bottom: 24px; }
+
+    /* FORM FIELDS */
+    .field-group { margin-bottom: 16px; }
+    .field-group label { display: block; font-size: 12px; font-weight: 700; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px; }
+    .field-group .input-wrap { position: relative; }
+    .field-group .input-wrap .ico { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); font-size: 16px; pointer-events: none; }
+    .field-group input, .field-group select {
+      width: 100%; padding: 12px 14px 12px 40px;
+      border: 1.5px solid #c8d8c5; border-radius: 10px;
+      font-family: 'Lato', sans-serif; font-size: 14px; color: var(--text-dark);
+      background: #fafff9; outline: none; transition: border-color .2s, box-shadow .2s;
+    }
+    .field-group input:focus, .field-group select:focus {
+      border-color: var(--green-mid);
+      box-shadow: 0 0 0 3px rgba(74,140,63,0.12);
+    }
+    .field-group input.error { border-color: var(--danger); }
+    .field-group .error-msg { font-size: 11px; color: var(--danger); margin-top: 4px; display: none; }
+    .field-group .error-msg.show { display: block; }
+    .field-group .toggle-pass {
+      position: absolute; right: 13px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; font-size: 16px; color: var(--text-light);
+    }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    /* STRENGTH METER */
+    .strength-wrap { margin-top: 6px; }
+    .strength-track { height: 4px; border-radius: 4px; background: #e0ead8; overflow: hidden; }
+    .strength-fill { height: 100%; border-radius: 4px; transition: width .3s, background .3s; width: 0%; }
+    .strength-label { font-size: 11px; color: var(--text-light); margin-top: 4px; }
+
+    /* CHECKBOX */
+    .check-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 16px; }
+    .check-row input[type="checkbox"] { accent-color: var(--green-mid); width: 16px; height: 16px; margin-top: 3px; flex-shrink: 0; cursor: pointer; }
+    .check-row label { font-size: 13px; color: var(--text-mid); cursor: pointer; line-height: 1.5; }
+    .check-row label a { color: var(--green-mid); text-decoration: underline; }
+
+    /* FORGOT PASSWORD */
+    .forgot-link { text-align: right; margin-top: -8px; margin-bottom: 16px; }
+    .forgot-link a { font-size: 12px; color: var(--green-mid); }
+    .forgot-link a:hover { text-decoration: underline; }
+
+    /* SUBMIT BTN */
+    .submit-btn {
+      width: 100%; padding: 14px;
+      background: var(--green-dark); color: var(--white);
+      border: none; border-radius: 10px;
+      font-family: 'Lato', sans-serif; font-size: 15px; font-weight: 700;
+      cursor: pointer; transition: background .2s, transform .2s;
+      margin-bottom: 16px;
+      position: relative; overflow: hidden;
+    }
+    .submit-btn:hover { background: var(--green-mid); transform: translateY(-1px); }
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn.loading::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(255,255,255,.15);
+      animation: shimmer 1s infinite;
+    }
+    @keyframes shimmer { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
+
+    /* SOCIAL LOGIN */
+    .social-divider { display: flex; align-items: center; gap: 12px; margin: 16px 0; }
+    .social-divider .line { flex: 1; height: 1px; background: var(--cream-dark); }
+    .social-divider span { font-size: 12px; color: var(--text-light); white-space: nowrap; }
+    .social-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .social-btn {
+      padding: 10px 14px; border-radius: 10px;
+      border: 1.5px solid #c8d8c5; background: var(--white);
+      font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 700;
+      color: var(--text-mid); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: border-color .2s, background .2s;
+    }
+    .social-btn:hover { border-color: var(--green-light); background: #f7fbf5; }
+
+    /* ALERT MESSAGES */
+    .form-alert { padding: 12px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; margin-bottom: 16px; display: none; align-items: center; gap: 10px; }
+    .form-alert.show { display: flex; }
+    .form-alert.error   { background: var(--danger-bg); color: var(--danger); }
+    .form-alert.success { background: var(--success-bg); color: var(--success); }
+
+    /* SWITCH PROMPT */
+    .switch-prompt { text-align: center; font-size: 13px; color: var(--text-light); margin-top: 16px; }
+    .switch-prompt a { color: var(--green-mid); font-weight: 700; cursor: pointer; }
+    .switch-prompt a:hover { text-decoration: underline; }
+
+    /* SUCCESS STATE */
+    .success-state { display: none; text-align: center; padding: 48px 24px; }
+    .success-state.show { display: block; }
+    .success-state .check-circle {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: var(--success-bg); margin: 0 auto 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px;
+    }
+    .success-state h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--green-dark); margin-bottom: 10px; }
+    .success-state p { font-size: 14px; color: var(--text-mid); margin-bottom: 24px; }
+    .success-state a { display: inline-block; padding: 12px 32px; background: var(--green-mid); color: var(--white); border-radius: 30px; font-weight: 700; font-size: 14px; }
+
+    /* FOOTER */
+    footer { background: var(--green-dark); color: #b8d9b2; padding: 24px; }
+    .footer-bottom { max-width: 1200px; margin: auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    .footer-bottom p { font-size: 12px; }
+
+    /* RESPONSIVE */
+    @media (max-width: 720px) {
+      .auth-wrapper { grid-template-columns: 1fr; }
+      .auth-panel-left { padding: 36px 28px; }
+      .auth-panel-left::before { font-size: 140px; }
+      .auth-form-wrap { padding: 28px 24px 32px; }
+      .two-col { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
-
 <body>
-  <div class="fix_top top_top">
-    <div class="container_top">
-      <div class="container">
-        <!--top_navbar-->
-        <div class="navbar_top">
-          <ul>
-            <li><a href="cart.html">Cart</a></li>
-            <li>|</li>
-            <li><a href="mailto:info@chakradavayurveda.com">Email</a></li>
-            <li>|</li>
-            <li><a href="Tel:+91XXXXXXXXXX">Call us</a></li>
-            <li>|</li>
-            <li><a href="login-signup.html">Login</a></li>
-            <li>|</li>
-            <li><a href="login-signup.html">Sign Up</a></li>
-          </ul>
+<!-- ANNOUNCEMENT BAR -->
+<div style="background:#c8972a;color:#fff;text-align:center;font-size:13px;font-weight:700;padding:9px 24px;">
+  🎁 First consultation is completely FREE — <a href="book_consultation.html" style="color:#fff;text-decoration:underline;margin-left:8px;">Book yours today →</a>
+</div>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="inner">
+    <div><a href="tel:+918825499283">📞 Call Us: +91-8825499283</a><a href="mailto:chakradev239@gmail.com">✉ chakradev239@gmail.com</a></div>
+    <div><a href="cart.html">🛒 Cart</a></div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="inner">
+    <div class="logo-wrap"><a href="index.html"><img src="image/ganesh.png" alt="Chakradev Ayurveda"></a></div>
+    <h1 class="brand"><a href="index.html" style="text-decoration:none;color:inherit;">Chakradev Ayurveda</a></h1>
+    <p class="tagline">Heal Naturally · Live Harmoniously</p>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="main-nav">
+  <ul>
+    <li><a href="index.html">🏡 Home</a></li>
+    <li><a href="consultant.html">Consultants</a></li>
+    <li><a href="dosha-analysis.html">Dosha Analysis</a></li>
+    <li><a href="e-shop.html">E-Shop</a></li>
+    <li><a href="book_consultation.html">Book Consultation</a></li>
+    <li><a href="diet.html">Diet & Nutrition</a></li>
+    <li><a href="blog.html">Blog</a></li>
+  </ul>
+</nav>
+
+<!-- AUTH SECTION -->
+<div class="auth-section">
+  <div class="auth-wrapper">
+
+    <!-- LEFT PANEL -->
+    <div class="auth-panel-left">
+      <div class="brand-mark">🌿</div>
+      <h2>Your Wellness<br><span>Journey Starts Here</span></h2>
+      <p>Join thousands of patients experiencing the healing power of authentic Ayurveda — from the comfort of home.</p>
+      <div class="auth-divider"></div>
+      <div class="benefit-list">
+        <div class="benefit-item">
+          <span class="ico">📅</span>
+          <p><strong>Manage Consultations</strong>View upcoming appointments, get reminders, and reschedule easily.</p>
         </div>
-        <!--centerlogo-->
-        <div class="logo_top">
-          <img src="image/ganesh.png" alt="" WIDTH="120" HEIGHT="120">
-          <p>The Opener of all good things in life</p>
+        <div class="benefit-item">
+          <span class="ico">💊</span>
+          <p><strong>Access Prescriptions</strong>View and download your Ayurvedic prescriptions and treatment plans.</p>
         </div>
-        <!-- Navbar -->
-        <div class="navbar">
-          <ul>
-            <li class="thick active"><a href="index.html">🏡Home</a></li>
-            <li class="thick"><a href="consultant.html">Consultants</a></li>
-            <li class="thick"><a href="dosha-analysis.html">Dosha Analysis</a></li>
-            <li class="thick"><a href="e-shop.html">E-Shope</a></li>
-            <li class="thick"><a href="book_consultation.html">Book You Online Consultation</a></li>
-            <li class="thick"><a href="diet.html">Diet</a></li>
-            <li class="thick"><a href="blog.html">Blog</a></li>
-          </ul>
+        <div class="benefit-item">
+          <span class="ico">🛒</span>
+          <p><strong>Order History & Tracking</strong>Track your Ayurvedic product orders and manage returns.</p>
+        </div>
+        <div class="benefit-item">
+          <span class="ico">📊</span>
+          <p><strong>Wellness Dashboard</strong>Track your Dosha progress, health goals, and doctor's notes.</p>
         </div>
       </div>
     </div>
-  </div>
-  <div class="main">
-    <h1>This Site is Under Construction</h1>
-    <p>Login to You Account</p>
-    <p>We are Happy to see you Return</p>
-    <p>Please log on to your sccount</p>
-    <br>
-    <!-- need to link the respective acount -->
 
-    <table>
-      <tr>
-        <td><button type="button" class="" name="button"><img src="image/facebook_logo.png" alt="" width="30" height="30">Continue with Facebook Account</button></td>
-      </tr>
-      <tr>
-        <td><button type="button" class="" name="button"><img src="image/google_logo.png" alt="" width="30" height="30">Continue with Google Account</button></td>
-      </tr>
-      <tr>
-        <td><button type="button" class="" name="button"><img src="image/apple_logo.png" alt="" width="30" height="30">Continue with Apple Account</button></td>
-      </tr>
-      <tr>
-        <td>or</td>
-      </tr>
-    </table>
-    <form class="" action="index.html" method="post">
-      <label for="">Your Name</label><input type="text" name="" value="">
-      <br>
-      <br>
-      <label for="">Password</label>
-      <input type="password" name="" value="">
-      <br>
-      <br>
-      <input type="checkbox" name="" value="">
-      <input type="submit" name="">
-      <br>
-      <br>
-      <label for="">Forgot Password<a href="#">Click here</a></label>
-      <br>
-      <label for="">Don't have account? <a href="">Click here</a></label>
-    </form>
-    <br>
-    <br>
-    <br>
-    <a href="index.html">Close</a>
-    </dir>
+    <!-- RIGHT PANEL -->
+    <div class="auth-panel-right">
 
-
-    <form class="form-signin">
-      <img class="mb-4" src="{{ site.baseurl }}/docs/{{ site.docs_version }}/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-      <label for="inputEmail" class="sr-only">Email address</label>
-      <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-      <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-      <div class="checkbox mb-3">
-        <label>
-          <input type="checkbox" value="remember-me"> Remember me
-        </label>
+      <!-- TABS -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Login</button>
+        <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Create Account</button>
       </div>
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-      <p class="mt-5 mb-3 text-muted">&copy; 2017-{{ site.time | date: "%Y" }}</p>
-    </form>
 
-</body>
+      <div class="auth-form-wrap">
 
-</html>
+        <!-- SUCCESS STATE (shown after signup) -->
+        <div class="success-state" id="successState">
+          <div class="check-circle">✅</div>
+          <h3>Account Created!</h3>
+          <p>Welcome to Chakradev Ayurveda. Your patient account is ready. Please check your email to verify your account.</p>
+          <a href="index.html">Go to Homepage →</a>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <div class="auth-form active" id="form-login">
+          <h3>Welcome Back</h3>
+          <p class="form-sub">Sign in to access your patient dashboard and appointments.</p>
+
+          <div class="form-alert" id="login-alert"></div>
+
+          <div class="field-group">
+            <label>Email Address</label>
+            <div class="input-wrap">
+              <span class="ico">✉️</span>
+              <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email">
+            </div>
+            <p class="error-msg" id="login-email-err">Please enter a valid email address.</p>
+          </div>
+
+          <div class="field-group">
+            <label>Password</label>
+            <div class="input-wrap">
+              <span class="ico">🔒</span>
+              <input type="password" id="login-pass" placeholder="Your password" autocomplete="current-password">
+              <button class="toggle-pass" type="button" onclick="togglePass('login-pass', this)">👁</button>
+            </div>
+            <p class="error-msg" id="login-pass-err">Please enter your password.</p>
+          </div>
+
+          <div class="forgot-link"><a href="#" onclick="showForgot(); return false;">Forgot password?</a></div>
+
+          <div class="check-row">
+            <input type="checkbox" id="remember-me">
+            <label for="remember-me">Keep me signed in on this device</label>
+          </div>
+
+          <button class="submit-btn" id="login-btn" onclick="handleLogin()">Sign In to My Account</button>
+
+          <div class="social-divider">
+            <div class="line"></div><span>or sign in with</span><div class="line"></div>
+          </div>
+          <div class="social-btns">
+            <button class="social-btn" onclick="socialLogin('Google')">🔵 Google</button>
+            <button class="social-btn" onclick="socialLogin('Facebook')">🔷 Facebook</button>
+          </div>
+
+          <p class="switch-prompt">Don't have an account? <a onclick="switchTab('signup')">Create one for free →</a></p>
+        </div>
+
+        <!-- SIGNUP FORM -->
+        <div class="auth-form" id="form-signup">
+          <h3>Create Your Account</h3>
+          <p class="form-sub">Join free and get access to your full Ayurvedic patient portal.</p>
+
+          <div class="form-alert" id="signup-alert"></div>
+
+          <div class="two-col">
+            <div class="field-group">
+              <label>First Name</label>
+              <div class="input-wrap">
+                <span class="ico">👤</span>
+                <input type="text" id="signup-fname" placeholder="First name" autocomplete="given-name">
+              </div>
+              <p class="error-msg" id="signup-fname-err">Please enter your first name.</p>
+            </div>
+            <div class="field-group">
+              <label>Last Name</label>
+              <div class="input-wrap">
+                <span class="ico">👤</span>
+                <input type="text" id="signup-lname" placeholder="Last name" autocomplete="family-name">
+              </div>
+              <p class="error-msg" id="signup-lname-err">Please enter your last name.</p>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Email Address</label>
+            <div class="input-wrap">
+              <span class="ico">✉️</span>
+              <input type="email" id="signup-email" placeholder="you@example.com" autocomplete="email">
+            </div>
+            <p class="error-msg" id="signup-email-err">Please enter a valid email address.</p>
+          </div>
+
+          <div class="field-group">
+            <label>Phone Number</label>
+            <div class="input-wrap">
+              <span class="ico">📞</span>
+              <input type="tel" id="signup-phone" placeholder="+91 8825499283" autocomplete="tel">
+            </div>
+            <p class="error-msg" id="signup-phone-err">Please enter your phone number.</p>
+          </div>
+
+          <div class="two-col">
+            <div class="field-group">
+              <label>Date of Birth</label>
+              <div class="input-wrap">
+                <span class="ico">🎂</span>
+                <input type="date" id="signup-dob">
+              </div>
+            </div>
+            <div class="field-group">
+              <label>Gender</label>
+              <div class="input-wrap">
+                <span class="ico">🧑</span>
+                <select id="signup-gender" style="padding-left:40px;">
+                  <option value="">Select</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Other</option>
+                  <option>Prefer not to say</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Password</label>
+            <div class="input-wrap">
+              <span class="ico">🔒</span>
+              <input type="password" id="signup-pass" placeholder="Create a strong password" autocomplete="new-password" oninput="checkStrength(this.value)">
+              <button class="toggle-pass" type="button" onclick="togglePass('signup-pass', this)">👁</button>
+            </div>
+            <div class="strength-wrap">
+              <div class="strength-track"><div class="strength-fill" id="strength-fill"></div></div>
+              <p class="strength-label" id="strength-label">Enter a password</p>
+            </div>
+            <p class="error-msg" id="signup-pass-err">Password must be at least 8 characters.</p>
+          </div>
+
+          <div class="field-group">
+            <label>Confirm Password</label>
+            <div class="input-wrap">
+              <span class="ico">🔒</span>
+              <input type="password" id="signup-confirm" placeholder="Repeat your password" autocomplete="new-password">
+              <button class="toggle-pass" type="button" onclick="togglePass('signup-confirm', this)">👁</button>
+            </div>
+            <p class="error-msg" id="signup-confirm-err">Passwords do not match.</p>
+          </div>
+
+          <div class="check-row">
+            <input type="checkbox" id="agree-terms">
+            <label for="agree-terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a> of Chakradev Ayurveda.</label>
+          </div>
+          <p class="error-msg" id="agree-err" style="margin-top:-12px;margin-bottom:12px;">Please accept the terms to continue.</p>
+
+          <div class="check-row">
+            <input type="checkbox" id="agree-updates" checked>
+            <label for="agree-updates">Send me health tips, Dosha updates, and exclusive offers by email.</label>
+          </div>
+
+          <button class="submit-btn" id="signup-btn" onclick="handleSignup()">Create My Account →</button>
+
+          <div class="social-divider">
+            <div class="line"></div><span>or sign up with</span><div class="line"></div>
+          </div>
+          <div class="social-btns">
+            <button class="social-btn" onclick="socialLogin('Google')">🔵 Google</button>
+            <button class="social-btn" onclick="socialLogin('Facebook')">🔷 Facebook</button>
+          </div>
+
+          <p class="switch-prompt">Already have an account? <a onclick="switchTab('login')">Sign in →</a></p>
+        </div>
+
+      </div>
+    </div><!-- /auth-panel-right -->
+  </div><!-- /auth-wrapper -->
+</div><!-- /auth-section -->
+
+<!-- FOOTER -->
+<!-- FOOTER -->
+<footer style="background:#2d5a27;color:#b8d9b2;padding:48px 24px 24px;">
+  <div style="max-width:1200px;margin:auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:36px;">
+    <div>
+      <h3 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.3rem;margin-bottom:12px;">Chakradev Ayurveda</h3>
+      <p style="font-size:13px;line-height:1.8;">Your one-stop destination for authentic Ayurvedic consultations, knowledge, and products.</p>
+      <div style="margin-top:14px;display:flex;flex-direction:column;gap:6px;">
+        <a href="tel:+918825499283" style="color:#b8d9b2;font-size:13px;">📞 Call Us: +91-8825499283</a>
+        <a href="mailto:chakradev239@gmail.com" style="color:#b8d9b2;font-size:13px;">✉ chakradev239@gmail.com</a>
+        <a href="contact.html" style="color:#b8d9b2;font-size:13px;">💬 Send us a message</a>
+      </div>
+    </div>
+    <div>
+      <h4 style="color:#f0c96b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;">Services</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+        <li><a href="book_consultation.html" style="color:#b8d9b2;font-size:13px;">Book Consultation</a></li>
+        <li><a href="dosha-analysis.html" style="color:#b8d9b2;font-size:13px;">Dosha Analysis</a></li>
+        <li><a href="consultant.html" style="color:#b8d9b2;font-size:13px;">Our Doctors</a></li>
+        <li><a href="diet.html" style="color:#b8d9b2;font-size:13px;">Diet Plans</a></li>
+        <li><a href="e-shop.html" style="color:#b8d9b2;font-size:13px;">E-Shop</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color:#f0c96b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;">Knowledge</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+        <li><a href="blog.html" style="color:#b8d9b2;font-size:13px;">Ayurveda Blog</a></li>
+        <li><a href="dosha-analysis.html" style="color:#b8d9b2;font-size:13px;">Dosha Guide</a></li>
+        <li><a href="diet.html" style="color:#b8d9b2;font-size:13px;">Nutrition Guide</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color:#f0c96b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;">Company</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+        <li><a href="about.html" style="color:#b8d9b2;font-size:13px;">About Us</a></li>
+        <li><a href="contact.html" style="color:#b8d9b2;font-size:13px;">Contact</a></li>
+        <li><a href="login-signup.html" style="color:#b8d9b2;font-size:13px;">Patient Login</a></li>
+        <li><a href="cart.html" style="color:#b8d9b2;font-size:13px;">Cart</a></li>
+        <li><a href="privacy.html" style="color:#b8d9b2;font-size:13px;">Privacy Policy</a></li>
+        <li><a href="terms.html" style="color:#b8d9b2;font-size:13px;">Terms of Service</a></li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width:1200px;margin:auto;border-top:1px solid rgba(255,255,255,.1);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+    <p style="font-size:12px;">© 2024 Chakradev Ayurveda Pvt. Ltd. All Rights Reserved.</p>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;">
+      <a href="about.html" style="color:#7aaa74;font-size:12px;">About</a>
+      <a href="contact.html" style="color:#7aaa74;font-size:12px;">Contact</a>
+      <a href="privacy.html" style="color:#7aaa74;font-size:12px;">Privacy</a>
+      <a href="terms.html" style="color:#7aaa74;font-size:12px;">Terms</a>
+    </div>
+  </div>
+  <p style="max-width:1200px;margin:12px auto 0;font-size:11px;color:#5a8a54;line-height:1.7;"><strong>Disclaimer:</strong> Content on this website is for informational purposes only and does not constitute medical advice. Always consult a qualified Ayurvedic doctor before starting any treatment. Products are not intended to diagnose, treat, cure, or prevent any disease.</p>
+</footer>
+
+<script>
+  /* ── TAB SWITCHING ── */
+  function switchTab(tab) {
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('form-' + tab).classList.add('active');
+    clearAlerts();
+  }
+
+  /* ── URL PARAM: ?tab=signup ── */
+  const urlTab = new URLSearchParams(window.location.search).get('tab');
+  if (urlTab === 'signup') switchTab('signup');
+
+  /* ── TOGGLE PASSWORD VISIBILITY ── */
+  function togglePass(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
+    else { input.type = 'password'; btn.textContent = '👁'; }
+  }
+
+  /* ── PASSWORD STRENGTH ── */
+  function checkStrength(val) {
+    const fill = document.getElementById('strength-fill');
+    const label = document.getElementById('strength-label');
+    let score = 0;
+    if (val.length >= 8) score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+    const levels = [
+      { w:'0%',   bg:'#c8d8c5', txt:'Enter a password' },
+      { w:'25%',  bg:'var(--danger)', txt:'Weak — keep going' },
+      { w:'50%',  bg:'var(--gold)', txt:'Fair — add numbers or symbols' },
+      { w:'75%',  bg:'#7dbf72', txt:'Good — almost there!' },
+      { w:'100%', bg:'var(--green-mid)', txt:'Strong password ✓' },
+    ];
+    const l = levels[score];
+    fill.style.width = l.w;
+    fill.style.background = l.bg;
+    label.textContent = l.txt;
+    label.style.color = l.bg;
+  }
+
+  /* ── VALIDATION HELPERS ── */
+  function setError(id, errId, show) {
+    const el = document.getElementById(id);
+    const err = document.getElementById(errId);
+    if (show) { el.classList.add('error'); err.classList.add('show'); }
+    else { el.classList.remove('error'); err.classList.remove('show'); }
+    return !show;
+  }
+  function showAlert(id, type, msg) {
+    const el = document.getElementById(id);
+    el.className = 'form-alert show ' + type;
+    el.innerHTML = (type === 'error' ? '⚠ ' : '✅ ') + msg;
+  }
+  function clearAlerts() {
+    document.querySelectorAll('.form-alert').forEach(el => { el.className = 'form-alert'; el.textContent = ''; });
+    document.querySelectorAll('.error-msg').forEach(el => el.classList.remove('show'));
+    document.querySelectorAll('input.error').forEach(el => el.classList.remove('error'));
+  }
+
+  /* ── LOGIN HANDLER ── */
+  function handleLogin() {
+    clearAlerts();
+    const email = document.getElementById('login-email').value.trim();
+    const pass  = document.getElementById('login-pass').value;
+    let valid = true;
+    if (!email || !/\S+@\S+\.\S+/.test(email)) { setError('login-email', 'login-email-err', true); valid = false; }
+    if (!pass) { setError('login-pass', 'login-pass-err', true); valid = false; }
+    if (!valid) return;
+
+    const btn = document.getElementById('login-btn');
+    btn.textContent = 'Signing in…'; btn.classList.add('loading'); btn.disabled = true;
+
+    /* Simulate async login */
+    setTimeout(() => {
+      btn.textContent = 'Sign In to My Account'; btn.classList.remove('loading'); btn.disabled = false;
+      /* Demo: any email with 8+ char password succeeds */
+      if (pass.length >= 6) {
+        showAlert('login-alert', 'success', 'Login successful! Redirecting to your dashboard…');
+        setTimeout(() => { window.location.href = 'index.html'; }, 1800);
+      } else {
+        showAlert('login-alert', 'error', 'Incorrect email or password. Please try again.');
+      }
+    }, 1400);
+  }
+
+  /* ── SIGNUP HANDLER ── */
+  function handleSignup() {
+    clearAlerts();
+    const fname   = document.getElementById('signup-fname').value.trim();
+    const lname   = document.getElementById('signup-lname').value.trim();
+    const email   = document.getElementById('signup-email').value.trim();
+    const phone   = document.getElementById('signup-phone').value.trim();
+    const pass    = document.getElementById('signup-pass').value;
+    const confirm = document.getElementById('signup-confirm').value;
+    const agreed  = document.getElementById('agree-terms').checked;
+    let valid = true;
+
+    if (!fname)                              { setError('signup-fname',   'signup-fname-err',   true); valid = false; }
+    if (!lname)                              { setError('signup-lname',   'signup-lname-err',   true); valid = false; }
+    if (!email || !/\S+@\S+\.\S+/.test(email)) { setError('signup-email','signup-email-err',   true); valid = false; }
+    if (!phone)                              { setError('signup-phone',   'signup-phone-err',   true); valid = false; }
+    if (pass.length < 8)                     { setError('signup-pass',    'signup-pass-err',    true); valid = false; }
+    if (pass !== confirm)                    { setError('signup-confirm', 'signup-confirm-err', true); valid = false; }
+    if (!agreed) {
+      document.getElementById('agree-err').classList.add('show'); valid = false;
+    }
+    if (!valid) return;
+
+    const btn = document.getElementById('signup-btn');
+    btn.textContent = 'Creating your account…'; btn.classList.add('loading'); btn.disabled = true;
+
+    setTimeout(() => {
+      btn.textContent = 'Create My Account →'; btn.classList.remove('loading'); btn.disabled = false;
+      /* Show success state */
+      document.getElementById('form-signup').style.display = 'none';
+      document.getElementById('successState').classList.add('show');
+    }, 1600);
+  }
+
+  /* ── FORGOT PASSWORD ── */
+  function showForgot() {
+    const email = document.getElementById('login-email').value.trim();
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      showAlert('login-alert', 'error', 'Please enter your email address above first.');
+      document.getElementById('login-email').focus();
+      return;
+    }
+ to ' + email + '. Check your inbox.');
+  }
+
+  /* ── TAB SWITCHING via URL param ── */
+  (function() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('tab') === 'signup') showTab('signup');
+  })();
+
+</script>
+<!-- WHATSAPP FLOAT -->
+<div style="position:fixed;bottom:28px;right:28px;z-index:200;">
+  <a href="https://wa.me/918825499283?text=Hi%20Chakradev%20Ayurveda%2C%20I%27d%20like%20to%20book%20a%20free%20consultation." target="_blank" rel="noopener"
+     style="display:flex

@@ -1,56 +1,625 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-
 <head>
   <meta charset="utf-8">
-  <title>E-Shoping</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/header.css">
-</head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Shop authentic Ayurvedic products at Chakradev Ayurveda. Herbs, oils, supplements and more — doctor recommended and lab tested.">
+  <title>E-Shop | Chakradev Ayurveda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green-dark:  #2d5a27;
+      --green-mid:   #4a8c3f;
+      --green-light: #7dbf72;
+      --gold:        #c8972a;
+      --gold-light:  #f0c96b;
+      --cream:       #fdf6e3;
+      --cream-dark:  #f5ead0;
+      --text-dark:   #1e2a1a;
+      --text-mid:    #3d4d38;
+      --text-light:  #6b7c65;
+      --white:       #ffffff;
+      --shadow:      0 4px 24px rgba(45,90,39,0.10);
+      --shadow-lg:   0 12px 40px rgba(45,90,39,0.16);
+      --radius:      14px;
+      --danger:      #c0392b;
+    }
+    body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--text-dark); line-height: 1.7; }
+    a { text-decoration: none; color: inherit; }
 
+    /* TOP BAR */
+    .top-bar { background: var(--green-dark); color: #cce5c8; font-size: 13px; padding: 7px 0; }
+    .top-bar .inner { max-width: 1200px; margin: auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .top-bar a { color: #cce5c8; margin: 0 10px; transition: color .2s; }
+    .top-bar a:hover { color: var(--gold-light); }
+
+    /* HEADER */
+    .site-header { background: var(--white); border-bottom: 3px solid var(--gold); padding: 18px 24px; }
+    .site-header .inner { max-width: 1200px; margin: auto; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; text-align: center; }
+    .site-header .logo-wrap img { width: 80px; height: 80px; object-fit: contain; }
+    .site-header h1.brand { font-family: 'Playfair Display', serif; font-size: 1.9rem; color: var(--green-dark); }
+    .site-header .tagline { font-size: 12px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
+
+    /* NAV */
+    nav.main-nav { background: var(--green-mid); position: sticky; top: 0; z-index: 100; }
+    nav.main-nav ul { list-style: none; max-width: 1200px; margin: auto; display: flex; flex-wrap: wrap; justify-content: center; padding: 0 16px; }
+    nav.main-nav ul li a { display: block; padding: 14px 18px; color: #e8f5e3; font-size: 14px; font-weight: 700; transition: background .2s, color .2s; }
+    nav.main-nav ul li a:hover, nav.main-nav ul li a.active { background: var(--green-dark); color: var(--gold-light); }
+
+    /* PAGE HERO */
+    .page-hero { background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%); padding: 52px 24px 44px; text-align: center; color: var(--white); position: relative; overflow: hidden; }
+    .page-hero::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 44px; background: var(--cream); clip-path: ellipse(55% 100% at 50% 100%); }
+    .page-hero .badge { display: inline-block; background: rgba(200,151,42,.25); border: 1px solid var(--gold-light); color: var(--gold-light); font-size: 12px; font-weight: 700; padding: 5px 18px; border-radius: 30px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px; }
+    .page-hero h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.6rem); margin-bottom: 10px; }
+    .page-hero p { color: #c8e8c4; max-width: 520px; margin: 0 auto; font-size: 15px; }
+
+    /* TRUST STRIP */
+    .trust-strip { background: var(--white); border-bottom: 1px solid #e2eed8; padding: 14px 24px; }
+    .trust-strip .inner { max-width: 1200px; margin: auto; display: flex; justify-content: center; flex-wrap: wrap; gap: 28px; }
+    .trust-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-mid); font-weight: 700; }
+    .trust-item .ico { font-size: 18px; }
+
+    /* SHOP LAYOUT */
+    .shop-layout { max-width: 1200px; margin: 40px auto 64px; padding: 0 24px; display: grid; grid-template-columns: 240px 1fr; gap: 32px; align-items: start; }
+
+    /* SIDEBAR FILTERS */
+    .filter-sidebar { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; position: sticky; top: 72px; }
+    .filter-sidebar h3 { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--green-dark); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--cream-dark); }
+    .filter-group { margin-bottom: 22px; }
+    .filter-group h4 { font-size: 12px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+    .filter-option { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: pointer; font-size: 13px; color: var(--text-mid); }
+    .filter-option input[type="checkbox"] { accent-color: var(--green-mid); width: 15px; height: 15px; cursor: pointer; }
+    .filter-option:hover { color: var(--green-dark); }
+    .price-range { display: flex; align-items: center; gap: 8px; }
+    .price-range input[type="range"] { flex: 1; accent-color: var(--green-mid); }
+    .price-range span { font-size: 13px; font-weight: 700; color: var(--green-dark); min-width: 52px; }
+    .filter-apply { width: 100%; padding: 10px; background: var(--green-mid); color: var(--white); border: none; border-radius: 8px; font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; margin-top: 8px; transition: background .2s; }
+    .filter-apply:hover { background: var(--green-dark); }
+    .filter-clear { width: 100%; padding: 8px; background: none; border: 1.5px solid var(--cream-dark); border-radius: 8px; font-family: 'Lato', sans-serif; font-size: 12px; color: var(--text-light); cursor: pointer; margin-top: 6px; transition: border-color .2s; }
+    .filter-clear:hover { border-color: var(--green-light); color: var(--green-dark); }
+
+    /* SHOP MAIN */
+    .shop-main { display: flex; flex-direction: column; gap: 20px; }
+    .shop-topbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .shop-topbar .results-count { font-size: 14px; color: var(--text-light); }
+    .shop-topbar .results-count strong { color: var(--text-dark); }
+    .sort-select { padding: 9px 14px; border: 1.5px solid #c8d8c5; border-radius: 8px; font-family: 'Lato', sans-serif; font-size: 13px; color: var(--text-mid); background: var(--white); outline: none; cursor: pointer; }
+    .search-bar { display: flex; gap: 8px; flex: 1; max-width: 340px; }
+    .search-bar input { flex: 1; padding: 9px 14px; border: 1.5px solid #c8d8c5; border-radius: 8px; font-family: 'Lato', sans-serif; font-size: 13px; outline: none; background: var(--white); transition: border-color .2s; }
+    .search-bar input:focus { border-color: var(--green-mid); }
+    .search-bar button { padding: 9px 16px; background: var(--green-mid); color: var(--white); border: none; border-radius: 8px; font-size: 13px; cursor: pointer; }
+
+    /* CATEGORY TABS */
+    .category-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+    .cat-tab { padding: 7px 18px; border-radius: 30px; font-size: 13px; font-weight: 700; cursor: pointer; border: 2px solid #c8d8c5; background: var(--white); color: var(--text-mid); transition: all .2s; }
+    .cat-tab:hover { border-color: var(--green-light); color: var(--green-dark); }
+    .cat-tab.active { background: var(--green-dark); color: var(--white); border-color: var(--green-dark); }
+
+    /* PRODUCT GRID */
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 20px; }
+
+    /* PRODUCT CARD */
+    .product-card { background: var(--white); border-radius: var(--radius); overflow: hidden; border: 1.5px solid #dfeadb; transition: box-shadow .25s, transform .25s; display: flex; flex-direction: column; }
+    .product-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+    .product-card .p-img { height: 170px; display: flex; align-items: center; justify-content: center; font-size: 58px; background: var(--cream); position: relative; }
+    .product-card .p-badge { position: absolute; top: 10px; left: 10px; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: 0.5px; }
+    .product-card .p-badge.sale    { background: #fde8e8; color: var(--danger); }
+    .product-card .p-badge.new     { background: #e8f5e3; color: var(--green-dark); }
+    .product-card .p-badge.bestseller { background: #fef9e7; color: #8b6914; }
+    .product-card .p-badge.doctor  { background: #e8f0fe; color: #2c4fa3; }
+    .product-card .p-info { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+    .product-card .p-cat { font-size: 10px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+    .product-card h4 { font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; line-height: 1.4; }
+    .product-card .p-desc { font-size: 12px; color: var(--text-light); margin-bottom: 10px; flex: 1; line-height: 1.5; }
+    .product-card .p-stars { color: var(--gold); font-size: 12px; margin-bottom: 6px; }
+    .product-card .p-stars span { color: var(--text-light); font-size: 11px; margin-left: 4px; }
+    .product-card .p-price { display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px; }
+    .product-card .p-price .curr { font-size: 17px; font-weight: 700; color: var(--green-dark); }
+    .product-card .p-price .orig { font-size: 12px; color: var(--text-light); text-decoration: line-through; }
+    .product-card .p-price .disc { font-size: 11px; font-weight: 700; color: var(--danger); }
+    .product-card .p-actions { display: flex; gap: 8px; }
+    .product-card .add-btn { flex: 1; padding: 9px; background: var(--green-dark); color: var(--white); border: none; border-radius: 8px; font-family: 'Lato', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; transition: background .2s; }
+    .product-card .add-btn:hover { background: var(--green-mid); }
+    .product-card .wish-btn { padding: 9px 12px; background: none; border: 1.5px solid #dfeadb; border-radius: 8px; cursor: pointer; font-size: 15px; transition: border-color .2s, background .2s; }
+    .product-card .wish-btn:hover { border-color: var(--gold); background: #fef9e7; }
+    .product-card .wish-btn.wished { background: #fef9e7; border-color: var(--gold); }
+
+    /* CART TOAST */
+    .cart-toast { position: fixed; bottom: 28px; right: 28px; background: var(--green-dark); color: var(--white); padding: 14px 22px; border-radius: 10px; font-size: 14px; font-weight: 700; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 10px; transform: translateY(80px); opacity: 0; transition: all .3s cubic-bezier(.22,.68,0,1.2); z-index: 500; }
+    .cart-toast.show { transform: translateY(0); opacity: 1; }
+    .cart-toast a { color: var(--gold-light); text-decoration: underline; margin-left: 8px; }
+
+    /* CART DRAWER */
+    .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 200; opacity: 0; pointer-events: none; transition: opacity .3s; }
+    .cart-overlay.open { opacity: 1; pointer-events: all; }
+    .cart-drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 380px; max-width: 95vw; background: var(--white); z-index: 201; box-shadow: var(--shadow-lg); transform: translateX(100%); transition: transform .3s cubic-bezier(.22,.68,0,1.2); display: flex; flex-direction: column; }
+    .cart-drawer.open { transform: translateX(0); }
+    .cart-header { background: var(--green-dark); color: var(--white); padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .cart-header h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; }
+    .cart-close { background: none; border: none; color: var(--white); font-size: 22px; cursor: pointer; }
+    .cart-items { flex: 1; overflow-y: auto; padding: 16px; }
+    .cart-empty { text-align: center; padding: 48px 24px; color: var(--text-light); }
+    .cart-empty .ico { font-size: 48px; margin-bottom: 12px; }
+    .cart-item { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--cream-dark); align-items: center; }
+    .cart-item .ci-img { width: 52px; height: 52px; background: var(--cream); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+    .cart-item .ci-info { flex: 1; }
+    .cart-item .ci-name { font-size: 13px; font-weight: 700; color: var(--text-dark); }
+    .cart-item .ci-price { font-size: 13px; color: var(--green-dark); font-weight: 700; }
+    .cart-item .ci-qty { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+    .cart-item .ci-qty button { width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid var(--border, #dfeadb); background: none; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: background .2s; }
+    .cart-item .ci-qty button:hover { background: var(--cream-dark); }
+    .cart-item .ci-qty span { font-size: 13px; font-weight: 700; min-width: 20px; text-align: center; }
+    .cart-item .ci-remove { background: none; border: none; cursor: pointer; font-size: 16px; color: var(--text-light); transition: color .2s; }
+    .cart-item .ci-remove:hover { color: var(--danger); }
+    .cart-footer { padding: 20px 24px; border-top: 2px solid var(--cream-dark); }
+    .cart-total { display: flex; justify-content: space-between; font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; }
+    .cart-shipping { font-size: 12px; color: var(--text-light); margin-bottom: 16px; }
+    .cart-shipping strong { color: var(--green-mid); }
+    .checkout-btn { width: 100%; padding: 14px; background: var(--gold); color: var(--white); border: none; border-radius: 10px; font-family: 'Lato', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .2s; }
+    .checkout-btn:hover { background: #b5831f; }
+
+    /* CART ICON FLOATING */
+    .cart-fab { position: fixed; bottom: 28px; left: 28px; background: var(--green-dark); color: var(--white); width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; box-shadow: var(--shadow-lg); z-index: 150; transition: transform .2s; border: none; }
+    .cart-fab:hover { transform: scale(1.1); }
+    .cart-fab .cart-count { position: absolute; top: -4px; right: -4px; background: var(--gold); color: var(--white); width: 20px; height: 20px; border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+
+    /* FOOTER */
+    footer { background: var(--green-dark); color: #b8d9b2; padding: 32px 24px 20px; margin-top: 20px; }
+    .footer-bottom { max-width: 1200px; margin: auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    .footer-bottom p { font-size: 12px; }
+    .disclaimer-text { font-size: 11px; color: #7aaa74; max-width: 680px; line-height: 1.6; }
+
+    /* RESPONSIVE */
+    @media (max-width: 860px) { .shop-layout { grid-template-columns: 1fr; } .filter-sidebar { position: static; } }
+    @media (max-width: 500px) { .products-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); } }
+  </style>
+</head>
 <body>
-  <div class="fix_top top_top">
-    <div class="container_top">
-      <div class="container">
-        <!--top_navbar-->
-        <div class="navbar_top">
-          <ul>
-            <li class=""><a href="cart.html">Cart</a></li>
-            <li>|</li>
-            <li class=""><a href="mailto:info@chakradavayurveda.com">Email</a></li>
-            <li>|</li>
-            <li class=""><a href="Tel:+91XXXXXXXXXX">Call us</a></li>
-            <li>|</li>
-            <li class=""><a href="login-signup.html">Login</a></li>
-            <li>|</li>
-            <li class=""><a href="login-signup.html">Sign Up</a></li>
-          </ul>
-        </div>
-        <!--centerlogo-->
-        <div class="logo_top">
-          <img src="image/ganesh.png" alt="" WIDTH="120" HEIGHT="120">
-          <p>The Opener of all good things in life</p>
-        </div>
-        <!-- Navbar -->
-        <div class="navbar">
-          <ul>
-            <li class="thick"><a href="index.html">🏡Home</a></li>
-            <li class="thick"><a href="consultant.html">Consultants</a></li>
-            <li class="thick"><a href="dosha-analysis.html">Dosha Analysis</a></li>
-            <li class="thick active"><a href="e-shop.html">E-Shope</a></li>
-            <li class="thick"><a href="book_consultation.html">Book You Online Consultation</a></li>
-            <li class="thick"><a href="diet.html">Diet</a></li>
-            <li class="thick"><a href="blog.html">Blog</a></li>
-          </ul>
-        </div>
-      </div>
+<!-- ANNOUNCEMENT BAR -->
+<div style="background:#c8972a;color:#fff;text-align:center;font-size:13px;font-weight:700;padding:9px 24px;">
+  🎁 First consultation is completely FREE — <a href="book_consultation.html" style="color:#fff;text-decoration:underline;margin-left:8px;">Book yours today →</a>
+</div>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="inner">
+    <div><a href="tel:+918825499283">📞 Call Us: +91-8825499283</a><a href="mailto:chakradev239@gmail.com">✉ chakradev239@gmail.com</a></div>
+    <div>
+      <a href="#" onclick="openCart(); return false;">🛒 Cart (<span id="top-cart-count">0</span>)</a>
+      <a href="login-signup.html">Login</a>
+      <a href="login-signup.html">Sign Up</a>
     </div>
   </div>
+</div>
 
-  <div class="main">
-    <h1 class="construction">This Site is Under Construction</h1>
-    <h1>E-shoping</h1>
+<!-- HEADER -->
+<header class="site-header">
+  <div class="inner">
+    <div class="logo-wrap"><a href="index.html"><img src="image/ganesh.png" alt="Chakradev Ayurveda"></a></div>
+    <h1 class="brand"><a href="index.html" style="text-decoration:none;color:inherit;">Chakradev Ayurveda</a></h1>
+    <p class="tagline">Heal Naturally · Live Harmoniously</p>
   </div>
-</body>
+</header>
 
+<!-- NAV -->
+<nav class="main-nav">
+  <ul>
+    <li><a href="index.html">🏡 Home</a></li>
+    <li><a href="consultant.html">Consultants</a></li>
+    <li><a href="dosha-analysis.html">Dosha Analysis</a></li>
+    <li><a href="e-shop.html" class="active">E-Shop</a></li>
+    <li><a href="book_consultation.html">Book Consultation</a></li>
+    <li><a href="diet.html">Diet & Nutrition</a></li>
+    <li><a href="blog.html">Blog</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="badge">🌿 Doctor Recommended Products</div>
+  <h2>Ayurvedic Product Store</h2>
+  <p>Authentic, lab-tested herbal medicines, oils, and supplements. Sourced from certified organic farms.</p>
+</div>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+  <div class="inner">
+    <div class="trust-item"><span class="ico">🧪</span><span>Lab Tested & Certified</span></div>
+    <div class="trust-item"><span class="ico">🌿</span><span>100% Natural Ingredients</span></div>
+    <div class="trust-item"><span class="ico">🚚</span><span>Free Shipping over ₹999</span></div>
+    <div class="trust-item"><span class="ico">↩️</span><span>Easy 7-Day Returns</span></div>
+    <div class="trust-item"><span class="ico">🔒</span><span>Secure Payments</span></div>
+  </div>
+</div>
+
+<!-- SHOP LAYOUT -->
+<div class="shop-layout">
+
+  <!-- SIDEBAR FILTERS -->
+  <aside class="filter-sidebar">
+    <h3>Filter Products</h3>
+
+    <div class="filter-group">
+      <h4>Category</h4>
+      <label class="filter-option"><input type="checkbox" value="herbs" checked> Herbs & Powders</label>
+      <label class="filter-option"><input type="checkbox" value="oils" checked> Oils & Ghee</label>
+      <label class="filter-option"><input type="checkbox" value="capsules" checked> Capsules & Tablets</label>
+      <label class="filter-option"><input type="checkbox" value="teas" checked> Teas & Drinks</label>
+      <label class="filter-option"><input type="checkbox" value="skincare" checked> Skincare</label>
+      <label class="filter-option"><input type="checkbox" value="digestive" checked> Digestive Health</label>
+    </div>
+
+    <div class="filter-group">
+      <h4>Dosha Type</h4>
+      <label class="filter-option"><input type="checkbox" value="vata" checked> Vata Balancing</label>
+      <label class="filter-option"><input type="checkbox" value="pitta" checked> Pitta Balancing</label>
+      <label class="filter-option"><input type="checkbox" value="kapha" checked> Kapha Balancing</label>
+      <label class="filter-option"><input type="checkbox" value="tridosha" checked> Tridosha (All)</label>
+    </div>
+
+    <div class="filter-group">
+      <h4>Price Range</h4>
+      <div class="price-range">
+        <span>₹0</span>
+        <input type="range" min="0" max="2000" value="2000" id="priceRange" oninput="document.getElementById('priceVal').textContent='₹'+this.value">
+        <span id="priceVal">₹2000</span>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <h4>Rating</h4>
+      <label class="filter-option"><input type="checkbox" checked> ★★★★★ 5 Stars</label>
+      <label class="filter-option"><input type="checkbox" checked> ★★★★☆ 4+ Stars</label>
+      <label class="filter-option"><input type="checkbox" checked> ★★★☆☆ 3+ Stars</label>
+    </div>
+
+    <button class="filter-apply">Apply Filters</button>
+    <button class="filter-clear">Clear All</button>
+  </aside>
+
+  <!-- SHOP MAIN -->
+  <div class="shop-main">
+
+    <!-- TOPBAR -->
+    <div class="shop-topbar">
+      <p class="results-count">Showing <strong id="product-count">16</strong> products</p>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search products..." oninput="filterProducts()">
+        <button onclick="filterProducts()">🔍</button>
+      </div>
+      <select class="sort-select" onchange="sortProducts(this.value)">
+        <option value="default">Sort: Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="rating">Best Rated</option>
+        <option value="new">Newest First</option>
+      </select>
+    </div>
+
+    <!-- CATEGORY TABS -->
+    <div class="category-tabs">
+      <button class="cat-tab active" onclick="filterCategory('all', this)">All Products</button>
+      <button class="cat-tab" onclick="filterCategory('herbs', this)">Herbs & Powders</button>
+      <button class="cat-tab" onclick="filterCategory('oils', this)">Oils & Ghee</button>
+      <button class="cat-tab" onclick="filterCategory('capsules', this)">Capsules</button>
+      <button class="cat-tab" onclick="filterCategory('teas', this)">Teas</button>
+      <button class="cat-tab" onclick="filterCategory('skincare', this)">Skincare</button>
+    </div>
+
+    <!-- PRODUCTS GRID -->
+    <div class="products-grid" id="productsGrid"></div>
+
+  </div>
+</div>
+
+<!-- CART TOAST -->
+<div class="cart-toast" id="cartToast">
+  <span>✅</span> <span id="toastMsg">Added to cart!</span>
+  <a href="#" onclick="openCart(); return false;">View Cart</a>
+</div>
+
+<!-- CART FAB -->
+<button class="cart-fab" onclick="openCart()">
+  🛒 <span class="cart-count" id="fab-count">0</span>
+</button>
+
+<!-- CART OVERLAY + DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <h3>🛒 Your Cart</h3>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-total"><span>Total</span><span id="cartTotal">₹0</span></div>
+    <p class="cart-shipping" id="shippingNote">Add ₹999 worth of items for <strong>Free Shipping</strong></p>
+    <button class="checkout-btn" onclick="checkout()">Proceed to Checkout →</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<!-- FOOTER -->
+<footer style="background:#2d5a27;color:#b8d9b2;padding:48px 24px 24px;">
+  <div style="max-width:1200px;margin:auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:36px;">
+    <div>
+      <h3 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.3rem;margin-bottom:12px;">Chakradev Ayurveda</h3>
+      <p style="font-size:13px;line-height:1.8;">Your one-stop destination for authentic Ayurvedic consultations, knowledge, and products.</p>
+      <div style="margin-top:14px;display:flex;flex-direction:column;gap:6px;">
+        <a href="tel:+918825499283" style="color:#b8d9b2;font-size:13px;">📞 +91-8825499283</a>
+        <a href="mailto:chakradev239@gmail.com" style="color:#b8d9b2;font-size:13px;">✉ chakradev239@gmail.com</a>
+        <a href="contact.html" style="color:#b8d9b2;font-size:13px;">💬 Send us a message</a>
+      </div>
+    </div>
+    <div>
+      <h4 style="color:#f0c96b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;">Services</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+        <li><a href="book_consultation.html" style="color:#b8d9b2;font-size:13px;">Book Consultation</a></li>
+        <li><a href="dosha-analysis.html" style="color:#b8d9b2;font-size:13px;">Dosha Analysis</a></li>
+        <li><a href="consultant.html" style="color:#b8d9b2;font-size:13px;">Our Doctors</a></li>
+        <li><a href="diet.html" style="color:#b8d9b2;font-size:13px;">Diet Plans</a></li>
+        <li><a href="e-shop.html" style="color:#b8d9b2;font-size:13px;">E-Shop</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color:#f0c96b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;">Knowledge</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+        <li><a href="blog.html" style="color:#b8d9b2;font-size:13px;">Ayurveda Blog</a></li>
+        <li><a href="dosha-analysis.html" style="color:#b8d9b2;font-size:13px;">Dosha Guide</a></li>
+        <li><a href="diet.html" style="color:#b8d9b2;font-size:13px;">Nutrition Guide</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color:#f0c96b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;">Company</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+        <li><a href="about.html" style="color:#b8d9b2;font-size:13px;">About Us</a></li>
+        <li><a href="contact.html" style="color:#b8d9b2;font-size:13px;">Contact</a></li>
+        <li><a href="login-signup.html" style="color:#b8d9b2;font-size:13px;">Patient Login</a></li>
+        <li><a href="cart.html" style="color:#b8d9b2;font-size:13px;">Cart</a></li>
+        <li><a href="privacy.html" style="color:#b8d9b2;font-size:13px;">Privacy Policy</a></li>
+        <li><a href="terms.html" style="color:#b8d9b2;font-size:13px;">Terms of Service</a></li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width:1200px;margin:auto;border-top:1px solid rgba(255,255,255,.1);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+    <p style="font-size:12px;">© 2024 Chakradev Ayurveda Pvt. Ltd. All Rights Reserved.</p>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;">
+      <a href="about.html" style="color:#7aaa74;font-size:12px;">About</a>
+      <a href="contact.html" style="color:#7aaa74;font-size:12px;">Contact</a>
+      <a href="privacy.html" style="color:#7aaa74;font-size:12px;">Privacy</a>
+      <a href="terms.html" style="color:#7aaa74;font-size:12px;">Terms</a>
+    </div>
+  </div>
+  <p style="max-width:1200px;margin:12px auto 0;font-size:11px;color:#5a8a54;line-height:1.7;"><strong>Disclaimer:</strong> Content on this website is for informational purposes only and does not constitute medical advice. Always consult a qualified Ayurvedic doctor before starting any treatment. Products are not intended to diagnose, treat, cure, or prevent any disease.</p>
+</footer>
+
+<script>
+/* ── PRODUCT DATA ── */
+const PRODUCTS = [
+  { id:1,  name:'Ashwagandha Root Powder',   cat:'herbs',    icon:'🌿', desc:'Pure organic adaptogen for stress relief, energy and vitality.',           price:349,  orig:499,  rating:5,  reviews:124, badge:'bestseller', dosha:'vata',     isNew:false },
+  { id:2,  name:'Triphala Churna',            cat:'herbs',    icon:'🍃', desc:'Classical digestive formula for gut health, detox, and regularity.',       price:299,  orig:420,  rating:5,  reviews:98,  badge:'bestseller', dosha:'tridosha', isNew:false },
+  { id:3,  name:'Brahmi Oil',                 cat:'oils',     icon:'💆', desc:'Traditional hair & scalp oil for clarity, memory, and hair growth.',       price:449,  orig:599,  rating:4,  reviews:67,  badge:'sale',       dosha:'pitta',    isNew:false },
+  { id:4,  name:'Shatavari Capsules',         cat:'capsules', icon:'🌸', desc:'Women\'s wellness supplement for hormonal balance and reproductive health.',price:520,  orig:699,  rating:5,  reviews:83,  badge:'doctor',     dosha:'vata',     isNew:false },
+  { id:5,  name:'Neem Powder',                cat:'herbs',    icon:'🌱', desc:'Powerful blood purifier and skin cleanser. Supports liver health.',        price:229,  orig:320,  rating:4,  reviews:55,  badge:'new',        dosha:'pitta',    isNew:true  },
+  { id:6,  name:'Sesame Oil (Cold Pressed)',  cat:'oils',     icon:'🫙', desc:'Pure sesame oil for Abhyanga massage. Deeply nourishing and warming.',    price:389,  orig:520,  rating:5,  reviews:42,  badge:'doctor',     dosha:'vata',     isNew:false },
+  { id:7,  name:'Turmeric & Ginger Tea',      cat:'teas',     icon:'🍵', desc:'Anti-inflammatory golden tea blend. Supports digestion and immunity.',    price:249,  orig:320,  rating:4,  reviews:76,  badge:'bestseller', dosha:'kapha',    isNew:false },
+  { id:8,  name:'Chyawanprash',               cat:'herbs',    icon:'🫙', desc:'Classic Ayurvedic immunity tonic with 40+ herbs. Suitable for all ages.', price:599,  orig:799,  rating:5,  reviews:109, badge:'bestseller', dosha:'tridosha', isNew:false },
+  { id:9,  name:'Guduchi Tablets',            cat:'capsules', icon:'💊', desc:'Immunity booster and anti-inflammatory. Excellent for chronic conditions.',price:399,  orig:520,  rating:4,  reviews:48,  badge:'doctor',     dosha:'pitta',    isNew:false },
+  { id:10, name:'Rose Hip Face Oil',          cat:'skincare', icon:'🌹', desc:'Nourishing Ayurvedic face oil. Reduces dark spots and brightens skin.',   price:649,  orig:899,  rating:5,  reviews:62,  badge:'new',        dosha:'pitta',    isNew:true  },
+  { id:11, name:'Moringa Powder',             cat:'herbs',    icon:'🌿', desc:'Superfood rich in iron, calcium, and vitamins. Boosts energy naturally.', price:279,  orig:380,  rating:4,  reviews:91,  badge:'new',        dosha:'kapha',    isNew:true  },
+  { id:12, name:'Digestive Churna',           cat:'herbs',    icon:'🌾', desc:'Ayurvedic blend for acidity, bloating, and sluggish digestion.',          price:319,  orig:420,  rating:5,  reviews:77,  badge:'sale',       dosha:'pitta',    isNew:false },
+  { id:13, name:'Coconut & Neem Hair Oil',    cat:'oils',     icon:'🥥', desc:'Controls dandruff, nourishes scalp, promotes thick healthy hair growth.',  price:359,  orig:460,  rating:4,  reviews:53,  badge:'sale',       dosha:'kapha',    isNew:false },
+  { id:14, name:'Licorice Root Powder',       cat:'herbs',    icon:'🌿', desc:'Soothes stomach lining, supports adrenals, and balances hormones.',       price:259,  orig:340,  rating:4,  reviews:38,  badge:'',           dosha:'vata',     isNew:false },
+  { id:15, name:'Tulsi Immunity Tea',         cat:'teas',     icon:'🫖', desc:'Holy Basil herbal tea for respiratory health and daily immunity support.', price:199,  orig:280,  rating:5,  reviews:118, badge:'bestseller', dosha:'tridosha', isNew:false },
+  { id:16, name:'Kumkumadi Face Cream',       cat:'skincare', icon:'✨', desc:'Luxurious Ayurvedic face cream with saffron. Brightens and anti-ageing.',  price:899,  orig:1199, rating:5,  reviews:44,  badge:'doctor',     dosha:'vata',     isNew:false },
+];
+
+/* ── CART STATE ── */
+let cart = [];
+let filteredProducts = [...PRODUCTS];
+let wishedItems = new Set();
+
+/* ── RENDER PRODUCTS ── */
+function renderProducts(list) {
+  const grid = document.getElementById('productsGrid');
+  document.getElementById('product-count').textContent = list.length;
+
+  if (list.length === 0) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--text-light);"><div style="font-size:48px;margin-bottom:12px;">🔍</div><p style="font-size:16px;">No products found. Try adjusting your filters.</p></div>';
+    return;
+  }
+
+  grid.innerHTML = list.map(p => {
+    const disc = p.orig ? Math.round((1 - p.price / p.orig) * 100) : 0;
+    const stars = '★'.repeat(p.rating) + '☆'.repeat(5 - p.rating);
+    const badgeMap = { sale:'🔥 Sale', new:'✨ New', bestseller:'🏆 Bestseller', doctor:'👨‍⚕️ Doctor Pick', '':'' };
+    const wished = wishedItems.has(p.id);
+    return `
+    <div class="product-card" data-id="${p.id}" data-cat="${p.cat}" data-price="${p.price}" data-rating="${p.rating}" data-new="${p.isNew}">
+      <div class="p-img">
+        <span>${p.icon}</span>
+        ${p.badge ? `<span class="p-badge ${p.badge}">${badgeMap[p.badge]}</span>` : ''}
+      </div>
+      <div class="p-info">
+        <p class="p-cat">${p.cat.charAt(0).toUpperCase()+p.cat.slice(1)}</p>
+        <h4>${p.name}</h4>
+        <p class="p-desc">${p.desc}</p>
+        <p class="p-stars">${stars} <span>(${p.reviews})</span></p>
+        <div class="p-price">
+          <span class="curr">₹${p.price}</span>
+          ${p.orig ? `<span class="orig">₹${p.orig}</span>` : ''}
+          ${disc ? `<span class="disc">-${disc}%</span>` : ''}
+        </div>
+        <div class="p-actions">
+          <button class="add-btn" onclick="addToCart(${p.id})">Add to Cart</button>
+          <button class="wish-btn ${wished ? 'wished' : ''}" id="wish-${p.id}" onclick="toggleWish(${p.id})">${wished ? '❤️' : '🤍'}</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ── FILTER BY CATEGORY ── */
+function filterCategory(cat, btn) {
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  filteredProducts = cat === 'all' ? [...PRODUCTS] : PRODUCTS.filter(p => p.cat === cat);
+  renderProducts(filteredProducts);
+}
+
+/* ── SEARCH ── */
+function filterProducts() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const res = PRODUCTS.filter(p => p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q));
+  renderProducts(res);
+}
+
+/* ── SORT ── */
+function sortProducts(val) {
+  let sorted = [...filteredProducts];
+  if      (val === 'price-asc')  sorted.sort((a,b) => a.price - b.price);
+  else if (val === 'price-desc') sorted.sort((a,b) => b.price - a.price);
+  else if (val === 'rating')     sorted.sort((a,b) => b.rating - a.rating);
+  else if (val === 'new')        sorted.sort((a,b) => b.isNew - a.isNew);
+  renderProducts(sorted);
+}
+
+/* ── WISHLIST ── */
+function toggleWish(id) {
+  if (wishedItems.has(id)) { wishedItems.delete(id); }
+  else { wishedItems.add(id); }
+  const btn = document.getElementById('wish-'+id);
+  if (btn) { btn.textContent = wishedItems.has(id) ? '❤️' : '🤍'; btn.classList.toggle('wished', wishedItems.has(id)); }
+}
+
+/* ── ADD TO CART ── */
+function addToCart(id) {
+  const product = PRODUCTS.find(p => p.id === id);
+  const existing = cart.find(i => i.id === id);
+  if (existing) { existing.qty++; } else { cart.push({ ...product, qty: 1 }); }
+  updateCartUI();
+  showToast('Added: ' + product.name);
+}
+
+function updateCartUI() {
+  const count = cart.reduce((s, i) => s + i.qty, 0);
+  document.getElementById('fab-count').textContent = count;
+  document.getElementById('top-cart-count').textContent = count;
+
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  document.getElementById('cartTotal').textContent = '₹' + total;
+
+  const note = document.getElementById('shippingNote');
+  if (total >= 999) { note.innerHTML = '🎉 You qualify for <strong>Free Shipping!</strong>'; }
+  else { note.innerHTML = 'Add ₹' + (999 - total) + ' more for <strong>Free Shipping</strong>'; }
+
+  const itemsEl = document.getElementById('cartItems');
+  if (cart.length === 0) {
+    itemsEl.innerHTML = '<div class="cart-empty"><div class="ico">🛒</div><p>Your cart is empty.</p><p style="font-size:13px;margin-top:8px;">Add some products to get started!</p></div>';
+    return;
+  }
+  itemsEl.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="ci-img">${item.icon}</div>
+      <div class="ci-info">
+        <p class="ci-name">${item.name}</p>
+        <p class="ci-price">₹${item.price} each</p>
+        <div class="ci-qty">
+          <button onclick="changeQty(${item.id}, -1)">−</button>
+          <span>${item.qty}</span>
+          <button onclick="changeQty(${item.id}, 1)">+</button>
+        </div>
+      </div>
+      <button class="ci-remove" onclick="removeFromCart(${item.id})">🗑</button>
+    </div>`).join('');
+}
+
+function changeQty(id, delta) {
+  const item = cart.find(i => i.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+  updateCartUI();
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(i => i.id !== id);
+  updateCartUI();
+}
+
+/* ── TOAST ── */
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('cartToast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+/* ── CART DRAWER ── */
+function openCart() {
+  document.getElementById('cartDrawer').classList.add('open');
+  document.getElementById('cartOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeCart() {
+  document.getElementById('cartDrawer').classList.remove('open');
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+
+/* ── CHECKOUT ── */
+function checkout() {
+  if (cart.length === 0) { alert('Your cart is empty! Please add some products first.'); return; }
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const shipping = total >= 999 ? 0 : 80;
+  alert('Proceeding to checkout!\n\nSubtotal: ₹' + total + '\nShipping: ' + (shipping === 0 ? 'FREE' : '₹' + shipping) + '\nTotal: ₹' + (total + shipping) + '\n\nPayment gateway integration coming soon. You will be redirected to Razorpay.');
+}
+
+/* ── FILTER SIDEBAR ── */
+document.querySelector('.filter-apply').addEventListener('click', function() {
+  const catChecks  = [...document.querySelectorAll('.filter-group:nth-child(1) input[type="checkbox"]')].filter(c=>c.checked).map(c=>c.value);
+  const doshChecks = [...document.querySelectorAll('.filter-group:nth-child(2) input[type="checkbox"]')].filter(c=>c.checked).map(c=>c.value);
+  const maxPrice   = parseInt(document.getElementById('priceRange').value);
+  filteredProducts = PRODUCTS.filter(p => {
+    const catOk   = catChecks.length === 0 || catChecks.includes(p.cat);
+    const doshaOk = doshChecks.length === 0 || doshChecks.includes(p.dosha) || doshChecks.includes('tridosha') || p.dosha === 'tridosha';
+    const priceOk = p.price <= maxPrice;
+    return catOk && doshaOk && priceOk;
+  });
+  renderProducts(filteredProducts);
+});
+
+document.querySelector('.filter-clear').addEventListener('click', function() {
+  document.querySelectorAll('.filter-sidebar input[type="checkbox"]').forEach(cb => cb.checked = true);
+  document.getElementById('priceRange').value = 2000;
+  document.getElementById('priceVal').textContent = '₹2000';
+  filteredProducts = [...PRODUCTS];
+  renderProducts(filteredProducts);
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector('.cat-tab').classList.add('active');
+  document.getElementById('searchInput').value = '';
+});
+
+/* ── INIT ── */
+renderProducts(PRODUCTS);
+updateCartUI();
+  </script>
+
+<!-- WHATSAPP FLOAT -->
+<div style="position:fixed;bottom:28px;right:28px;z-index:200;">
+  <a href="https://wa.me/918825499283?text=Hi%20Chakradev%20Ayurveda%2C%20I%27d%20like%20to%20book%20a%20free%20consultation." target="_blank" rel="noopener"
+     style="display:flex;align-items:center;gap:10px;background:#25D366;color:#fff;padding:12px 20px;border-radius:50px;font-size:14px;font-weight:700;box-shadow:0 4px 20px rgba(0,0,0,.2);text-decoration:none;">
+    <span style="font-size:22px;">💬</span>
+    <span style="display:none;" id="wa-label">WhatsApp Us</span>
+  </a>
+</div>
+<style>@media(min-width:640px){#wa-label{display:block!important}}</style>
+
+</body>
 </html>

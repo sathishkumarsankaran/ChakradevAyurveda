@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Testimonials Admin | Chakradev Ayurveda</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --gd:#2d5a27;--gm:#4a8c3f;--gl:#7dbf72;
+      --gold:#c8972a;--gol:#f0c96b;
+      --cream:#fdf6e3;--cd:#f5ead0;
+      --td:#1e2a1a;--tm:#3d4d38;--tl:#6b7c65;
+      --wh:#fff;
+      --sh:0 4px 24px rgba(45,90,39,.10);
+      --shl:0 12px 40px rgba(45,90,39,.16);
+      --r:14px;
+      --danger:#c0392b;--warn:#c8972a;--info:#2980b9;--success:#27ae60;
+    }
+    body{font-family:'Lato',sans-serif;background:#f0f2f0;color:var(--td);line-height:1.6;min-height:100vh}
+
+    /* ── LOGIN SCREEN ── */
+    .login-screen{position:fixed;inset:0;background:linear-gradient(135deg,var(--gd),var(--gm));display:flex;align-items:center;justify-content:center;z-index:9999;padding:24px}
+    .login-screen.hidden{display:none!important}
+    .login-box{background:var(--wh);border-radius:20px;padding:48px 40px;width:100%;max-width:400px;box-shadow:0 24px 64px rgba(0,0,0,.25);text-align:center}
+    .login-logo{font-size:56px;margin-bottom:12px}
+    .login-box h2{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gd);margin-bottom:4px}
+    .login-box .login-sub{font-size:12px;color:var(--tl);margin-bottom:28px;letter-spacing:.5px;text-transform:uppercase}
+    .login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;text-align:left}
+    .login-field label{font-size:12px;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.5px}
+    .login-field input{padding:12px 16px;border:1.5px solid #ddd;border-radius:10px;font-size:14px;font-family:'Lato',sans-serif;outline:none;transition:border-color .2s}
+    .login-field input:focus{border-color:var(--gm)}
+    .login-btn{width:100%;padding:14px;background:var(--gd);color:var(--wh);border:none;border-radius:10px;font-family:'Lato',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;transition:background .2s}
+    .login-btn:hover{background:var(--gm)}
+    .login-error{background:#fde8e8;color:var(--danger);font-size:13px;padding:10px 14px;border-radius:8px;margin-top:12px;display:none}
+    .login-hint{font-size:11px;color:var(--tl);margin-top:16px}
+
+    /* ── ADMIN LAYOUT ── */
+    .admin-wrap{display:none;min-height:100vh;flex-direction:column}
+
+    /* Top admin bar */
+    .admin-bar{background:var(--gd);color:var(--wh);padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;height:56px;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+    .admin-bar .ab-brand{display:flex;align-items:center;gap:10px}
+    .admin-bar .ab-logo{font-size:24px}
+    .admin-bar h1{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--wh)}
+    .admin-bar .ab-pill{font-size:10px;font-weight:700;background:rgba(200,151,42,.35);color:var(--gol);padding:2px 10px;border-radius:20px;letter-spacing:1px;text-transform:uppercase;margin-left:6px}
+    .admin-bar .ab-right{display:flex;align-items:center;gap:12px}
+    .admin-bar .ab-time{font-size:12px;color:#a8d4a4}
+    .logout-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:var(--wh);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;transition:background .2s;font-family:'Lato',sans-serif}
+    .logout-btn:hover{background:rgba(255,255,255,.25)}
+
+    /* Main content */
+    .admin-main{max-width:1400px;margin:0 auto;padding:32px 24px;flex:1;width:100%}
+
+    /* Stats bar */
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:28px}
+    .stat-card{background:var(--wh);border-radius:var(--r);padding:20px 22px;box-shadow:var(--sh);border-left:4px solid}
+    .stat-card.total{border-color:var(--gm)}
+    .stat-card.pending{border-color:var(--warn)}
+    .stat-card.approved{border-color:var(--success)}
+    .stat-card.rejected{border-color:var(--danger)}
+    .stat-card.featured{border-color:#7c5cbf}
+    .stat-card .snum{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;line-height:1;color:var(--td)}
+    .stat-card .slbl{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--tl);margin-top:4px;font-weight:700}
+    .stat-card .sico{font-size:22px;float:right;margin-top:-4px}
+
+    /* Panel layout */
+    .admin-panels{display:grid;grid-template-columns:1fr 400px;gap:24px;align-items:start}
+
+    /* Left panel — testimonial list */
+    .panel{background:var(--wh);border-radius:var(--r);box-shadow:var(--sh)}
+    .panel-header{padding:20px 24px;border-bottom:2px solid var(--cd);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+    .panel-header h2{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--gd)}
+    .panel-body{padding:20px 24px}
+
+    /* Filter toolbar */
+    .filter-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:20px}
+    .filter-bar input[type="search"]{flex:1;min-width:180px;padding:9px 14px;border:1.5px solid #c8d8c5;border-radius:8px;font-family:'Lato',sans-serif;font-size:13px;outline:none;background:#fafff9;transition:border-color .2s}
+    .filter-bar input:focus{border-color:var(--gm)}
+    .filter-bar select{padding:9px 12px;border:1.5px solid #c8d8c5;border-radius:8px;font-family:'Lato',sans-serif;font-size:13px;color:var(--td);background:var(--wh);outline:none;cursor:pointer}
+    .sort-btn{padding:9px 14px;border:1.5px solid #c8d8c5;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;background:var(--wh);color:var(--tm);transition:all .2s;font-family:'Lato',sans-serif}
+    .sort-btn.active{background:var(--gm);color:var(--wh);border-color:var(--gm)}
+
+    /* Testimonial cards */
+    .t-list{display:flex;flex-direction:column;gap:14px}
+    .t-card{border:1.5px solid var(--cd);border-radius:12px;overflow:hidden;transition:box-shadow .2s;cursor:pointer}
+    .t-card:hover{box-shadow:0 4px 16px rgba(45,90,39,.12)}
+    .t-card.active{border-color:var(--gm);box-shadow:0 0 0 2px rgba(74,140,63,.25)}
+    .t-card-head{padding:14px 16px;display:flex;align-items:center;gap:12px}
+    .t-avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:var(--wh);flex-shrink:0;font-family:'Playfair Display',serif}
+    .t-meta{flex:1;min-width:0}
+    .t-name{font-size:14px;font-weight:700;color:var(--td);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .t-sub{font-size:11px;color:var(--tl);margin-top:1px}
+    .t-status{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+    .s-pending {background:#fff3cd;color:#856404}
+    .s-approved{background:#d1fae5;color:#065f46}
+    .s-rejected{background:#fee2e2;color:#991b1b}
+    .t-card-body{padding:0 16px 14px;font-size:13px;color:var(--tm);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .t-card-foot{padding:8px 16px;background:var(--cream);border-top:1px solid var(--cd);display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .t-stars{color:var(--gold);font-size:12px}
+    .t-date{font-size:11px;color:var(--tl)}
+    .t-featured-badge{font-size:10px;font-weight:700;color:#7c5cbf;background:rgba(124,92,191,.12);padding:2px 8px;border-radius:10px}
+
+    /* Right panel — detail & actions */
+    .detail-panel{position:sticky;top:80px}
+    .detail-empty{padding:48px 24px;text-align:center;color:var(--tl)}
+    .detail-empty .de-ico{font-size:48px;margin-bottom:12px}
+    .detail-content{padding:24px}
+    .detail-avatar{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:var(--wh);font-family:'Playfair Display',serif;margin:0 auto 12px}
+    .detail-name{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--td);text-align:center;margin-bottom:2px}
+    .detail-sub{font-size:12px;color:var(--tl);text-align:center;margin-bottom:16px}
+    .detail-stars{text-align:center;color:var(--gold);font-size:18px;margin-bottom:20px}
+    .detail-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+    .dm-item{background:var(--cream);border-radius:8px;padding:10px 12px}
+    .dm-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--tl);margin-bottom:3px}
+    .dm-value{font-size:13px;font-weight:700;color:var(--td)}
+    .detail-quote{background:var(--cream);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:14px 16px;font-size:14px;color:var(--tm);line-height:1.75;font-style:italic;margin-bottom:20px}
+    .consent-box{background:#f0fbf0;border:1.5px solid #68d391;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--gd);margin-bottom:20px;display:flex;align-items:center;gap:8px}
+    .detail-section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--tl);margin-bottom:8px}
+
+    /* Admin note field */
+    .admin-note{width:100%;padding:10px 12px;border:1.5px solid #c8d8c5;border-radius:8px;font-family:'Lato',sans-serif;font-size:13px;color:var(--td);background:#fafff9;resize:vertical;min-height:72px;outline:none;margin-bottom:16px;transition:border-color .2s}
+    .admin-note:focus{border-color:var(--gm)}
+
+    /* Display snippet preview */
+    .snippet-preview{background:var(--gd);border-radius:10px;padding:16px;margin-bottom:16px}
+    .snippet-preview p{font-size:11px;font-weight:700;color:var(--gol);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+    .snippet-text{font-size:13px;color:#c8e8c4;font-style:italic;line-height:1.6}
+    .snippet-author{font-size:11px;color:#7dbf72;margin-top:6px}
+
+    /* Feature toggle */
+    .feature-toggle{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:12px 14px;background:rgba(124,92,191,.07);border-radius:8px;border:1.5px solid rgba(124,92,191,.2)}
+    .feature-toggle label{font-size:13px;font-weight:700;color:#7c5cbf;cursor:pointer;flex:1}
+    .toggle-switch{position:relative;width:44px;height:24px;flex-shrink:0}
+    .toggle-switch input{opacity:0;width:0;height:0}
+    .toggle-slider{position:absolute;inset:0;background:#ccc;border-radius:24px;cursor:pointer;transition:.3s}
+    .toggle-slider::before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:var(--wh);border-radius:50%;transition:.3s}
+    .toggle-switch input:checked+.toggle-slider{background:#7c5cbf}
+    .toggle-switch input:checked+.toggle-slider::before{transform:translateX(20px)}
+
+    /* Action buttons */
+    .action-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+    .act-btn{padding:11px 8px;border:none;border-radius:8px;font-family:'Lato',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+    .act-btn:hover{transform:translateY(-1px)}
+    .act-approve{background:#d1fae5;color:#065f46}
+    .act-approve:hover{background:#a7f3d0}
+    .act-reject {background:#fee2e2;color:#991b1b}
+    .act-reject:hover {background:#fecaca}
+    .act-delete {background:#f3f4f6;color:#6b7280;grid-column:1/-1}
+    .act-delete:hover {background:#e5e7eb}
+    .act-copy{background:var(--cd);color:var(--td);grid-column:1/-1}
+    .act-copy:hover{background:#e8dfc4}
+
+    /* Add testimonial form */
+    /* ── COLLECT PANEL ── */
+    .form-group{margin-bottom:14px}
+    .form-group label{display:block;font-size:12px;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
+    .form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 13px;border:1.5px solid #c8d8c5;border-radius:8px;font-family:'Lato',sans-serif;font-size:13px;color:var(--td);background:#fafff9;outline:none;transition:border-color .2s}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gm)}
+    .form-group textarea{min-height:100px;resize:vertical}
+    .star-picker{display:flex;gap:4px;margin-top:4px}
+    .star-picker span{font-size:24px;cursor:pointer;color:#ccc;transition:color .15s}
+    .star-picker span.lit{color:var(--gold)}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .submit-btn{width:100%;padding:12px;background:var(--gd);color:var(--wh);border:none;border-radius:8px;font-family:'Lato',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s;margin-top:4px}
+    .submit-btn:hover{background:var(--gm)}
+
+    /* Export strip */
+    .export-strip{display:flex;gap:10px;flex-wrap:wrap;padding:16px 24px;border-top:2px solid var(--cd);align-items:center}
+    .export-strip span{font-size:12px;color:var(--tl);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-right:4px}
+    .exp-btn{padding:7px 14px;border:1.5px solid #c8d8c5;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;background:var(--wh);color:var(--tm);transition:all .2s;font-family:'Lato',sans-serif}
+    .exp-btn:hover{background:var(--gd);color:var(--wh);border-color:var(--gd)}
+
+    /* Toast */
+    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--gd);color:var(--wh);padding:12px 24px;border-radius:30px;font-size:14px;font-weight:700;box-shadow:var(--shl);z-index:9000;opacity:0;transition:all .3s;white-space:nowrap}
+    .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+    /* Responsive */
+    @media(max-width:900px){.admin-panels{grid-template-columns:1fr}.detail-panel{position:static}}
+    @media(max-width:600px){.stats-row{grid-template-columns:1fr 1fr}.action-btns{grid-template-columns:1fr}.act-delete,.act-copy{grid-column:1}.form-row{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     LOGIN SCREEN
+══════════════════════════════════════════════════════════ -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">🌿</div>
+    <h2>Chakradev Ayurveda</h2>
+    <p class="login-sub">Testimonials Admin · Restricted Access</p>
+    <div class="login-field">
+      <label>Username</label>
+      <input type="text" id="loginUser" placeholder="admin" autocomplete="username">
+    </div>
+    <div class="login-field">
+      <label>Password</label>
+      <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="login-btn" type="button" onclick="doLogin()" id="loginBtn">Sign In →</button>
+    <div class="login-error" id="loginError">⚠ Incorrect username or password.</div>
+    <p class="login-hint">🔒 This page is for authorised staff only.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     ADMIN INTERFACE
+══════════════════════════════════════════════════════════ -->
+<div class="admin-wrap" id="adminWrap">
+
+  <!-- Admin Top Bar -->
+  <div class="admin-bar">
+    <div class="ab-brand">
+      <span class="ab-logo">🌿</span>
+      <h1>Chakradev Ayurveda <span class="ab-pill">Admin</span></h1>
+    </div>
+    <div class="ab-right">
+      <span class="ab-time" id="adminClock"></span>
+      <a href="https://forms.gle/4HrNokb7Ty9K6eBe6" target="_blank" style="display:flex;align-items:center;gap:6px;background:rgba(200,151,42,.25);border:1px solid rgba(240,201,107,.4);color:var(--gol);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;text-decoration:none;transition:background .2s" onmouseover="this.style.background='rgba(200,151,42,.4)'" onmouseout="this.style.background='rgba(200,151,42,.25)'">📋 View Live Form ↗</a>
+      <button onclick="copyFormLinkQuick()" style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:var(--wh);padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Lato',sans-serif;transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,.22)'" onmouseout="this.style.background='rgba(255,255,255,.12)'">🔗 Copy Form Link</button>
+      <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="admin-main">
+
+    <!-- Page heading -->
+    <div style="margin-bottom:24px">
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--gd);margin-bottom:4px">💬 Testimonials Manager</h2>
+      <p style="font-size:13px;color:var(--tl)">Collect, review, approve and manage patient testimonials for display on the website.</p>
+    </div>
+
+    <!-- Stats row -->
+    <div class="stats-row" id="statsRow">
+      <div class="stat-card total">   <span class="sico">💬</span><div class="snum" id="sTotal">0</div><div class="slbl">Total</div></div>
+      <div class="stat-card pending"> <span class="sico">⏳</span><div class="snum" id="sPending">0</div><div class="slbl">Pending Review</div></div>
+      <div class="stat-card approved"><span class="sico">✅</span><div class="snum" id="sApproved">0</div><div class="slbl">Approved</div></div>
+      <div class="stat-card rejected"><span class="sico">❌</span><div class="snum" id="sRejected">0</div><div class="slbl">Rejected</div></div>
+      <div class="stat-card featured"><span class="sico">⭐</span><div class="snum" id="sFeatured">0</div><div class="slbl">Featured</div></div>
+    </div>
+
+    <!-- Main panels -->
+    <div class="admin-panels">
+
+      <!-- LEFT — Testimonial List -->
+      <div class="panel">
+        <div class="panel-header">
+          <h2>All Testimonials</h2>
+          <button onclick="toggleCollectPanel()" style="padding:8px 16px;background:var(--gd);color:var(--wh);border:none;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Lato',sans-serif" id="collectToggleBtn">📨 Collect Testimonials</button>
+        </div>
+
+        <!-- Collect Testimonials Panel -->
+        <div class="panel-body" id="collectPanelWrap" style="display:none">
+          <div style="border:2px solid var(--cd);border-radius:14px;overflow:hidden;margin-bottom:4px">
+
+            <!-- Panel header -->
+            <div style="background:linear-gradient(90deg,var(--gd),var(--gm));padding:14px 18px;display:flex;align-items:center;justify-content:space-between">
+              <div>
+                <p style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--wh);margin-bottom:2px">📨 Request a Testimonial</p>
+                <p style="font-size:11px;color:#a8d4a4">Share the link after a successful consultation to collect formally</p>
+              </div>
+              <button onclick="toggleCollectPanel()" style="background:none;border:none;color:rgba(255,255,255,.6);font-size:20px;cursor:pointer;line-height:1;padding:0 4px">✕</button>
+            </div>
+
+            <div style="padding:20px">
+
+              <!-- Google Form option -->
+              <div style="background:var(--cream);border-radius:12px;padding:18px;margin-bottom:14px;border:1.5px solid #ddebd8">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+                  <div style="width:42px;height:42px;border-radius:10px;background:#4285f4;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">📋</div>
+                  <div>
+                    <p style="font-size:14px;font-weight:700;color:var(--td);margin-bottom:2px">Google Form (Recommended)</p>
+                    <p style="font-size:11px;color:var(--tl)">Formal, documented consent — best for compliance & records</p>
+                  </div>
+                </div>
+                <p style="font-size:12px;color:var(--tm);line-height:1.7;margin-bottom:14px">Send this link to patients after a positive consultation. The form collects their testimonial, star rating, and explicit written consent in one step. Responses feed directly into your Google Sheets for easy import here.</p>
+
+                <!-- Form link input -->
+                <div style="display:flex;gap:8px;margin-bottom:10px">
+                  <input type="text" id="gFormUrl" placeholder="Paste your Google Form link here…" style="flex:1;padding:9px 13px;border:1.5px solid #c8d8c5;border-radius:8px;font-size:13px;font-family:'Lato',sans-serif;outline:none;background:var(--wh)" value="https://forms.gle/4HrNokb7Ty9K6eBe6">
+                  <button onclick="saveFormUrl()" style="padding:9px 14px;background:var(--gm);color:var(--wh);border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Lato',sans-serif;white-space:nowrap">Save</button>
+                </div>
+
+                <!-- Action buttons -->
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+                  <button onclick="openGForm()" style="padding:9px 6px;background:var(--wh);border:1.5px solid #4285f4;color:#4285f4;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Lato',sans-serif">🔗 Open Form</button>
+                  <button onclick="copyGFormLink()" style="padding:9px 6px;background:var(--wh);border:1.5px solid #c8d8c5;color:var(--tm);border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Lato',sans-serif">📋 Copy Link</button>
+                  <button onclick="shareGFormViaWA()" style="padding:9px 6px;background:var(--wh);border:1.5px solid #25D366;color:#128C7E;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Lato',sans-serif">💬 Share via WA</button>
+                </div>
+
+                <!-- How to create guide -->
+                <details style="margin-top:12px">
+                  <summary style="font-size:12px;font-weight:700;color:var(--gm);cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px"><span>▶</span> How to set up your Google Form</summary>
+                  <div style="margin-top:10px;padding:12px;background:var(--wh);border-radius:8px;border:1px solid var(--cd)">
+                    <ol style="padding-left:18px;display:flex;flex-direction:column;gap:6px">
+                      <li style="font-size:12px;color:var(--tm)">Go to <strong>forms.google.com</strong> → click <em>Blank form</em></li>
+                      <li style="font-size:12px;color:var(--tm)">Title: <em>"Share Your Experience with Chakradev Ayurveda"</em></li>
+                      <li style="font-size:12px;color:var(--tm)">Add fields: <strong>Full Name</strong> (Short answer) · <strong>Your Experience</strong> (Paragraph) · <strong>Star Rating</strong> (Multiple choice: ★ to ★★★★★) · <strong>May we display this on our website?</strong> (Checkbox: Yes, I consent)</li>
+                      <li style="font-size:12px;color:var(--tm)">Click <em>Send</em> → copy the link → paste it above</li>
+                      <li style="font-size:12px;color:var(--tm)">Link the form to a Google Sheet to track all responses in one place</li>
+                    </ol>
+                  </div>
+                </details>
+              </div>
+
+              <!-- WhatsApp option -->
+              <div style="background:var(--cream);border-radius:12px;padding:18px;border:1.5px solid #ddebd8">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+                  <div style="width:42px;height:42px;border-radius:10px;background:#25D366;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">💬</div>
+                  <div>
+                    <p style="font-size:14px;font-weight:700;color:var(--td);margin-bottom:2px">WhatsApp Request</p>
+                    <p style="font-size:11px;color:var(--tl)">Most effective for Indian audience — warm, personal, instant</p>
+                  </div>
+                </div>
+                <p style="font-size:12px;color:var(--tm);line-height:1.7;margin-bottom:14px">Send a personalised WhatsApp message to the patient after a positive outcome. This achieves the highest response rate. Always follow up with the Google Form link to capture formal written consent before publishing.</p>
+
+                <!-- Message templates -->
+                <p style="font-size:11px;font-weight:700;color:var(--tl);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Ready-to-Send Message Templates</p>
+
+                <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+                  <!-- Template 1 -->
+                  <div style="background:var(--wh);border-radius:8px;border:1px solid var(--cd);padding:12px">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                      <span style="font-size:11px;font-weight:700;color:var(--gm)">Template 1 — General</span>
+                      <button onclick="copyWATemplate(1)" style="font-size:11px;padding:3px 10px;border:1px solid var(--cd);border-radius:10px;background:var(--wh);cursor:pointer;font-family:'Lato',sans-serif;color:var(--tl)">📋 Copy</button>
+                    </div>
+                    <p id="wa-tpl-1" style="font-size:12px;color:var(--tm);line-height:1.65;white-space:pre-line">Namaste 🙏
+
+We are so glad to hear you are feeling better after your consultation with Dr. Preetha at Chakradev Ayurveda.
+
+Would you be willing to share a few words about your experience? Your feedback helps other families discover the healing power of Ayurveda. 🌿
+
+👉 Share your experience here: https://forms.gle/4HrNokb7Ty9K6eBe6
+
+It takes just 2 minutes and means the world to us. Thank you! 🙏
+— Team Chakradev Ayurveda</p>
+                  </div>
+
+                  <!-- Template 2 -->
+                  <div style="background:var(--wh);border-radius:8px;border:1px solid var(--cd);padding:12px">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                      <span style="font-size:11px;font-weight:700;color:var(--gm)">Template 2 — Parent & Child</span>
+                      <button onclick="copyWATemplate(2)" style="font-size:11px;padding:3px 10px;border:1px solid var(--cd);border-radius:10px;background:var(--wh);cursor:pointer;font-family:'Lato',sans-serif;color:var(--tl)">📋 Copy</button>
+                    </div>
+                    <p id="wa-tpl-2" style="font-size:12px;color:var(--tm);line-height:1.65;white-space:pre-line">Namaste 🙏
+
+It was truly wonderful working with your child at Chakradev Ayurveda. Seeing little ones thrive through Ayurveda is what drives us every day. 💚
+
+If you have a moment, could you share your experience as a parent? Your words could reassure another family who is wondering whether Ayurveda is right for their child.
+
+👉 It takes 2 minutes: https://forms.gle/4HrNokb7Ty9K6eBe6
+
+With gratitude 🌿
+— Dr. Preetha Vasudavan, Chakradev Ayurveda</p>
+                  </div>
+
+                  <!-- Template 3 -->
+                  <div style="background:var(--wh);border-radius:8px;border:1px solid var(--cd);padding:12px">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                      <span style="font-size:11px;font-weight:700;color:var(--gm)">Template 3 — Follow-up Reminder</span>
+                      <button onclick="copyWATemplate(3)" style="font-size:11px;padding:3px 10px;border:1px solid var(--cd);border-radius:10px;background:var(--wh);cursor:pointer;font-family:'Lato',sans-serif;color:var(--tl)">📋 Copy</button>
+                    </div>
+                    <p id="wa-tpl-3" style="font-size:12px;color:var(--tm);line-height:1.65;white-space:pre-line">Namaste 🙏
+
+Just a gentle reminder — we would love to hear how you are doing after your Chakradev Ayurveda consultation! Your feedback takes just 2 minutes and truly helps us help others. 🌿
+
+👉 Share here: https://forms.gle/4HrNokb7Ty9K6eBe6
+
+No obligation at all — only if you feel comfortable. Thank you! 🙏</p>
+                  </div>
+                </div>
+
+                <!-- Open WA Chat button -->
+                <button onclick="openWhatsAppChat()" style="width:100%;padding:11px;background:#25D366;color:var(--wh);border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Lato',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px">
+                  <span style="font-size:18px">💬</span> Open WhatsApp Business Chat
+                </button>
+              </div>
+
+              <!-- Tip box -->
+              <div style="margin-top:14px;background:rgba(200,151,42,.1);border:1.5px solid rgba(200,151,42,.35);border-radius:10px;padding:13px 15px;display:flex;gap:10px">
+                <span style="font-size:18px;flex-shrink:0">💡</span>
+                <p style="font-size:12px;color:var(--td);line-height:1.65"><strong>Best practice:</strong> Send the WhatsApp message within 24–48 hours of a positive outcome when the experience is freshest. Then always follow up with the Google Form link to capture written consent — this is required before displaying any testimonial publicly.</p>
+              </div>
+
+              <!-- ── EMAIL SHARING ── -->
+              <div style="background:var(--cream);border-radius:12px;padding:18px;margin-top:14px;border:1.5px solid #ddebd8">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+                  <div style="width:42px;height:42px;border-radius:10px;background:#ea4335;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">✉️</div>
+                  <div>
+                    <p style="font-size:14px;font-weight:700;color:var(--td);margin-bottom:2px">Email Request</p>
+                    <p style="font-size:11px;color:var(--tl)">Professional, documented — great for follow-up care patients</p>
+                  </div>
+                </div>
+                <p style="font-size:12px;color:var(--tm);line-height:1.7;margin-bottom:14px">Send a personalised email to the patient's inbox. Email requests feel more formal and work well for patients who prefer written communication. Fill in the patient's name and email below, then pick a template to send.</p>
+
+                <!-- Compose fields -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+                  <div>
+                    <label style="font-size:11px;font-weight:700;color:var(--tl);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:4px">Patient Name</label>
+                    <input type="text" id="email-patient-name" placeholder="e.g. Priya Sharma" style="width:100%;padding:9px 12px;border:1.5px solid #c8d8c5;border-radius:8px;font-size:13px;font-family:'Lato',sans-serif;outline:none;background:var(--wh)">
+                  </div>
+                  <div>
+                    <label style="font-size:11px;font-weight:700;color:var(--tl);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:4px">Patient Email *</label>
+                    <input type="email" id="email-patient-addr" placeholder="patient@email.com" style="width:100%;padding:9px 12px;border:1.5px solid #c8d8c5;border-radius:8px;font-size:13px;font-family:'Lato',sans-serif;outline:none;background:var(--wh)">
+                  </div>
+                </div>
+
+                <!-- Email templates -->
+                <p style="font-size:11px;font-weight:700;color:var(--tl);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Choose a Template</p>
+                <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
+
+                  <!-- Email Template 1 -->
+                  <div style="background:var(--wh);border-radius:8px;border:1px solid var(--cd);padding:12px">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                      <span style="font-size:11px;font-weight:700;color:#ea4335">Template 1 — General Follow-up</span>
+                      <div style="display:flex;gap:6px">
+                        <button onclick="previewEmail(1)" style="font-size:11px;padding:3px 10px;border:1px solid var(--cd);border-radius:10px;background:var(--wh);cursor:pointer;font-family:'Lato',sans-serif;color:var(--tl)">👁 Preview</button>
+                        <button onclick="sendEmail(1)" style="font-size:11px;padding:3px 10px;border:1px solid #ea4335;border-radius:10px;background:#fef2f2;cursor:pointer;font-family:'Lato',sans-serif;color:#ea4335;font-weight:700">✉ Send</button>
+                      </div>
+                    </div>
+                    <p style="font-size:11px;color:var(--tl)"><strong>Subject:</strong> Share Your Healing Journey — Chakradev Ayurveda</p>
+                  </div>
+
+                  <!-- Email Template 2 -->
+                  <div style="background:var(--wh);border-radius:8px;border:1px solid var(--cd);padding:12px">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                      <span style="font-size:11px;font-weight:700;color:#ea4335">Template 2 — Parent & Child</span>
+                      <div style="display:flex;gap:6px">
+                        <button onclick="previewEmail(2)" style="font-size:11px;padding:3px 10px;border:1px solid var(--cd);border-radius:10px;background:var(--wh);cursor:pointer;font-family:'Lato',sans-serif;color:var(--tl)">👁 Preview</button>
+                        <button onclick="sendEmail(2)" style="font-size:11px;padding:3px 10px;border:1px solid #ea4335;border-radius:10px;background:#fef2f2;cursor:pointer;font-family:'Lato',sans-serif;color:#ea4335;font-weight:700">✉ Send</button>
+                      </div>
+                    </div>
+                    <p style="font-size:11px;color:var(--tl)"><strong>Subject:</strong> Your Child's Wellness Journey — We'd Love to Hear From You</p>
+                  </div>
+
+                  <!-- Email Template 3 -->
+                  <div style="background:var(--wh);border-radius:8px;border:1px solid var(--cd);padding:12px">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                      <span style="font-size:11px;font-weight:700;color:#ea4335">Template 3 — Reminder</span>
+                      <div style="display:flex;gap:6px">
+                        <button onclick="previewEmail(3)" style="font-size:11px;padding:3px 10px;border:1px solid var(--cd);border-radius:10px;background:var(--wh);cursor:pointer;font-family:'Lato',sans-serif;color:var(--tl)">👁 Preview</button>
+                        <button onclick="sendEmail(3)" style="font-size:11px;padding:3px 10px;border:1px solid #ea4335;border-radius:10px;background:#fef2f2;cursor:pointer;font-family:'Lato',sans-serif;color:#ea4335;font-weight:700">✉ Send</button>
+                      </div>
+                    </div>
+                    <p style="font-size:11px;color:var(--tl)"><strong>Subject:</strong> A Gentle Reminder — Your Feedback Matters 🌿</p>
+                  </div>
+                </div>
+
+                <!-- Email preview modal -->
+                <div id="emailPreviewBox" style="display:none;background:#f8f9fa;border:1.5px solid #dee2e6;border-radius:10px;padding:14px;margin-bottom:10px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                    <span style="font-size:12px;font-weight:700;color:var(--td)">📧 Email Preview</span>
+                    <button onclick="document.getElementById('emailPreviewBox').style.display='none'" style="background:none;border:none;font-size:16px;cursor:pointer;color:var(--tl)">✕</button>
+                  </div>
+                  <div style="background:var(--wh);border-radius:6px;padding:12px;border:1px solid #dee2e6">
+                    <p style="font-size:11px;color:var(--tl);margin-bottom:4px"><strong>To:</strong> <span id="emailPreviewTo">—</span></p>
+                    <p style="font-size:11px;color:var(--tl);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #eee"><strong>Subject:</strong> <span id="emailPreviewSubject">—</span></p>
+                    <p id="emailPreviewBody" style="font-size:12px;color:var(--td);line-height:1.75;white-space:pre-line"></p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ── SOCIAL MEDIA SHARING ── -->
+              <div style="background:var(--cream);border-radius:12px;padding:18px;margin-top:14px;border:1.5px solid #ddebd8">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+                  <div style="width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,#f58529,#dd2a7b,#515bd4);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">📲</div>
+                  <div>
+                    <p style="font-size:14px;font-weight:700;color:var(--td);margin-bottom:2px">Share on Social Media</p>
+                    <p style="font-size:11px;color:var(--tl)">Reach existing followers to collect more testimonials</p>
+                  </div>
+                </div>
+                <p style="font-size:12px;color:var(--tm);line-height:1.7;margin-bottom:14px">Post a public call-for-testimonials on your clinic's social pages. This reaches patients who may not have been contacted directly and builds your brand's credibility simultaneously.</p>
+
+                <!-- Platform buttons grid -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+
+                  <!-- Facebook -->
+                  <button onclick="shareOnPlatform('facebook')" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--wh);border:1.5px solid #1877f2;border-radius:10px;cursor:pointer;font-family:'Lato',sans-serif;transition:all .2s" onmouseover="this.style.background='#e7f0fd'" onmouseout="this.style.background='var(--wh)'">
+                    <span style="font-size:22px">📘</span>
+                    <div style="text-align:left">
+                      <p style="font-size:13px;font-weight:700;color:#1877f2;margin-bottom:1px">Facebook</p>
+                      <p style="font-size:10px;color:var(--tl)">Post on your page</p>
+                    </div>
+                  </button>
+
+                  <!-- Instagram -->
+                  <button onclick="shareOnPlatform('instagram')" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--wh);border:1.5px solid #c13584;border-radius:10px;cursor:pointer;font-family:'Lato',sans-serif;transition:all .2s" onmouseover="this.style.background='#fdf0f7'" onmouseout="this.style.background='var(--wh)'">
+                    <span style="font-size:22px">📸</span>
+                    <div style="text-align:left">
+                      <p style="font-size:13px;font-weight:700;color:#c13584;margin-bottom:1px">Instagram</p>
+                      <p style="font-size:10px;color:var(--tl)">Copy caption for post</p>
+                    </div>
+                  </button>
+
+                  <!-- Twitter / X -->
+                  <button onclick="shareOnPlatform('twitter')" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--wh);border:1.5px solid #000;border-radius:10px;cursor:pointer;font-family:'Lato',sans-serif;transition:all .2s" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='var(--wh)'">
+                    <span style="font-size:22px">𝕏</span>
+                    <div style="text-align:left">
+                      <p style="font-size:13px;font-weight:700;color:#000;margin-bottom:1px">X (Twitter)</p>
+                      <p style="font-size:10px;color:var(--tl)">Post a tweet</p>
+                    </div>
+                  </button>
+
+                  <!-- LinkedIn -->
+                  <button onclick="shareOnPlatform('linkedin')" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--wh);border:1.5px solid #0a66c2;border-radius:10px;cursor:pointer;font-family:'Lato',sans-serif;transition:all .2s" onmouseover="this.style.background='#e8f0fb'" onmouseout="this.style.background='var(--wh)'">
+                    <span style="font-size:22px">💼</span>
+                    <div style="text-align:left">
+                      <p style="font-size:13px;font-weight:700;color:#0a66c2;margin-bottom:1px">LinkedIn</p>
+                      <p style="font-size:10px;color:var(--tl)">Share professionally</p>
+                    </div>
+                  </button>
+
+                  <!-- Telegram -->
+                  <button onclick="shareOnPlatform('telegram')" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--wh);border:1.5px solid #229ed9;border-radius:10px;cursor:pointer;font-family:'Lato',sans-serif;transition:all .2s" onmouseover="this.style.background='#e8f6fd'" onmouseout="this.style.background='var(--wh)'">
+                    <span style="font-size:22px">✈️</span>
+                    <div style="text-align:left">
+                      <p style="font-size:13px;font-weight:700;color:#229ed9;margin-bottom:1px">Telegram</p>
+                      <p style="font-size:10px;color:var(--tl)">Share to channel / group</p>
+                    </div>
+                  </button>
+
+                  <!-- Copy Link -->
+                  <button onclick="copyShareLink()" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--wh);border:1.5px solid var(--gm);border-radius:10px;cursor:pointer;font-family:'Lato',sans-serif;transition:all .2s" onmouseover="this.style.background='#eef8ec'" onmouseout="this.style.background='var(--wh)'">
+                    <span style="font-size:22px">🔗</span>
+                    <div style="text-align:left">
+                      <p style="font-size:13px;font-weight:700;color:var(--gm);margin-bottom:1px">Copy Link</p>
+                      <p style="font-size:10px;color:var(--tl)">Paste anywhere</p>
+                    </div>
+                  </button>
+                </div>
+
+                <!-- Social caption preview -->
+                <div id="socialCaptionBox" style="display:none;background:var(--wh);border:1.5px solid var(--cd);border-radius:10px;padding:14px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                    <span id="socialCaptionTitle" style="font-size:12px;font-weight:700;color:var(--td)">Caption to copy</span>
+                    <div style="display:flex;gap:6px">
+                      <button onclick="copySocialCaption()" style="font-size:11px;padding:3px 12px;border:1px solid var(--gm);border-radius:10px;background:var(--wh);cursor:pointer;font-family:'Lato',sans-serif;color:var(--gm);font-weight:700">📋 Copy</button>
+                      <button onclick="document.getElementById('socialCaptionBox').style.display='none'" style="background:none;border:none;font-size:16px;cursor:pointer;color:var(--tl)">✕</button>
+                    </div>
+                  </div>
+                  <p id="socialCaptionText" style="font-size:12px;color:var(--td);line-height:1.75;white-space:pre-line;border-top:1px solid var(--cd);padding-top:10px"></p>
+                </div>
+
+                <div style="background:rgba(200,151,42,.08);border:1px solid rgba(200,151,42,.25);border-radius:8px;padding:10px 13px;display:flex;gap:8px;margin-top:10px">
+                  <span style="font-size:14px;flex-shrink:0">📌</span>
+                  <p style="font-size:11px;color:var(--td);line-height:1.6"><strong>Tip:</strong> Pin the testimonial request post on your Facebook/Instagram page so new visitors always see it. Refresh the post once a month to keep engagement high.</p>
+                </div>
+              </div>
+
+        <!-- Filter bar -->
+        <div class="panel-body" style="padding-top:0">
+          <div class="filter-bar">
+            <input type="search" placeholder="🔍 Search name, concern, text…" oninput="filterList(this.value)" id="searchBox">
+            <select onchange="filterStatus(this.value)">
+              <option value="all">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+            </select>
+            <select onchange="filterConcern(this.value)" id="concernFilter">
+              <option value="all">All Concerns</option>
+            </select>
+            <button class="sort-btn active" id="sortNew" onclick="sortBy('new',this)">Newest</button>
+            <button class="sort-btn" id="sortStar" onclick="sortBy('stars',this)">⭐ Stars</button>
+          </div>
+
+          <!-- List -->
+          <div class="t-list" id="tList"></div>
+          <p style="text-align:center;color:var(--tl);font-size:13px;padding:24px 0;display:none" id="emptyMsg">No testimonials match your filters.</p>
+        </div>
+
+        <!-- Export strip -->
+        <div class="export-strip">
+          <span>Export:</span>
+          <button class="exp-btn" onclick="exportCSV()">📄 CSV</button>
+          <button class="exp-btn" onclick="exportJSON()">📋 JSON</button>
+          <button class="exp-btn" onclick="exportWebCode()">🌐 HTML Snippet</button>
+          <button class="exp-btn" onclick="printApproved()">🖨 Print Approved</button>
+        </div>
+      </div>
+
+      <!-- RIGHT — Detail & Actions -->
+      <div class="panel detail-panel" id="detailPanel">
+        <div class="panel-header">
+          <h2>Review & Actions</h2>
+        </div>
+        <div id="detailBody">
+          <div class="detail-empty">
+            <div class="de-ico">💬</div>
+            <p style="font-size:14px;font-weight:700;color:var(--td);margin-bottom:6px">Select a testimonial</p>
+            <p style="font-size:13px">Click any entry on the left to review it and take action.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════════════ -->
+<script>
+/* ── CREDENTIALS (change these) ── */
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'chakradev2024';
+
+/* ── AUTH ── */
+function doLogin() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    showAdmin();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+    document.getElementById('loginPass').value = '';
+    document.getElementById('loginPass').focus();
+  }
+}
+
+function showAdmin() {
+  document.getElementById('loginScreen').classList.add('hidden');
+  var wrap = document.getElementById('adminWrap');
+  wrap.style.display = 'flex';
+  wrap.style.flexDirection = 'column';
+  try { sessionStorage.setItem('ca_admin', '1'); } catch(e) {}
+  if (!window._appInited) { window._appInited = true; initApp(); }
+}
+
+function doLogout() {
+  try { sessionStorage.removeItem('ca_admin'); } catch(e) {}
+  window._appInited = false;
+  document.getElementById('adminWrap').style.display = 'none';
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('loginError').style.display = 'none';
+}
+
+/* ── CLOCK ── */
+function updateClock() {
+  const now = new Date();
+  document.getElementById('adminClock').textContent =
+    now.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'}) + '  ' +
+    now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+/* ── DATA STORE ── */
+const STORE_KEY = 'ca_testimonials';
+
+function loadData() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); }
+  catch(e) { return []; }
+}
+function saveData(data) {
+  localStorage.setItem(STORE_KEY, JSON.stringify(data));
+}
+
+/* ── SEED DATA (sample testimonials) ── */
+const SEED = [
+  {id:'t1',name:'Ananya R.',age:'6 years',concern:'Digestive Health',text:'My daughter had been suffering from chronic constipation for over two years. After just one consultation with Dr. Preetha, we made simple dietary changes and started a herbal routine. Within three weeks she was completely regular. I am genuinely grateful — no more tears at mealtimes!',stars:5,source:'WhatsApp',date:'2024-10-12',status:'approved',featured:true,consent:'yes',adminNote:'Featured on home page. Very strong testimonial.',displayAs:'Ananya R., Mother of 6-year-old'},
+  {id:'t2',name:'Rajan K.',age:'Adult',concern:'Stress & Anxiety',text:'I had tried everything for my anxiety — from allopathy to meditation apps. Dr. Preetha\'s approach was completely different. She treated the root cause, not just the symptoms. The Ashwagandha protocol and sleep routine she suggested changed my mornings completely.',stars:5,source:'Google Form',date:'2024-11-03',status:'approved',featured:true,consent:'form',adminNote:'Great for the About page.',displayAs:'Rajan K., IT Professional'},
+  {id:'t3',name:'Meera S.',age:'11 years',concern:'Skin & Allergy',text:'Our son had eczema patches on his arms and legs for two years. We were applying steroid cream regularly. After Chakradev consultation, we stopped the cream gradually and started the Ayurvedic protocol. His skin is 90% clear now after 2 months. Remarkable.',stars:5,source:'Email',date:'2024-11-18',status:'approved',featured:false,consent:'yes',adminNote:'',displayAs:'Meera S., Parent'},
+  {id:'t4',name:'Lakshmi P.',age:'Adult',concern:'Women\'s Health',text:'I was dealing with irregular cycles and PCOS for 4 years. Three months of Ayurvedic treatment with Dr. Preetha and my cycles are now regular for the first time. My energy levels are also so much better.',stars:5,source:'WhatsApp',date:'2024-12-01',status:'pending',featured:false,consent:'yes',adminNote:'Awaiting written consent confirmation.',displayAs:'Lakshmi P.'},
+  {id:'t5',name:'Suresh M.',age:'Adult',concern:'Weight Management',text:'Lost 6 kg in 3 months following the Kapha diet plan. More importantly I feel so much lighter and energetic. The lifestyle changes suggested are practical and I could follow them without disrupting my work schedule.',stars:4,source:'Google Form',date:'2024-12-10',status:'pending',featured:false,consent:'form',adminNote:'',displayAs:'Suresh M.'},
+  {id:'t6',name:'Divya N.',age:'4 years',concern:'Immunity & Wellness',text:'My child kept getting sick every month — cough, cold, fever. Since starting the Chyawanprash and diet changes from Chakradev, she has had just one mild cold in 5 months. Absolutely recommend to all parents.',stars:5,source:'WhatsApp',date:'2024-12-15',status:'approved',featured:false,consent:'yes',adminNote:'Good for home page immunity section.',displayAs:'Divya N., Mother'},
+  {id:'t7',name:'Arun T.',age:'Adult',concern:'Joint & Pain',text:'Had knee pain for 6 months. The oil massage routine and dietary changes have reduced the inflammation significantly. I can now climb stairs without pain. Still continuing the treatment.',stars:4,source:'In-Person',date:'2024-12-20',status:'rejected',featured:false,consent:'pending',adminNote:'Consent still pending — do not publish.',displayAs:'Arun T.'},
+];
+
+function seedIfEmpty() {
+  if (loadData().length === 0) saveData(SEED);
+}
+
+/* ── STATE ── */
+let currentId = null;
+let filterText = '';
+let filterStat = 'all';
+let filterConc = 'all';
+let sortMode   = 'new';
+
+/* ── INIT ── */
+const FORM_URL = 'https://forms.gle/4HrNokb7Ty9K6eBe6';
+
+function initApp() {
+  seedIfEmpty();
+  // Pre-seed Google Form URL if not already saved
+  if (!localStorage.getItem(GFORM_KEY)) {
+    localStorage.setItem(GFORM_KEY, FORM_URL);
+  }
+  renderList();
+  updateStats();
+  populateConcernFilter();
+}
+
+/* ── STATS ── */
+function updateStats() {
+  const data = loadData();
+  document.getElementById('sTotal').textContent    = data.length;
+  document.getElementById('sPending').textContent  = data.filter(t=>t.status==='pending').length;
+  document.getElementById('sApproved').textContent = data.filter(t=>t.status==='approved').length;
+  document.getElementById('sRejected').textContent = data.filter(t=>t.status==='rejected').length;
+  document.getElementById('sFeatured').textContent = data.filter(t=>t.featured).length;
+}
+
+/* ── COLOUR MAP ── */
+const COLORS = ['#2d5a27','#4a8c3f','#7c5cbf','#c05621','#c8972a','#2980b9','#27ae60'];
+function avatarColor(name) {
+  let h = 0;
+  for (let i=0;i<name.length;i++) h = name.charCodeAt(i) + ((h<<5)-h);
+  return COLORS[Math.abs(h) % COLORS.length];
+}
+function initials(name) {
+  return name.split(' ').map(w=>w[0]||'').join('').substring(0,2).toUpperCase();
+}
+
+/* ── STARS ── */
+function starsHtml(n) { return '★'.repeat(n) + '☆'.repeat(5-n); }
+
+/* ── RENDER LIST ── */
+function renderList() {
+  let data = loadData();
+
+  // Filter
+  if (filterText) {
+    const q = filterText.toLowerCase();
+    data = data.filter(t =>
+      t.name.toLowerCase().includes(q) ||
+      t.text.toLowerCase().includes(q) ||
+      t.concern.toLowerCase().includes(q)
+    );
+  }
+  if (filterStat !== 'all') data = data.filter(t => t.status === filterStat);
+  if (filterConc !== 'all') data = data.filter(t => t.concern === filterConc);
+
+  // Sort
+  if (sortMode === 'new')   data.sort((a,b)=>b.date.localeCompare(a.date));
+  if (sortMode === 'stars') data.sort((a,b)=>b.stars-a.stars);
+
+  const list = document.getElementById('tList');
+  const empty = document.getElementById('emptyMsg');
+
+  if (data.length === 0) {
+    list.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  list.innerHTML = data.map(t => {
+    const col = avatarColor(t.name);
+    const ini = initials(t.name);
+    const preview = t.text.length > 90 ? t.text.substring(0,90)+'…' : t.text;
+    return `<div class="t-card ${currentId===t.id?'active':''}" onclick="selectTestimonial('${t.id}')">
+      <div class="t-card-head">
+        <div class="t-avatar" style="background:${col}">${ini}</div>
+        <div class="t-meta">
+          <div class="t-name">${t.name}</div>
+          <div class="t-sub">${t.concern}${t.age&&t.age!=='Adult'?' · Child: '+t.age:''}</div>
+        </div>
+        <span class="t-status s-${t.status}">${t.status}</span>
+      </div>
+      <div class="t-card-body">"${preview}"</div>
+      <div class="t-card-foot">
+        <span class="t-stars">${starsHtml(t.stars)}</span>
+        <span class="t-date">${formatDate(t.date)}</span>
+        ${t.featured?'<span class="t-featured-badge">⭐ Featured</span>':''}
+        <span style="font-size:11px;color:var(--tl)">${t.source}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ── SELECT TESTIMONIAL ── */
+function selectTestimonial(id) {
+  currentId = id;
+  const data = loadData();
+  const t = data.find(x=>x.id===id);
+  if (!t) return;
+
+  renderList(); // re-render to show active
+
+  const col = avatarColor(t.name);
+  const ini = initials(t.name);
+  const consentIcon = t.consent==='pending' ? '⏳' : '✅';
+
+  // Build snippet preview (first 120 chars)
+  const snippet = t.text.length>120 ? t.text.substring(0,120)+'…' : t.text;
+
+  document.getElementById('detailBody').innerHTML = `
+    <div class="detail-content">
+      <div class="detail-avatar" style="background:${col}">${ini}</div>
+      <div class="detail-name">${t.name}</div>
+      <div class="detail-sub">${t.concern}${t.age&&t.age!=='Adult'?' · Child aged '+t.age:''} · ${t.source}</div>
+      <div class="detail-stars">${starsHtml(t.stars)} <span style="font-size:13px;color:var(--tl)">(${t.stars}/5)</span></div>
+
+      <div class="detail-meta">
+        <div class="dm-item"><div class="dm-label">Date Received</div><div class="dm-value">${formatDate(t.date)}</div></div>
+        <div class="dm-item"><div class="dm-label">Status</div><div class="dm-value"><span class="t-status s-${t.status}" style="font-size:12px">${t.status}</span></div></div>
+        <div class="dm-item"><div class="dm-label">Consent</div><div class="dm-value">${consentIcon} ${t.consent}</div></div>
+        <div class="dm-item"><div class="dm-label">Display As</div><div class="dm-value" style="font-size:12px">${t.displayAs||t.name}</div></div>
+      </div>
+
+      <div class="detail-quote">"${t.text}"</div>
+
+      ${t.consent!=='pending'?`<div class="consent-box">✅ Consent confirmed — safe to publish on website</div>`:`<div style="background:#fff3cd;border:1.5px solid #fbbf24;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;margin-bottom:20px">⏳ Consent still pending — do not publish until confirmed</div>`}
+
+      <div class="detail-section-label">Website Snippet Preview</div>
+      <div class="snippet-preview">
+        <p>How it will appear on the website:</p>
+        <div class="snippet-text">"${snippet}"</div>
+        <div class="snippet-author">— ${t.displayAs||t.name}</div>
+      </div>
+
+      <div class="detail-section-label">Feature on Website</div>
+      <div class="feature-toggle">
+        <label for="featToggle-${t.id}">⭐ Mark as Featured (shown in hero carousel)</label>
+        <label class="toggle-switch">
+          <input type="checkbox" id="featToggle-${t.id}" ${t.featured?'checked':''} onchange="toggleFeatured('${t.id}',this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="detail-section-label">Display Name Override</div>
+      <input type="text" style="width:100%;padding:9px 13px;border:1.5px solid #c8d8c5;border-radius:8px;font-family:'Lato',sans-serif;font-size:13px;margin-bottom:16px;outline:none;background:#fafff9" value="${t.displayAs||t.name}" id="displayAsInput" placeholder="e.g. Priya M., Mother of 8-year-old" onchange="updateDisplayAs('${t.id}',this.value)">
+
+      <div class="detail-section-label">Admin Notes (internal only)</div>
+      <textarea class="admin-note" id="noteArea" placeholder="Internal notes — not visible on website…" onchange="saveNote('${t.id}',this.value)">${t.adminNote||''}</textarea>
+
+      <div class="detail-section-label">Actions</div>
+      <div class="action-btns">
+        <button class="act-btn act-approve" onclick="setStatus('${t.id}','approved')">✅ Approve</button>
+        <button class="act-btn act-reject"  onclick="setStatus('${t.id}','rejected')">❌ Reject</button>
+        <button class="act-btn act-copy"    onclick="copySnippet('${t.id}')">📋 Copy HTML Snippet</button>
+        <button class="act-btn act-delete"  onclick="deleteTestimonial('${t.id}')">🗑 Delete Permanently</button>
+      </div>
+    </div>`;
+}
+
+/* ── ACTIONS ── */
+function setStatus(id, status) {
+  const data = loadData();
+  const t = data.find(x=>x.id===id);
+  if (!t) return;
+  t.status = status;
+  saveData(data);
+  renderList();
+  updateStats();
+  selectTestimonial(id);
+  showToast(status==='approved' ? '✅ Testimonial approved!' : '❌ Testimonial rejected');
+}
+
+function toggleFeatured(id, val) {
+  const data = loadData();
+  const t = data.find(x=>x.id===id);
+  if (!t) return;
+  t.featured = val;
+  saveData(data);
+  updateStats();
+  renderList();
+  showToast(val ? '⭐ Marked as featured!' : 'Removed from featured');
+}
+
+function saveNote(id, note) {
+  const data = loadData();
+  const t = data.find(x=>x.id===id);
+  if (t) { t.adminNote = note; saveData(data); }
+}
+
+function updateDisplayAs(id, val) {
+  const data = loadData();
+  const t = data.find(x=>x.id===id);
+  if (t) { t.displayAs = val; saveData(data); showToast('Display name saved'); }
+}
+
+function deleteTestimonial(id) {
+  if (!confirm('Permanently delete this testimonial? This cannot be undone.')) return;
+  let data = loadData().filter(x=>x.id!==id);
+  saveData(data);
+  currentId = null;
+  document.getElementById('detailBody').innerHTML = `<div class="detail-empty"><div class="de-ico">💬</div><p style="font-size:14px;font-weight:700;color:var(--td);margin-bottom:6px">Select a testimonial</p><p style="font-size:13px">Click any entry on the left to review it.</p></div>`;
+  renderList();
+  updateStats();
+  showToast('🗑 Testimonial deleted');
+}
+
+/* ── COLLECT PANEL ── */
+const GFORM_KEY = 'ca_gform_url';
+
+function copyFormLinkQuick() {
+  navigator.clipboard.writeText(FORM_URL).then(() => showToast('📋 Form link copied — ready to paste in WhatsApp!'));
+}
+
+function toggleCollectPanel() {
+  const panel = document.getElementById('collectPanelWrap');
+  const btn   = document.getElementById('collectToggleBtn');
+  const open  = panel.style.display === 'none' || panel.style.display === '';
+  panel.style.display = open ? 'block' : 'none';
+  btn.textContent = open ? '✕ Close' : '📨 Collect Testimonials';
+  // Load saved form URL
+  if (open) {
+    const saved = localStorage.getItem(GFORM_KEY) || '';
+    document.getElementById('gFormUrl').value = saved;
+  }
+}
+
+function saveFormUrl() {
+  const url = document.getElementById('gFormUrl').value.trim();
+  localStorage.setItem(GFORM_KEY, url);
+  showToast('🔗 Google Form link saved!');
+}
+
+function openGForm() {
+  const url = document.getElementById('gFormUrl').value.trim() || localStorage.getItem(GFORM_KEY);
+  if (!url) { showToast('⚠ Please paste your Google Form link first'); return; }
+  window.open(url, '_blank');
+}
+
+function copyGFormLink() {
+  const url = document.getElementById('gFormUrl').value.trim() || localStorage.getItem(GFORM_KEY) || '';
+  if (!url) { showToast('⚠ No Google Form link saved yet'); return; }
+  navigator.clipboard.writeText(url).then(() => showToast('📋 Form link copied!'));
+}
+
+function shareGFormViaWA() {
+  const url = document.getElementById('gFormUrl').value.trim() || localStorage.getItem(GFORM_KEY) || '';
+  const msg = 'Namaste 🙏\n\nThank you for choosing Chakradev Ayurveda. We would love to hear about your experience!\n\nPlease share your feedback here (takes 2 minutes):\n👉 ' + (url || '[PASTE YOUR GOOGLE FORM LINK]') + '\n\nWith gratitude 🌿\n— Team Chakradev Ayurveda';
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+}
+
+function openWhatsAppChat() {
+  window.open('https://wa.me/918825499283', '_blank');
+}
+
+function copyWATemplate(n) {
+  const el = document.getElementById('wa-tpl-' + n);
+  if (!el) return;
+  let text = el.textContent;
+  // Replace placeholder with saved form URL
+  const savedUrl = localStorage.getItem(GFORM_KEY) || FORM_URL;
+  text = text.split('https://forms.gle/4HrNokb7Ty9K6eBe6').join(savedUrl);
+  navigator.clipboard.writeText(text).then(() => showToast('📋 WhatsApp template ' + n + ' copied!'));
+}
+
+/* ── EMAIL SHARING ── */
+function getEmailTemplates() {
+  const name    = document.getElementById('email-patient-name').value.trim() || 'there';
+  const formUrl = localStorage.getItem(GFORM_KEY) || FORM_URL;
+
+  return {
+    1: {
+      subject: 'Share Your Healing Journey — Chakradev Ayurveda',
+      body:
+        'Namaste ' + name + ',\n\n' +
+        'We hope you are doing well and feeling the benefits of your Ayurvedic journey with Chakradev Ayurveda.\n\n' +
+        'Your experience matters deeply to us — and it could also guide other families who are looking for natural healing. Would you be willing to share a few words about your time with Dr. Preetha Vasudavan?\n\n' +
+        '👉 It takes just 2 minutes:\n' + formUrl + '\n\n' +
+        'Your feedback is completely voluntary. We will always ask for your permission before publishing anything on our website.\n\n' +
+        'With warmth and gratitude 🌿\n' +
+        'Dr. Preetha Vasudavan\n' +
+        'Chakradev Ayurveda Pvt. Ltd.\n' +
+        '📞 +91-8825499283 | ✉ chakradev239@gmail.com'
+    },
+    2: {
+      subject: "Your Child's Wellness Journey — We'd Love to Hear From You",
+      body:
+        'Namaste ' + name + ',\n\n' +
+        'It was a true privilege to support your child\'s wellness journey at Chakradev Ayurveda. Seeing little ones thrive through Ayurveda is what inspires us every single day. 💚\n\n' +
+        'As a parent, your experience and perspective is incredibly valuable — not just to us, but to other families who are wondering whether Ayurveda is the right path for their child.\n\n' +
+        'If you have a moment, could you share your experience here?\n' +
+        '👉 ' + formUrl + '\n\n' +
+        'It takes just 2 minutes, and your words could make a real difference for another family.\n\n' +
+        'With gratitude 🙏\n' +
+        'Dr. Preetha Vasudavan\n' +
+        'Chakradev Ayurveda Pvt. Ltd.\n' +
+        '📞 +91-8825499283'
+    },
+    3: {
+      subject: 'A Gentle Reminder — Your Feedback Matters 🌿',
+      body:
+        'Namaste ' + name + ',\n\n' +
+        'We recently reached out about sharing your experience with Chakradev Ayurveda — just a gentle reminder in case our earlier message was missed!\n\n' +
+        'Your honest feedback helps other patients discover natural healing, and it means the world to our small clinic.\n\n' +
+        '👉 Share here (2 minutes):\n' + formUrl + '\n\n' +
+        'No obligation at all — only if you feel comfortable. We truly appreciate your trust in us.\n\n' +
+        'With gratitude 🌿\n' +
+        'Team Chakradev Ayurveda\n' +
+        '📞 +91-8825499283'
+    }
+  };
+}
+
+function previewEmail(n) {
+  const addr      = document.getElementById('email-patient-addr').value.trim();
+  const templates = getEmailTemplates();
+  const tpl       = templates[n];
+  document.getElementById('emailPreviewTo').textContent      = addr || '(patient email not entered)';
+  document.getElementById('emailPreviewSubject').textContent = tpl.subject;
+  document.getElementById('emailPreviewBody').textContent    = tpl.body;
+  document.getElementById('emailPreviewBox').style.display   = 'block';
+  document.getElementById('emailPreviewBox').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function sendEmail(n) {
+  const addr = document.getElementById('email-patient-addr').value.trim();
+  if (!addr) { showToast('⚠ Please enter the patient email address first'); return; }
+  if (!/\S+@\S+\.\S+/.test(addr)) { showToast('⚠ Please enter a valid email address'); return; }
+  const tpl = getEmailTemplates()[n];
+  const mailto = 'mailto:' + addr +
+    '?subject=' + encodeURIComponent(tpl.subject) +
+    '&body='    + encodeURIComponent(tpl.body);
+  window.location.href = mailto;
+  showToast('✉ Opening email client…');
+}
+
+/* ── SOCIAL MEDIA SHARING ── */
+function getSocialCaption(platform) {
+  const formUrl = localStorage.getItem(GFORM_KEY) || FORM_URL;
+
+  const captions = {
+    facebook: {
+      title: '📘 Facebook Post Caption',
+      text:
+        '🌿 Has Ayurveda helped you or your family?\n\n' +
+        'At Chakradev Ayurveda, we\'re on a mission to bring authentic, natural healing to every home. Your experience is our greatest testament — and it could inspire another family to begin their wellness journey.\n\n' +
+        '💬 Share your experience with us in 2 minutes:\n' + formUrl + '\n\n' +
+        'Your story will be shared with your permission only. Thank you for being part of our healing community. 🙏\n\n' +
+        '#ChakradevAyurveda #Ayurveda #NaturalHealing #HolisticHealth #AyurvedaKerala #PatientStories #HealNaturally'
+    },
+    instagram: {
+      title: '📸 Instagram Caption',
+      text:
+        '🌿 Has Ayurveda changed your life?\n\n' +
+        'We would love to hear your story. Every healing journey is unique — and yours could be the light that guides another family toward natural wellness. ✨\n\n' +
+        'Share your experience with Chakradev Ayurveda (takes 2 minutes):\n' +
+        '👉 Link in bio\n\n' +
+        'Or use this link directly:\n' + formUrl + '\n\n' +
+        '#ChakradevAyurveda #Ayurveda #AyurvedaHealing #NaturalHealth #HolisticWellness #AyurvedaLife #PatientStories #HealNaturally #KeralaAyurveda #DrPreethaVasudavan'
+    },
+    twitter: {
+      title: '𝕏 Tweet Text',
+      text:
+        'Has Ayurveda helped you or your family? 🌿\n\n' +
+        'We\'d love to hear your story at Chakradev Ayurveda. Share your experience in 2 minutes:\n' +
+        formUrl + '\n\n' +
+        '#Ayurveda #NaturalHealing #ChakradevAyurveda'
+    },
+    linkedin: {
+      title: '💼 LinkedIn Post',
+      text:
+        'At Chakradev Ayurveda, we believe every healing story deserves to be heard. 🌿\n\n' +
+        'Ayurvedic medicine has been transforming lives for over 5,000 years — and today, it continues to offer profound, personalised healing to patients dealing with everything from digestive issues and skin conditions to stress, anxiety, and hormonal imbalances.\n\n' +
+        'If you or your family have experienced the benefits of Ayurvedic care with Dr. Preetha Vasudavan, we would be honoured if you could share your experience:\n\n' +
+        '👉 ' + formUrl + '\n\n' +
+        'Your testimonial will be shared only with your explicit consent, and it will help other families discover the power of natural healing.\n\n' +
+        '#Ayurveda #HolisticHealth #NaturalMedicine #PatientCare #WellnessJourney #ChakradevAyurveda'
+    },
+    telegram: {
+      title: '✈️ Telegram Message',
+      text:
+        '🌿 *Chakradev Ayurveda — Share Your Experience*\n\n' +
+        'Has our Ayurvedic care made a difference in your life?\n\n' +
+        'We would love to hear your story! Your feedback helps other families discover natural healing and inspires our entire team. 💚\n\n' +
+        '📝 Share your experience (takes 2 minutes):\n' + formUrl + '\n\n' +
+        '_Your feedback is voluntary. We will always ask for your permission before publishing anything._\n\n' +
+        'Thank you for being part of our healing family 🙏\n' +
+        '— Team Chakradev Ayurveda'
+    }
+  };
+  return captions[platform] || null;
+}
+
+function shareOnPlatform(platform) {
+  const formUrl = localStorage.getItem(GFORM_KEY) || FORM_URL;
+  const caption = getSocialCaption(platform);
+  if (!caption) return;
+
+  if (platform === 'facebook') {
+    // Facebook share dialog with the form URL as the shared link
+    window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(formUrl), '_blank', 'width=600,height=400');
+    // Also show caption to copy manually
+    showSocialCaption(caption);
+  } else if (platform === 'twitter') {
+    window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(caption.text), '_blank', 'width=600,height=400');
+  } else if (platform === 'linkedin') {
+    window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(formUrl), '_blank', 'width=600,height=500');
+    showSocialCaption(caption);
+  } else if (platform === 'telegram') {
+    window.open('https://t.me/share/url?url=' + encodeURIComponent(formUrl) + '&text=' + encodeURIComponent(caption.text), '_blank');
+  } else {
+    // Instagram — no direct share API; show caption to copy
+    showSocialCaption(caption);
+    showToast('📸 Caption ready — copy and paste into Instagram');
+  }
+}
+
+function showSocialCaption(caption) {
+  document.getElementById('socialCaptionTitle').textContent    = caption.title;
+  document.getElementById('socialCaptionText').textContent     = caption.text;
+  document.getElementById('socialCaptionBox').style.display    = 'block';
+  document.getElementById('socialCaptionBox').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function copySocialCaption() {
+  const text = document.getElementById('socialCaptionText').textContent;
+  navigator.clipboard.writeText(text).then(() => showToast('📋 Caption copied to clipboard!'));
+}
+
+function copyShareLink() {
+  const url = localStorage.getItem(GFORM_KEY) || FORM_URL;
+  navigator.clipboard.writeText(url).then(() => showToast('🔗 Form link copied — paste anywhere!'));
+}
+
+/* ── FILTERS ── */
+function filterList(q)     { filterText = q; renderList(); }
+function filterStatus(s)   { filterStat = s; renderList(); }
+function filterConcern(c)  { filterConc = c; renderList(); }
+function sortBy(mode, btn) {
+  sortMode = mode;
+  document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderList();
+}
+
+function populateConcernFilter() {
+  const data = loadData();
+  const concerns = [...new Set(data.map(t=>t.concern))].filter(Boolean).sort();
+  const sel = document.getElementById('concernFilter');
+  sel.innerHTML = '<option value="all">All Concerns</option>' +
+    concerns.map(c=>`<option value="${c}">${c}</option>`).join('');
+}
+
+/* ── COPY HTML SNIPPET ── */
+function copySnippet(id) {
+  const data = loadData();
+  const t = data.find(x=>x.id===id);
+  if (!t) return;
+  const snippet = t.text.length>200 ? t.text.substring(0,200)+'…' : t.text;
+  const html = `<!-- Testimonial: ${t.name} -->
+<div class="testimonial-card">
+  <div class="t-quote">"${snippet}"</div>
+  <div class="t-author">— ${t.displayAs||t.name}</div>
+  <div class="t-stars">${'★'.repeat(t.stars)}</div>
+  <div class="t-concern">${t.concern}</div>
+</div>`;
+  navigator.clipboard.writeText(html).then(()=>showToast('📋 HTML snippet copied to clipboard!'));
+}
+
+/* ── EXPORTS ── */
+function exportCSV() {
+  const data = loadData();
+  const rows = [['ID','Name','Child Age','Concern','Stars','Status','Featured','Source','Date','Consent','Display As','Testimonial Text']];
+  data.forEach(t=>rows.push([t.id,t.name,t.age,t.concern,t.stars,t.status,t.featured?'Yes':'No',t.source,t.date,t.consent,t.displayAs||t.name,'"'+t.text.replace(/"/g,'""')+'"']));
+  const csv = rows.map(r=>r.join(',')).join('\n');
+  download('chakradev_testimonials.csv','text/csv',csv);
+  showToast('📄 CSV exported');
+}
+
+function exportJSON() {
+  const data = loadData();
+  download('chakradev_testimonials.json','application/json',JSON.stringify(data,null,2));
+  showToast('📋 JSON exported');
+}
+
+function exportWebCode() {
+  const approved = loadData().filter(t=>t.status==='approved'&&t.consent!=='pending');
+  const html = `<!-- Chakradev Ayurveda — Approved Testimonials Widget -->
+<!-- Generated: ${new Date().toLocaleDateString('en-IN')} | ${approved.length} testimonials -->
+<section class="testimonials-section">
+  <div class="t-grid">
+${approved.map(t=>`    <div class="t-item">
+      <div class="t-stars">${'★'.repeat(t.stars)}</div>
+      <p class="t-text">"${t.text}"</p>
+      <div class="t-author">— ${t.displayAs||t.name}</div>
+      <div class="t-concern">${t.concern}</div>
+    </div>`).join('\n')}
+  </div>
+</section>`;
+  download('testimonials-widget.html','text/html',html);
+  showToast('🌐 HTML widget exported (' + approved.length + ' testimonials)');
+}
+
+function printApproved() {
+  const approved = loadData().filter(t=>t.status==='approved');
+  const w = window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><title>Approved Testimonials — Chakradev Ayurveda</title>
+  <style>body{font-family:Georgia,serif;max-width:800px;margin:40px auto;color:#222}h1{color:#2d5a27;border-bottom:3px solid #c8972a;padding-bottom:8px;margin-bottom:24px}.item{margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid #ddd}.stars{color:#c8972a;font-size:18px;margin-bottom:6px}.quote{font-style:italic;font-size:15px;line-height:1.7;margin-bottom:8px;color:#333}.author{font-weight:700;color:#2d5a27}.meta{font-size:12px;color:#666;margin-top:3px}@media print{body{margin:20px}}</style>
+  </head><body><h1>🌿 Chakradev Ayurveda — Approved Testimonials</h1><p style="color:#666;font-size:13px;margin-bottom:24px">Printed: ${new Date().toLocaleDateString('en-IN')} | ${approved.length} approved testimonials</p>
+  ${approved.map(t=>`<div class="item"><div class="stars">${'★'.repeat(t.stars)}</div><div class="quote">"${t.text}"</div><div class="author">— ${t.displayAs||t.name}</div><div class="meta">${t.concern} · ${formatDate(t.date)} · ${t.source}</div></div>`).join('')}
+  </body></html>`);
+  w.document.close();
+  w.print();
+}
+
+/* ── UTILS ── */
+function download(filename, mime, content) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content],{type:mime}));
+  a.download = filename;
+  a.click();
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  return new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2800);
+}
+
+/* ── STARTUP — runs after DOM is fully ready ── */
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* Auto-focus username field */
+  var userInput = document.getElementById('loginUser');
+  if (userInput) userInput.focus();
+
+  /* Enter key: username → password */
+  document.getElementById('loginUser').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') document.getElementById('loginPass').focus();
+  });
+
+  /* Enter key: password → submit */
+  document.getElementById('loginPass').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  /* Session persistence — stay logged in on refresh */
+  try {
+    if (sessionStorage.getItem('ca_admin') === '1') {
+      showAdmin();
+    }
+  } catch(e) {}
+
+});
+</script>
+<!-- ══════════════════════════════════════════════════════════
+     LEGAL & ETHICAL FOOTNOTE
+══════════════════════════════════════════════════════════ -->
+<div style="background:#1a2e17;color:#7aaa74;padding:32px 24px;margin-top:0">
+  <div style="max-width:1400px;margin:0 auto">
+
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+      <span style="font-size:20px">⚖️</span>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#c8e8c4">Legal & Ethical Guidelines for Testimonial Collection</h3>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-bottom:24px">
+
+      <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:16px 18px;border-left:3px solid #c8972a">
+        <p style="font-size:11px;font-weight:700;color:#c8972a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">✅ Consent is Mandatory</p>
+        <p style="font-size:12px;line-height:1.7;color:#a8d4a4">Always obtain <strong style="color:#c8e8c4">explicit written consent</strong> before publishing any testimonial. The Google Form checkbox ("I consent to Chakradev Ayurveda displaying this on their website") constitutes valid written consent. A verbal WhatsApp "yes" alone is not sufficient — always follow up with the form.</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:16px 18px;border-left:3px solid #7dbf72">
+        <p style="font-size:11px;font-weight:700;color:#7dbf72;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">🔒 Privacy & Anonymisation</p>
+        <p style="font-size:12px;line-height:1.7;color:#a8d4a4">Publish only <strong style="color:#c8e8c4">first name + last initial</strong> (e.g. Priya M.) unless the patient explicitly consents to their full name. Never publish phone numbers, email addresses, or any identifying health details beyond what the patient has voluntarily shared in their testimonial.</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:16px 18px;border-left:3px solid #7c5cbf">
+        <p style="font-size:11px;font-weight:700;color:#b39ddb;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">📋 AYUSH & Consumer Law</p>
+        <p style="font-size:12px;line-height:1.7;color:#a8d4a4">Under the <strong style="color:#c8e8c4">Drugs & Magic Remedies Act, 1954</strong> and <strong style="color:#c8e8c4">Consumer Protection Act, 2019</strong>, health testimonials must not claim to cure, treat, or prevent any disease. Testimonials should reflect personal experience only. Always include the standard disclaimer on the public page.</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:16px 18px;border-left:3px solid #c05621">
+        <p style="font-size:11px;font-weight:700;color:#f6a97a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">🚫 What Not to Do</p>
+        <p style="font-size:12px;line-height:1.7;color:#a8d4a4">Never fabricate, paraphrase beyond meaning, or embellish a testimonial. Do not use pressure tactics to solicit testimonials ("Leave a review or we won't continue your treatment"). Do not offer discounts or gifts in exchange for positive reviews — this is considered <strong style="color:#c8e8c4">deceptive advertising</strong> under Indian law.</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:16px 18px;border-left:3px solid #2980b9">
+        <p style="font-size:11px;font-weight:700;color:#7ec8e3;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">🗂 Record Keeping</p>
+        <p style="font-size:12px;line-height:1.7;color:#a8d4a4">Maintain a consent record for every published testimonial — the date consent was given, the method (form, email, WhatsApp screenshot), and the patient's name. Use the <strong style="color:#c8e8c4">Export CSV</strong> function monthly as your compliance record. Keep records for a minimum of 3 years.</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:16px 18px;border-left:3px solid #27ae60">
+        <p style="font-size:11px;font-weight:700;color:#68d391;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">📝 Required Website Disclaimer</p>
+        <p style="font-size:12px;line-height:1.7;color:#a8d4a4">The following disclaimer must appear on every page displaying testimonials: <em style="color:#c8e8c4">"Individual results may vary. These testimonials reflect personal experiences and do not constitute a guarantee of treatment outcomes. Ayurvedic treatments are complementary to, and not a replacement for, conventional medical care."</em></p>
+      </div>
+
+    </div>
+
+    <div style="border-top:1px solid rgba(255,255,255,.1);padding-top:16px;display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;justify-content:space-between">
+      <div>
+        <p style="font-size:11px;color:#5a8a54;line-height:1.7;max-width:680px">
+          <strong style="color:#7aaa74">Legal references:</strong> Drugs &amp; Magic Remedies (Objectionable Advertisements) Act, 1954 · Consumer Protection Act, 2019 (Section 2(28) — Misleading Advertisements) · Information Technology Act, 2000 (Data Privacy) · AYUSH Ministry Guidelines on Advertising, 2023. For legal advice specific to your practice, consult a qualified healthcare advertising lawyer.
+        </p>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <p style="font-size:11px;color:#5a8a54">Admin page — restricted access only</p>
+        <p style="font-size:11px;color:#5a8a54">Chakradev Ayurveda Pvt. Ltd. © 2024</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,100 +1,1061 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-
 <head>
   <meta charset="utf-8">
-  <title>ONLINE DOCTOR CONSULTATION</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/header.css">
+  <meta name="description" content="Book your free online Ayurvedic doctor consultation at Chakradev Ayurveda. Choose your doctor, pick a time, and start your healing journey today.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Book Consultation | Chakradev Ayurveda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --green-dark:   #2d5a27;
+      --green-mid:    #4a8c3f;
+      --green-light:  #7dbf72;
+      --gold:         #c8972a;
+      --gold-light:   #f0c96b;
+      --cream:        #fdf6e3;
+      --cream-dark:   #f5ead0;
+      --text-dark:    #1e2a1a;
+      --text-mid:     #3d4d38;
+      --text-light:   #6b7c65;
+      --white:        #ffffff;
+      --shadow:       0 4px 24px rgba(45,90,39,0.10);
+      --shadow-lg:    0 12px 40px rgba(45,90,39,0.16);
+      --radius:       14px;
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      line-height: 1.7;
+    }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      background: var(--green-dark);
+      color: #cce5c8;
+      font-size: 13px;
+      padding: 7px 0;
+    }
+    .top-bar .inner {
+      max-width: 1200px; margin: auto; padding: 0 24px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+    }
+    .top-bar a { color: #cce5c8; text-decoration: none; margin: 0 10px; transition: color .2s; }
+    .top-bar a:hover { color: var(--gold-light); }
+
+    /* ── HEADER ── */
+    .site-header {
+      background: var(--white);
+      border-bottom: 3px solid var(--gold);
+      padding: 18px 24px;
+    }
+    .site-header .inner {
+      max-width: 1200px; margin: auto;
+      display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; text-align: center;
+    }
+    .site-header .logo-wrap img { width: 80px; height: 80px; object-fit: contain; }
+    .site-header h1.brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.9rem; color: var(--green-dark); letter-spacing: 1px;
+    }
+    .site-header .tagline { font-size: 12px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
+
+    /* ── MAIN NAV ── */
+    nav.main-nav { background: var(--green-mid); position: sticky; top: 0; z-index: 100; }
+    nav.main-nav ul {
+      list-style: none; max-width: 1200px; margin: auto;
+      display: flex; flex-wrap: wrap; justify-content: center; padding: 0 16px;
+    }
+    nav.main-nav ul li a {
+      display: block; padding: 14px 18px; color: #e8f5e3; text-decoration: none;
+      font-size: 14px; font-weight: 700; letter-spacing: 0.4px; transition: background .2s, color .2s;
+    }
+    nav.main-nav ul li a:hover, nav.main-nav ul li a.active {
+      background: var(--green-dark); color: var(--gold-light);
+    }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+      padding: 56px 24px 48px;
+      text-align: center;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 48px;
+      background: var(--cream);
+      clip-path: ellipse(55% 100% at 50% 100%);
+    }
+    .page-hero .badge {
+      display: inline-block;
+      background: rgba(200,151,42,0.25);
+      border: 1px solid var(--gold-light);
+      color: var(--gold-light);
+      font-size: 12px; font-weight: 700;
+      padding: 5px 18px; border-radius: 30px;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .page-hero h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      margin-bottom: 12px;
+    }
+    .page-hero p { color: #c8e8c4; max-width: 540px; margin: 0 auto; font-size: 16px; }
+
+    /* ── TRUST BADGES ── */
+    .trust-strip {
+      background: var(--white);
+      border-bottom: 1px solid #e2eed e;
+      padding: 18px 24px;
+    }
+    .trust-strip .inner {
+      max-width: 1200px; margin: auto;
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 32px;
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; color: var(--text-mid); font-weight: 700;
+    }
+    .trust-item span.ico { font-size: 22px; }
+
+    /* ── MAIN LAYOUT ── */
+    .booking-layout {
+      max-width: 1200px;
+      margin: 48px auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 36px;
+      align-items: start;
+    }
+
+    /* ── STEP INDICATOR ── */
+    .steps-bar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 36px;
+      gap: 0;
+    }
+    .step {
+      display: flex; align-items: center; gap: 10px;
+      flex: 1;
+    }
+    .step-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: #d0e8cb; color: var(--text-light);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 15px; flex-shrink: 0;
+      transition: background .3s, color .3s;
+    }
+    .step.active .step-num { background: var(--green-mid); color: var(--white); }
+    .step.done .step-num { background: var(--gold); color: var(--white); }
+    .step-label { font-size: 12px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; }
+    .step.active .step-label { color: var(--green-dark); }
+    .step.done .step-label { color: var(--gold); }
+    .step-line { flex: 1; height: 2px; background: #d0e8cb; margin: 0 8px; }
+    .step-line.done { background: var(--gold); }
+
+    /* ── BOOKING SECTIONS ── */
+    .booking-section {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 32px;
+      margin-bottom: 28px;
+    }
+    .booking-section h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: var(--green-dark);
+      margin-bottom: 6px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .booking-section h3 .step-tag {
+      background: var(--green-dark);
+      color: var(--white);
+      font-size: 11px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      padding: 3px 10px; border-radius: 20px;
+      letter-spacing: 1px; text-transform: uppercase;
+    }
+    .booking-section .sub { font-size: 13px; color: var(--text-light); margin-bottom: 24px; }
+
+    /* ── DOCTOR CARDS ── */
+    .doctors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 18px;
+    }
+    .doctor-select-card {
+      border: 2px solid #d8ead4;
+      border-radius: 12px;
+      padding: 20px;
+      cursor: pointer;
+      transition: border-color .2s, box-shadow .2s, transform .2s;
+      position: relative;
+      user-select: none;
+    }
+    .doctor-select-card:hover {
+      border-color: var(--green-mid);
+      box-shadow: 0 4px 16px rgba(74,140,63,0.12);
+      transform: translateY(-2px);
+    }
+    .doctor-select-card.selected {
+      border-color: var(--green-mid);
+      background: #f2fbf0;
+      box-shadow: 0 0 0 3px rgba(74,140,63,0.15);
+    }
+    .doctor-select-card input[type="radio"] { display: none; }
+    .doctor-select-card .check-badge {
+      position: absolute; top: 12px; right: 12px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: #d8ead4; border: 2px solid #b0cfab;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; color: transparent;
+      transition: background .2s, color .2s;
+    }
+    .doctor-select-card.selected .check-badge {
+      background: var(--green-mid); color: var(--white); border-color: var(--green-mid);
+    }
+    .doc-avatar {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: linear-gradient(135deg, #a8d5a1, #5a9e50);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; margin-bottom: 12px;
+    }
+    .doctor-select-card h4 { font-size: 15px; color: var(--text-dark); font-weight: 700; margin-bottom: 3px; }
+    .doctor-select-card .spec { font-size: 12px; color: var(--gold); font-weight: 700; margin-bottom: 4px; }
+    .doctor-select-card .qual { font-size: 11px; color: var(--text-light); margin-bottom: 8px; }
+    .doctor-select-card .doc-meta {
+      display: flex; gap: 12px; font-size: 11px; color: var(--text-light); flex-wrap: wrap;
+    }
+    .doctor-select-card .doc-meta span { display: flex; align-items: center; gap: 4px; }
+    .doctor-select-card .stars-sm { color: var(--gold); font-size: 11px; }
+    .avail-badge {
+      display: inline-block; margin-top: 10px;
+      background: #e8f5e3; color: var(--green-dark);
+      font-size: 11px; font-weight: 700;
+      padding: 3px 10px; border-radius: 20px;
+    }
+
+    /* ── DATE PICKER ── */
+    .date-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+    .day-header {
+      text-align: center; font-size: 11px; font-weight: 700;
+      color: var(--text-light); text-transform: uppercase;
+      padding-bottom: 6px;
+    }
+    .date-cell {
+      text-align: center; padding: 9px 4px;
+      border-radius: 8px;
+      font-size: 14px; font-weight: 700;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: background .15s, border-color .15s, color .15s;
+      color: var(--text-dark);
+    }
+    .date-cell:hover:not(.disabled):not(.empty) {
+      background: #e8f5e3; border-color: var(--green-light);
+    }
+    .date-cell.selected {
+      background: var(--green-mid); color: var(--white); border-color: var(--green-mid);
+    }
+    .date-cell.today { border-color: var(--gold); color: var(--gold); }
+    .date-cell.today.selected { background: var(--green-mid); color: var(--white); border-color: var(--green-mid); }
+    .date-cell.disabled { color: #c8d4c5; cursor: not-allowed; }
+    .date-cell.empty { cursor: default; }
+    .cal-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .cal-nav h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; color: var(--green-dark);
+    }
+    .cal-btn {
+      background: none; border: 1.5px solid #c8d8c5;
+      border-radius: 8px; padding: 6px 14px;
+      cursor: pointer; font-size: 14px; color: var(--green-dark);
+      transition: background .2s;
+    }
+    .cal-btn:hover { background: #e8f5e3; }
+
+    /* ── TIME SLOTS ── */
+    .slots-label { font-size: 13px; font-weight: 700; color: var(--text-mid); margin-bottom: 12px; }
+    .slots-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px;
+    }
+    .slot-btn {
+      padding: 10px 8px; border-radius: 8px;
+      border: 1.5px solid #c8d8c5;
+      background: var(--white); cursor: pointer;
+      font-size: 13px; font-weight: 700; color: var(--text-mid);
+      text-align: center; transition: all .2s;
+    }
+    .slot-btn:hover:not(.booked) { border-color: var(--green-mid); background: #e8f5e3; color: var(--green-dark); }
+    .slot-btn.selected { background: var(--green-mid); border-color: var(--green-mid); color: var(--white); }
+    .slot-btn.booked { color: #c8d4c5; border-color: #e0e8de; cursor: not-allowed; text-decoration: line-through; }
+    .slot-btn .slot-type { font-size: 10px; font-weight: 400; display: block; margin-top: 2px; opacity: 0.8; }
+
+    /* ── CONSULT TYPE ── */
+    .consult-type-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    }
+    .consult-type-card {
+      border: 2px solid #d8ead4; border-radius: 10px; padding: 18px;
+      cursor: pointer; transition: all .2s; position: relative;
+    }
+    .consult-type-card:hover { border-color: var(--green-mid); background: #f9fef8; }
+    .consult-type-card.selected { border-color: var(--green-mid); background: #f2fbf0; }
+    .consult-type-card input[type="radio"] { display: none; }
+    .consult-type-card .type-ico { font-size: 28px; margin-bottom: 8px; display: block; }
+    .consult-type-card h4 { font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
+    .consult-type-card p { font-size: 12px; color: var(--text-light); }
+    .consult-type-card .price-tag {
+      position: absolute; top: 12px; right: 12px;
+      background: #e8f5e3; color: var(--green-dark);
+      font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px;
+    }
+    .consult-type-card.selected .price-tag { background: var(--green-mid); color: var(--white); }
+
+    /* ── PATIENT FORM ── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label { font-size: 13px; font-weight: 700; color: var(--text-mid); }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 11px 14px; border: 1.5px solid #c8d8c5; border-radius: 8px;
+      font-family: 'Lato', sans-serif; font-size: 14px; color: var(--text-dark);
+      background: #fafff9; outline: none; transition: border-color .2s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--green-mid); }
+    .form-group textarea { resize: vertical; min-height: 90px; }
+    .radio-group { display: flex; gap: 20px; flex-wrap: wrap; }
+    .radio-label {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; color: var(--text-mid); cursor: pointer;
+    }
+    .radio-label input[type="radio"] { accent-color: var(--green-mid); width: 16px; height: 16px; }
+
+    /* ── SIDEBAR ── */
+    .sidebar { position: sticky; top: 80px; }
+    .summary-card {
+      background: var(--white); border-radius: var(--radius);
+      box-shadow: var(--shadow); overflow: hidden;
+    }
+    .summary-header {
+      background: var(--green-dark); padding: 22px 24px;
+      color: var(--white);
+    }
+    .summary-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem; margin-bottom: 4px;
+    }
+    .summary-header p { font-size: 12px; color: #a8d4a4; }
+    .summary-body { padding: 24px; }
+    .summary-row {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 14px 0; border-bottom: 1px solid #eef5ec;
+    }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-row .ico { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+    .summary-row .info { flex: 1; }
+    .summary-row .label { font-size: 11px; color: var(--text-light); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .summary-row .value { font-size: 14px; color: var(--text-dark); font-weight: 700; margin-top: 2px; }
+    .summary-row .value.placeholder { color: var(--text-light); font-weight: 400; font-style: italic; }
+
+    .free-badge {
+      background: #e8f5e3; border-radius: 8px;
+      padding: 14px 16px; margin-top: 4px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .free-badge .ico { font-size: 22px; }
+    .free-badge .text { font-size: 13px; }
+    .free-badge .text strong { display: block; color: var(--green-dark); font-size: 15px; }
+    .free-badge .text span { color: var(--text-light); font-size: 12px; }
+
+    .confirm-btn {
+      width: 100%; padding: 16px;
+      background: var(--gold); color: var(--white);
+      border: none; border-radius: 10px;
+      font-size: 16px; font-weight: 700;
+      cursor: pointer; margin-top: 20px;
+      font-family: 'Lato', sans-serif;
+      letter-spacing: 0.5px;
+      transition: background .2s, transform .2s;
+    }
+    .confirm-btn:hover { background: #b5831f; transform: translateY(-2px); }
+    .confirm-btn:active { transform: translateY(0); }
+
+    .why-box {
+      background: var(--cream); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 24px; margin-top: 20px;
+    }
+    .why-box h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; color: var(--green-dark); margin-bottom: 16px;
+    }
+    .why-item {
+      display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start;
+    }
+    .why-item .ico { font-size: 16px; flex-shrink: 0; margin-top: 3px; }
+    .why-item p { font-size: 13px; color: var(--text-mid); line-height: 1.5; }
+
+    /* ── SUCCESS MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(30,42,26,0.7);
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-box {
+      background: var(--white); border-radius: 20px;
+      padding: 48px 40px; max-width: 480px; width: 90%;
+      text-align: center; box-shadow: var(--shadow-lg);
+      animation: popIn .35s cubic-bezier(.22,.68,0,1.2);
+    }
+    @keyframes popIn { from { opacity:0; transform: scale(.85); } to { opacity:1; transform: scale(1); } }
+    .modal-box .success-ico {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: #e8f5e3;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px; margin: 0 auto 20px;
+    }
+    .modal-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; color: var(--green-dark); margin-bottom: 12px;
+    }
+    .modal-box p { color: var(--text-mid); font-size: 14px; margin-bottom: 8px; }
+    .modal-box .booking-ref {
+      background: var(--cream); border-radius: 8px; padding: 12px 20px;
+      font-size: 20px; font-weight: 700; color: var(--green-dark);
+      letter-spacing: 3px; margin: 16px 0;
+    }
+    .modal-close {
+      display: inline-block; margin-top: 20px;
+      padding: 13px 36px; background: var(--green-mid);
+      color: var(--white); border: none; border-radius: 50px;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      font-family: 'Lato', sans-serif;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--green-dark); color: #b8d9b2;
+      padding: 40px 24px 24px; margin-top: 60px;
+    }
+    .footer-bottom {
+      max-width: 1200px; margin: auto;
+      display: flex; justify-content: space-between; align-items: flex-start;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom p { font-size: 12px; }
+    .disclaimer-text { font-size: 11px; color: #7aaa74; max-width: 680px; line-height: 1.6; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .booking-layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+    }
+    @media (max-width: 600px) {
+      .consult-type-grid { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .date-grid { grid-template-columns: repeat(7, 1fr); gap: 4px; }
+      .date-cell { font-size: 12px; padding: 7px 2px; }
+    }
+  </style>
 </head>
-
 <body>
+<!-- ANNOUNCEMENT BAR -->
+<div style="background:#c8972a;color:#fff;text-align:center;font-size:13px;font-weight:700;padding:9px 24px;">
+  🎁 First consultation is completely FREE — <a href="book_consultation.html" style="color:#fff;text-decoration:underline;margin-left:8px;">Book yours today →</a>
+</div>
 
-  <div class="fix_top top_top">
-    <div class="container_top">
-      <div class="container">
-        <!--top_navbar-->
-        <div class="navbar_top">
-          <ul>
-            <li><a href="cart.html">Cart</a></li>
-            <li>|</li>
-            <li><a href="mailto:info@chakradavayurveda.com">Email</a></li>
-            <li>|</li>
-            <li><a href="Tel:+91XXXXXXXXXX">Call us</a></li>
-            <li>|</li>
-            <li><a href="login-signup.html">Login</a></li>
-            <li>|</li>
-            <li><a href="login-signup.html">Sign Up</a></li>
-          </ul>
-        </div>
-        <!--centerlogo-->
-        <div class="logo_top">
-          <img src="image/ganesh.png" alt="" WIDTH="120" HEIGHT="120">
-          <p>The Opener of all good things in life</p>
-        </div>
-        <!-- Navbar -->
-        <div class="navbar">
-          <ul>
-            <li class="thick"><a href="index.html">🏡Home</a></li>
-            <li class="thick"><a href="consultant.html">Consultants</a></li>
-            <li class="thick"><a href="dosha-analysis.html">Dosha Analysis</a></li>
-            <li class="thick"><a href="e-shop.html">E-Shope</a></li>
-            <li class="thick active"><a href="book_consultation.html">Book You Online Consultation</a></li>
-            <li class="thick"><a href="diet.html">Diet</a></li>
-            <li class="thick"><a href="blog.html">Blog</a></li>
-          </ul>
-        </div>
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="inner">
+      <div>
+        <a href="tel:+918825499283">📞 Call Us: +91-8825499283</a>
+        <a href="mailto:chakradev239@gmail.com">✉ chakradev239@gmail.com</a>
+      </div>
+      <div>
+        <a href="cart.html">🛒 Cart</a>
+        <a href="login-signup.html">Login</a>
+        <a href="login-signup.html">Sign Up</a>
       </div>
     </div>
   </div>
 
-  <div class="main">
-    <h1 class="construction">This Site is Under Construction</h1>
-    <p>You can book your physical consultation with one of our specialists near to you. To Manage Corona pendamic sutuation Online consultation booked from anyware. Look here for the available consultation dates and -places (subject to change).
-      Important change due to absence of the assistant:</p>
-    <h1>Consult with your doctor online and stay healthy at home.</h1>
-    <table>
-      <tr>
-        <td><img src="image/preetha_profile_picture.png" alt="" width="80" height="80"></td>
-      </tr>
-    </table>
-    <p>Dr.Preetha Vasudevan</p>
-    <p>We have a solution via ayurvedic products and ayurvedic services for every problem.</p>
-    <p>* Required</p>
-    <form action="mailto:drpreetha86@gmail.com" method="post" enctype="text/plain">
-      <label for="">Your Name* :</label>
-      <input type="text" name="Your Name" value="">
-      <br>
-      <label for="">Phone Number* :</label>
-      <input type="text" name="Your Phone Number" value="">
-      <br>
-      <label for="">E-Mail* :</label>
-      <input type="email" name="E-Mail" value="">
-      <br>
-      <br>
-      <label for="">Date</label>
-      <input type="datetime-local" name="Requested Appointment Data & Time" value="">
-      <br>
-      <br>
-      <label for="">Any additional Information you would like to share*</label>
-      <br>
-      <textarea name="name" rows="8" cols="100"></textarea>
-      <br>
-      <br>
-      <label for="">Terms & Condition:- I hereby: State that I have read and understood the above information and give consent for Doctor to contact me for Consultation/Treatments and Diet Plan Services to be communicated with me regarding my
-        submitted
-        request
-        form.</label>
-      <br>
-      <br>
-      <input type="checkbox" name="" value="">
-      <label for="">Agree</label>
-      <br>
-      <input type="submit">
-    </form>
-    <br>
-  </div>
-</body>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="inner">
+      <div class="logo-wrap">
+        <a href="index.html"><img src="image/ganesh.png" alt="Chakradev Ayurveda"></a>
+      </div>
+      <h1 class="brand"><a href="index.html" style="text-decoration:none;color:inherit;">Chakradev Ayurveda</a></h1>
+      <p class="tagline">Heal Naturally · Live Harmoniously</p>
+    </div>
+  </header>
 
-</html>
+  <!-- NAV -->
+  <nav class="main-nav">
+    <ul>
+      <li><a href="index.html">🏡 Home</a></li>
+      <li><a href="consultant.html">Consultants</a></li>
+      <li><a href="dosha-analysis.html">Dosha Analysis</a></li>
+      <li><a href="e-shop.html">E-Shop</a></li>
+      <li><a href="book_consultation.html" class="active">Book Consultation</a></li>
+      <li><a href="diet.html">Diet & Nutrition</a></li>
+      <li><a href="blog.html">Blog</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="badge">✦ First Consultation Free</div>
+    <h2>Book Your Ayurvedic Consultation</h2>
+    <p>Select your doctor, choose a time that works for you, and begin your natural healing journey — all from home.</p>
+  </div>
+
+  <!-- TRUST STRIP -->
+  <div class="trust-strip">
+    <div class="inner">
+      <div class="trust-item"><span class="ico">🩺</span><span>Certified BAMS Doctors</span></div>
+      <div class="trust-item"><span class="ico">🔒</span><span>100% Private & Secure</span></div>
+      <div class="trust-item"><span class="ico">🎁</span><span>First Consultation FREE</span></div>
+      <div class="trust-item"><span class="ico">⚡</span><span>Confirmed within 24 hrs</span></div>
+      <div class="trust-item"><span class="ico">🌿</span><span>Personalised Treatment Plan</span></div>
+    </div>
+  </div>
+
+  <!-- MAIN BOOKING LAYOUT -->
+  <div class="booking-layout">
+
+    <!-- LEFT: BOOKING FORM -->
+    <div class="booking-main">
+
+      <!-- STEP 1: Choose Doctor -->
+      <div class="booking-section">
+        <h3>
+          <span class="step-tag">Step 1</span>
+          Choose Your Doctor
+        </h3>
+        <p class="sub">Your consultation will be with our Ayurvedic doctor. All first-time consultations are completely FREE.</p>
+
+        <div style="display:flex; align-items:flex-start; gap:28px; background:#f2fbf0; border:2px solid var(--green-mid); border-radius:14px; padding:28px; flex-wrap:wrap;">
+          <div class="doc-avatar" style="width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#a8d5a1,#5a9e50);display:flex;align-items:center;justify-content:center;font-size:44px;flex-shrink:0;">👩‍⚕️</div>
+          <div style="flex:1;min-width:200px;">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px;">
+              <h4 style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--green-dark);">Dr. Priya Nair</h4>
+              <span style="background:var(--green-mid);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:0.5px;">✓ Your Doctor</span>
+            </div>
+            <p style="font-size:13px;color:var(--gold);font-weight:700;margin-bottom:4px;">General Ayurveda & Holistic Wellness</p>
+            <p style="font-size:12px;color:var(--text-light);margin-bottom:12px;">B.A.M.S, M.D. Ayurveda &nbsp;·&nbsp; 12 Years Experience &nbsp;·&nbsp; 480+ Patients</p>
+            <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:13px;color:var(--text-mid);margin-bottom:14px;">
+              <span>⭐ <strong>4.9 / 5</strong> Rating</span>
+              <span>🎓 Certified BAMS Doctor</span>
+              <span>🌿 Specialises in Dosha balancing, chronic conditions & lifestyle disorders</span>
+            </div>
+            <p style="font-size:13px;color:var(--text-mid);font-style:italic;border-left:3px solid var(--gold);padding-left:12px;line-height:1.6;">"Ayurveda is not just about treating disease — it is about creating an environment within the body where disease cannot thrive."</p>
+          </div>
+          <div style="flex-shrink:0;text-align:center;">
+            <span style="display:inline-block;background:#e8f5e3;color:var(--green-dark);font-size:12px;font-weight:700;padding:6px 16px;border-radius:20px;margin-bottom:8px;">✅ Available Today</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Consultation Type -->
+      <div class="booking-section">
+        <h3><span class="step-tag">Step 2</span> Consultation Type</h3>
+        <p class="sub">Choose how you'd like to speak with your doctor.</p>
+        <div class="consult-type-grid">
+
+          <label class="consult-type-card" id="type-video" onclick="selectType(this,'Video Call')">
+            <input type="radio" name="consult_type" value="video">
+            <span class="price-tag">FREE</span>
+            <span class="type-ico">📹</span>
+            <h4>Video Consultation</h4>
+            <p>Face-to-face with your doctor via secure video call. Best for detailed assessments.</p>
+          </label>
+
+          <label class="consult-type-card" id="type-chat" onclick="selectType(this,'Chat / Message')">
+            <input type="radio" name="consult_type" value="chat">
+            <span class="price-tag">FREE</span>
+            <span class="type-ico">💬</span>
+            <h4>Chat Consultation</h4>
+            <p>Text-based consultation. Ideal for follow-ups, questions, and prescription refills.</p>
+          </label>
+
+        </div>
+      </div>
+
+      <!-- STEP 3: Date & Time -->
+      <div class="booking-section">
+        <h3><span class="step-tag">Step 3</span> Choose Date & Time</h3>
+        <p class="sub">Select your preferred appointment date and time slot.</p>
+
+        <!-- Calendar -->
+        <div class="cal-nav">
+          <button class="cal-btn" onclick="prevMonth()">← Prev</button>
+          <h4 id="cal-title"></h4>
+          <button class="cal-btn" onclick="nextMonth()">Next →</button>
+        </div>
+        <div class="date-grid" id="cal-grid"></div>
+
+        <!-- Time Slots -->
+        <p class="slots-label">Available Time Slots</p>
+        <div class="slots-grid" id="slots-grid"></div>
+      </div>
+
+      <!-- STEP 4: Patient Details -->
+      <div class="booking-section">
+        <h3><span class="step-tag">Step 4</span> Your Details</h3>
+        <p class="sub">Tell us a little about yourself so the doctor can prepare for your consultation.</p>
+
+        <form id="booking-form" novalidate>
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label for="fname">First Name *</label>
+              <input type="text" id="fname" name="first_name" placeholder="Your first name" required>
+            </div>
+
+            <div class="form-group">
+              <label for="lname">Last Name *</label>
+              <input type="text" id="lname" name="last_name" placeholder="Your last name" required>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" name="email" placeholder="you@example.com" required oninput="updateSummary()">
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Phone Number *</label>
+              <input type="tel" id="phone" name="phone" placeholder="+91 8825499283" required>
+            </div>
+
+            <div class="form-group">
+              <label for="dob">Date of Birth</label>
+              <input type="date" id="dob" name="dob">
+            </div>
+
+            <div class="form-group">
+              <label>Gender</label>
+              <div class="radio-group" style="margin-top:8px;">
+                <label class="radio-label"><input type="radio" name="gender" value="male"> Male</label>
+                <label class="radio-label"><input type="radio" name="gender" value="female"> Female</label>
+                <label class="radio-label"><input type="radio" name="gender" value="other"> Other</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="concern">Primary Health Concern *</label>
+              <select id="concern" name="concern" required onchange="updateSummary()">
+                <option value="">Select your concern</option>
+                <option>Digestive Issues (Acidity, IBS, Constipation)</option>
+                <option>Skin Conditions (Eczema, Psoriasis, Acne)</option>
+                <option>Stress, Anxiety & Mental Wellness</option>
+                <option>Joint & Muscle Pain (Arthritis, Back Pain)</option>
+                <option>Weight Management</option>
+                <option>Women's Health (PCOS, Menstrual Issues)</option>
+                <option>Respiratory Issues (Asthma, Allergies)</option>
+                <option>Diabetes & Metabolic Health</option>
+                <option>Hair Loss & Scalp Issues</option>
+                <option>General Wellness & Dosha Balancing</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="dosha">Known Dosha (optional)</label>
+              <select id="dosha" name="dosha">
+                <option value="">Not sure / To be assessed</option>
+                <option>Vata</option>
+                <option>Pitta</option>
+                <option>Kapha</option>
+                <option>Vata-Pitta</option>
+                <option>Pitta-Kapha</option>
+                <option>Vata-Kapha</option>
+              </select>
+            </div>
+
+            <div class="form-group full">
+              <label for="symptoms">Describe Your Symptoms / Health Goals</label>
+              <textarea id="symptoms" name="symptoms" placeholder="Please describe your symptoms, how long you've had them, any treatments you've tried, and what you'd like to achieve through Ayurveda..."></textarea>
+            </div>
+
+            <div class="form-group full">
+              <label for="medications">Current Medications or Supplements (if any)</label>
+              <input type="text" id="medications" name="medications" placeholder="e.g., Metformin 500mg, Vitamin D, etc. (leave blank if none)">
+            </div>
+
+          </div>
+        </form>
+      </div>
+
+    </div><!-- /booking-main -->
+
+    <!-- RIGHT: SIDEBAR SUMMARY -->
+    <aside class="sidebar">
+      <div class="summary-card">
+        <div class="summary-header">
+          <h3>Booking Summary</h3>
+          <p>Review your appointment details</p>
+        </div>
+        <div class="summary-body">
+
+          <div class="summary-row">
+            <span class="ico">👨‍⚕️</span>
+            <div class="info">
+              <p class="label">Doctor</p>
+              <p class="value placeholder" id="sum-doctor">Not selected yet</p>
+            </div>
+          </div>
+
+          <div class="summary-row">
+            <span class="ico">🏥</span>
+            <div class="info">
+              <p class="label">Speciality</p>
+              <p class="value placeholder" id="sum-spec">—</p>
+            </div>
+          </div>
+
+          <div class="summary-row">
+            <span class="ico">📹</span>
+            <div class="info">
+              <p class="label">Consultation Type</p>
+              <p class="value placeholder" id="sum-type">Not selected yet</p>
+            </div>
+          </div>
+
+          <div class="summary-row">
+            <span class="ico">📅</span>
+            <div class="info">
+              <p class="label">Date</p>
+              <p class="value placeholder" id="sum-date">Not selected yet</p>
+            </div>
+          </div>
+
+          <div class="summary-row">
+            <span class="ico">⏰</span>
+            <div class="info">
+              <p class="label">Time Slot</p>
+              <p class="value placeholder" id="sum-time">Not selected yet</p>
+            </div>
+          </div>
+
+          <div class="summary-row">
+            <span class="ico">🩺</span>
+            <div class="info">
+              <p class="label">Health Concern</p>
+              <p class="value placeholder" id="sum-concern">Not entered yet</p>
+            </div>
+          </div>
+
+          <div class="free-badge">
+            <span class="ico">🎁</span>
+            <div class="text">
+              <strong>FREE Consultation</strong>
+              <span>₹0 — No payment required today</span>
+            </div>
+          </div>
+
+          <button class="confirm-btn" onclick="confirmBooking()">
+            ✅ Confirm Appointment
+          </button>
+          <p style="font-size:11px;color:var(--text-light);text-align:center;margin-top:10px;">
+            You'll receive a confirmation email & SMS within 24 hours.
+          </p>
+        </div>
+      </div>
+
+      <div class="why-box">
+        <h4>Why Choose Chakradev Ayurveda?</h4>
+        <div class="why-item">
+          <span class="ico">🎓</span>
+          <p>All doctors hold authenticated B.A.M.S degrees from recognised Ayurvedic universities.</p>
+        </div>
+        <div class="why-item">
+          <span class="ico">🌿</span>
+          <p>Personalised treatment plans based on your unique Prakriti (body type).</p>
+        </div>
+        <div class="why-item">
+          <span class="ico">🔒</span>
+          <p>All consultations are 100% private and confidential.</p>
+        </div>
+        <div class="why-item">
+          <span class="ico">💊</span>
+          <p>Authentic, lab-tested herbal medicines delivered to your door.</p>
+        </div>
+      </div>
+    </aside>
+
+  </div><!-- /booking-layout -->
+
+  <!-- SUCCESS MODAL -->
+  <div class="modal-overlay" id="success-modal">
+    <div class="modal-box">
+      <div class="success-ico">✅</div>
+      <h3>Consultation Booked!</h3>
+      <p>Your appointment has been successfully submitted.</p>
+      <p>Your booking reference number is:</p>
+      <p class="booking-ref" id="booking-ref">—</p>
+      <p style="font-size:13px;color:var(--text-light);">A confirmation will be sent to your email and phone within 24 hours. The doctor will contact you to confirm the exact time.</p>
+      <button class="modal-close" onclick="document.getElementById('success-modal').classList.remove('show');window.location.href='index.html'">
+        Return to Homepage
+      </button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <!-- FOOTER -->
+<footer style="background:#2d5a27;color:#b8d9b2;padding:48px 24px 24px;">
+  <div style="max-width:1200px;margin:auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:36px;">
+    <div>
+      <h3 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.3rem;margin-bottom:12px;">Chakradev Ayurveda</h3>
+      <p style="font-size:13px;line-height:1.8;">Your one-stop destination for authentic Ayurvedic consultations, knowledge, and products.</p>
+      <div style="margin-top:14px;display:flex;flex-direction:column;gap:6px;">
+        <a href="tel:+918825499283" style="color:#b8d9b2;font-size:13px;">📞 Call Us: +91-8825499283</a>
+        <a href="mailto:chakradev239@gmail.com" style="color:#b8d9b2;font-size:13px;">✉ chakradev239@gmail.com</a>
+        <a href="contact.html" style="color:#b8d9b2;font-size:13px;">💬 Send us a message</a>
+      </div>
+    </div>
+    <div>
+      <h4 style="color:#f0c96b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;">Services</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+        <li><a href="book_consultation.html" style="color:#b8d9b2;font-size:13px;">Book Consultation</a></li>
+        <li><a href="dosha-analysis.html" style="color:#b8d9b2;font-size:13px;">Dosha Analysis</a></li>
+        <li><a href="consultant.html" style="color:#b8d9b2;font-size:13px;">Our Doctors</a></li>
+        <li><a href="diet.html" style="color:#b8d9b2;font-size:13px;">Diet Plans</a></li>
+        <li><a href="e-shop.html" style="color:#b8d9b2;font-size:13px;">E-Shop</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color:#f0c96b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;">Knowledge</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+        <li><a href="blog.html" style="color:#b8d9b2;font-size:13px;">Ayurveda Blog</a></li>
+        <li><a href="dosha-analysis.html" style="color:#b8d9b2;font-size:13px;">Dosha Guide</a></li>
+        <li><a href="diet.html" style="color:#b8d9b2;font-size:13px;">Nutrition Guide</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color:#f0c96b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;">Company</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+        <li><a href="about.html" style="color:#b8d9b2;font-size:13px;">About Us</a></li>
+        <li><a href="contact.html" style="color:#b8d9b2;font-size:13px;">Contact</a></li>
+        <li><a href="login-signup.html" style="color:#b8d9b2;font-size:13px;">Patient Login</a></li>
+        <li><a href="cart.html" style="color:#b8d9b2;font-size:13px;">Cart</a></li>
+        <li><a href="privacy.html" style="color:#b8d9b2;font-size:13px;">Privacy Policy</a></li>
+        <li><a href="terms.html" style="color:#b8d9b2;font-size:13px;">Terms of Service</a></li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width:1200px;margin:auto;border-top:1px solid rgba(255,255,255,.1);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+    <p style="font-size:12px;">© 2024 Chakradev Ayurveda Pvt. Ltd. All Rights Reserved.</p>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;">
+      <a href="about.html" style="color:#7aaa74;font-size:12px;">About</a>
+      <a href="contact.html" style="color:#7aaa74;font-size:12px;">Contact</a>
+      <a href="privacy.html" style="color:#7aaa74;font-size:12px;">Privacy</a>
+      <a href="terms.html" style="color:#7aaa74;font-size:12px;">Terms</a>
+    </div>
+  </div>
+  <p style="max-width:1200px;margin:12px auto 0;font-size:11px;color:#5a8a54;line-height:1.7;"><strong>Disclaimer:</strong> Content on this website is for informational purposes only and does not constitute medical advice. Always consult a qualified Ayurvedic doctor before starting any treatment. Products are not intended to diagnose, treat, cure, or prevent any disease.</p>
+</footer>
+
+  <script>
+    // ── STATE ──
+    const state = {
+      doctor: 'Dr. Priya Nair', doctorSpec: 'General Ayurveda & Holistic Wellness',
+      type: null,
+      date: null, dateLabel: null,
+      time: null,
+      year: new Date().getFullYear(),
+      month: new Date().getMonth()
+    };
+
+    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const DAYS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+    const ALL_SLOTS = [
+      { label: '9:00 AM', type: 'Morning', booked: false },
+      { label: '10:00 AM', type: 'Morning', booked: false },
+      { label: '11:00 AM', type: 'Morning', booked: true },
+      { label: '12:00 PM', type: 'Afternoon', booked: false },
+      { label: '2:00 PM', type: 'Afternoon', booked: false },
+      { label: '3:00 PM', type: 'Afternoon', booked: true },
+      { label: '4:00 PM', type: 'Afternoon', booked: false },
+      { label: '5:00 PM', type: 'Evening', booked: false },
+      { label: '6:00 PM', type: 'Evening', booked: false },
+    ];
+
+    // ── CONSULT TYPE ──
+    function selectType(card, type) {
+      document.querySelectorAll('.consult-type-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      state.type = type;
+      updateSummary();
+    }
+
+    // ── CALENDAR ──
+    function renderCalendar() {
+      const title = document.getElementById('cal-title');
+      const grid  = document.getElementById('cal-grid');
+      const today = new Date();
+      title.textContent = MONTHS[state.month] + ' ' + state.year;
+      grid.innerHTML = '';
+
+      DAYS.forEach(d => {
+        const h = document.createElement('div');
+        h.className = 'day-header'; h.textContent = d;
+        grid.appendChild(h);
+      });
+
+      const firstDay = new Date(state.year, state.month, 1).getDay();
+      const daysInMonth = new Date(state.year, state.month + 1, 0).getDate();
+
+      for (let i = 0; i < firstDay; i++) {
+        const e = document.createElement('div'); e.className = 'date-cell empty';
+        grid.appendChild(e);
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const cell = document.createElement('div');
+        cell.textContent = d;
+        cell.className = 'date-cell';
+
+        const cellDate = new Date(state.year, state.month, d);
+        const isPast = cellDate < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const isSun  = cellDate.getDay() === 0;
+
+        if (isPast || isSun) {
+          cell.classList.add('disabled');
+        } else {
+          const isToday = d === today.getDate() && state.month === today.getMonth() && state.year === today.getFullYear();
+          if (isToday) cell.classList.add('today');
+
+          cell.addEventListener('click', () => {
+            document.querySelectorAll('.date-cell').forEach(c => c.classList.remove('selected'));
+            cell.classList.add('selected');
+            state.date = cellDate;
+            state.dateLabel = d + ' ' + MONTHS[state.month] + ' ' + state.year;
+            state.time = null;
+            renderSlots();
+            updateSummary();
+          });
+
+          if (state.dateLabel === d + ' ' + MONTHS[state.month] + ' ' + state.year) {
+            cell.classList.add('selected');
+          }
+        }
+        grid.appendChild(cell);
+      }
+    }
+
+    function prevMonth() {
+      state.month--; if (state.month < 0) { state.month = 11; state.year--; }
+      renderCalendar();
+    }
+    function nextMonth() {
+      state.month++; if (state.month > 11) { state.month = 0; state.year++; }
+      renderCalendar();
+    }
+
+    // ── SLOTS ──
+    function renderSlots() {
+      const grid = document.getElementById('slots-grid');
+      grid.innerHTML = '';
+      ALL_SLOTS.forEach(slot => {
+        const btn = document.createElement('div');
+        btn.className = 'slot-btn' + (slot.booked ? ' booked' : '');
+        btn.innerHTML = slot.label + '<span class="slot-type">' + slot.type + (slot.booked ? ' · Full' : '') + '</span>';
+        if (!slot.booked) {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            state.time = slot.label;
+            updateSummary();
+          });
+        }
+        grid.appendChild(btn);
+      });
+    }
+
+    // ── SUMMARY ──
+    function updateSummary() {
+      const set = (id, val, placeholder) => {
+        const el = document.getElementById(id);
+        if (val) { el.textContent = val; el.classList.remove('placeholder'); }
+        else { el.textContent = placeholder || '—'; el.classList.add('placeholder'); }
+      };
+      set('sum-doctor',  state.doctor,      'Not selected yet');
+      set('sum-spec',    state.doctorSpec,  '—');
+      set('sum-type',    state.type,        'Not selected yet');
+      set('sum-date',    state.dateLabel,   'Not selected yet');
+      set('sum-time',    state.time,        'Not selected yet');
+      const concern = document.getElementById('concern').value;
+      set('sum-concern', concern || null,   'Not entered yet');
+    }
+
+    // ── CONFIRM BOOKING ──
+    function confirmBooking() {
+      const fname = document.getElementById('fname').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const concern = document.getElementById('concern').value;
+
+      const errors = [];
+      if (!state.doctor)  errors.push('Please select a doctor.');
+      if (!state.type)    errors.push('Please choose a consultation type.');
+      if (!state.dateLabel) errors.push('Please select a date.');
+      if (!state.time)    errors.push('Please select a time slot.');
+      if (!fname)         errors.push('Please enter your first name.');
+      if (!email)         errors.push('Please enter your email address.');
+      if (!phone)         errors.push('Please enter your phone number.');
+      if (!concern)       errors.push('Please select your health concern.');
+
+      if (errors.length) {
+        alert('Please complete the following:\n\n• ' + errors.join('\n• '));
+        return;
+      }
+
+      const ref = 'CA-' + Math.random().toString(36).toUpperCase().slice(2,8);
+      document.getElementById('booking-ref').textContent = ref;
+      document.getElementById('success-modal').classList.add('show');
+    }
+
+    // ── INIT ──
+    renderCalendar();
+    renderSlots();
+    updateSummary();
+  </script>
+
+<!-- WHATSAPP FLOAT -->
+<div style="position:fixed;bottom:28px;right:28px;z-index:200;">
+  <a href="https://wa.me/918825499283?text=Hi%20Chakradev%20Ayurveda%2C%20I%27d%20like%20to%20book%20a%20free%20consultation." target="_blank" rel="noopener"
+     style="display:flex

@@ -1,196 +1,352 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-
 <head>
   <meta charset="utf-8">
-  <title>Blog</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/header.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Chakradev Ayurveda Blog — Expert articles on Dosha balancing, Ayurvedic diet, Panchakarma, herbs, women's wellness and natural healing.">
+  <title>Blog &amp; Knowledge Hub | Chakradev Ayurveda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--gd:#2d5a27;--gm:#4a8c3f;--gl:#7dbf72;--gold:#c8972a;--gol:#f0c96b;--cream:#fdf6e3;--cd:#f5ead0;--td:#1e2a1a;--tm:#3d4d38;--tl:#6b7c65;--wh:#ffffff;--sh:0 4px 24px rgba(45,90,39,.10);--shl:0 12px 40px rgba(45,90,39,.16);--r:14px}
+    body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--td);line-height:1.7}
+    a{text-decoration:none;color:inherit}
+    /* TOP BAR */
+    .top-bar{background:var(--gd);color:#cce5c8;font-size:13px;padding:7px 0}
+    .top-bar .inner{max-width:1200px;margin:auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+    .top-bar a{color:#cce5c8;margin:0 10px;transition:color .2s}.top-bar a:hover{color:var(--gol)}
+    /* HEADER */
+    .site-header{background:var(--wh);border-bottom:3px solid var(--gold);padding:18px 24px}
+    .site-header .inner{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;text-align:center}
+    .site-header .logo-wrap img{width:90px;height:90px;object-fit:contain}
+    .site-header h1.brand{font-family:'Playfair Display',serif;font-size:2rem;color:var(--gd);letter-spacing:1px}
+    .site-header .tagline{font-size:13px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;font-weight:700}
+    /* NAV */
+    nav.main-nav{background:var(--gm);position:sticky;top:0;z-index:200}
+    nav.main-nav ul{list-style:none;max-width:1200px;margin:auto;display:flex;flex-wrap:wrap;justify-content:center;padding:0 16px}
+    nav.main-nav ul li a{display:block;padding:14px 18px;color:#e8f5e3;font-size:14px;font-weight:700;letter-spacing:.4px;transition:background .2s,color .2s}
+    nav.main-nav ul li a:hover,nav.main-nav ul li a.active{background:var(--gd);color:var(--gol)}
+    /* HERO */
+    .page-hero{background:linear-gradient(135deg,var(--gd) 0%,var(--gm) 60%,#5a9e50 100%);color:var(--wh);padding:72px 24px 64px;text-align:center;position:relative;overflow:hidden}
+    .page-hero::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:52px;background:var(--cream);clip-path:ellipse(55% 100% at 50% 100%)}
+    .badge{display:inline-block;background:rgba(200,151,42,.25);border:1px solid var(--gol);color:var(--gol);font-size:12px;font-weight:700;padding:5px 20px;border-radius:30px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px}
+    .page-hero h2{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,2.9rem);margin-bottom:14px;line-height:1.2}
+    .page-hero p{color:#d0eac9;max-width:540px;margin:0 auto 32px;font-size:16px;line-height:1.7}
+    .hero-search{display:flex;max-width:500px;margin:0 auto}
+    .hero-search input{flex:1;padding:14px 20px;border:none;border-radius:50px 0 0 50px;font-family:'Lato',sans-serif;font-size:14px;outline:none;color:var(--td)}
+    .hero-search button{padding:14px 26px;background:var(--gold);color:var(--wh);border:none;border-radius:0 50px 50px 0;font-family:'Lato',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s;white-space:nowrap}
+    .hero-search button:hover{background:#b5831f}
+    /* LAYOUT */
+    .blog-layout{max-width:1200px;margin:56px auto 80px;padding:0 24px;display:grid;grid-template-columns:1fr 310px;gap:44px;align-items:start}
+    /* FEATURED */
+    .featured-article{background:var(--wh);border-radius:var(--r);overflow:hidden;box-shadow:var(--shl);display:grid;grid-template-columns:1fr 1fr;margin-bottom:36px}
+    .feat-thumb{background:linear-gradient(135deg,var(--gd),#1a3d16);display:flex;align-items:center;justify-content:center;font-size:96px;min-height:280px}
+    .feat-body{padding:36px 32px;display:flex;flex-direction:column;justify-content:center}
+    .feat-meta{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+    .feat-label{background:var(--gold);color:var(--wh);font-size:10px;font-weight:700;padding:3px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:1px}
+    .feat-cat{background:#e8f5e3;color:var(--gd);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase}
+    .feat-date{font-size:12px;color:var(--tl)}
+    .feat-body h2{font-family:'Playfair Display',serif;font-size:1.45rem;color:var(--td);margin-bottom:12px;line-height:1.35}
+    .feat-excerpt{font-size:14px;color:var(--tm);margin-bottom:20px;line-height:1.8}
+    .feat-author{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+    .feat-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#a8d5a1,#5a9e50);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+    .feat-author-info .name{font-size:13px;font-weight:700;color:var(--td)}
+    .feat-author-info .role{font-size:11px;color:var(--tl)}
+    .read-btn{display:inline-block;padding:12px 26px;background:var(--gd);color:var(--wh);border-radius:50px;font-size:13px;font-weight:700;transition:background .2s,transform .2s;align-self:flex-start;border:none;cursor:pointer;font-family:'Lato',sans-serif}
+    .read-btn:hover{background:var(--gm);transform:translateY(-2px)}
+    /* CATEGORY TABS */
+    .cat-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+    .cat-tab{padding:8px 20px;border-radius:50px;font-size:13px;font-weight:700;cursor:pointer;border:2px solid #c8d8c5;background:var(--wh);color:var(--tm);transition:all .2s;font-family:'Lato',sans-serif}
+    .cat-tab:hover{border-color:var(--gl);color:var(--gd)}
+    .cat-tab.active{background:var(--gd);color:var(--wh);border-color:var(--gd)}
+    /* ARTICLES GRID */
+    .articles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:24px}
+    .article-card{background:var(--wh);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column;cursor:pointer}
+    .article-card:hover{transform:translateY(-6px);box-shadow:var(--shl)}
+    .a-thumb{height:158px;display:flex;align-items:center;justify-content:center;font-size:52px;position:relative}
+    .a-thumb.dosha{background:linear-gradient(135deg,#eaeffd,#c5d5f8)}
+    .a-thumb.diet{background:linear-gradient(135deg,#eaf5e8,#c8e8c4)}
+    .a-thumb.lifestyle{background:linear-gradient(135deg,#fef9e7,#fde8b8)}
+    .a-thumb.herbs{background:linear-gradient(135deg,#e8f5e3,#a8d5a0)}
+    .a-thumb.wellness{background:linear-gradient(135deg,#fde8f0,#f8c4d8)}
+    .a-thumb.panchakarma{background:linear-gradient(135deg,#e8f0fe,#b8d0f8)}
+    .a-tag{position:absolute;bottom:10px;left:10px;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px}
+    .a-tag.dosha{background:rgba(44,79,163,.12);color:#2c4fa3}
+    .a-tag.diet{background:rgba(45,90,39,.12);color:var(--gd)}
+    .a-tag.lifestyle{background:rgba(200,151,42,.15);color:#8b6914}
+    .a-tag.herbs{background:rgba(45,90,39,.14);color:var(--gd)}
+    .a-tag.wellness{background:rgba(192,57,121,.12);color:#c03979}
+    .a-tag.panchakarma{background:rgba(44,79,163,.12);color:#2c4fa3}
+    .a-body{padding:18px 20px;flex:1;display:flex;flex-direction:column}
+    .a-meta{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--tl);margin-bottom:8px}
+    .a-read-time{background:var(--cd);padding:2px 9px;border-radius:10px;font-size:10px;font-weight:700;color:var(--tm)}
+    .article-card h3{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--td);margin-bottom:8px;line-height:1.4}
+    .a-excerpt{font-size:13px;color:var(--tl);flex:1;line-height:1.65;margin-bottom:14px}
+    .a-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--cd);padding-top:12px}
+    .a-author{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--tm);font-weight:700}
+    .a-author .dot{width:24px;height:24px;border-radius:50%;background:#e8f5e3;display:flex;align-items:center;justify-content:center;font-size:12px}
+    .a-link{font-size:12px;font-weight:700;color:var(--gm);border-bottom:2px solid var(--gl);padding-bottom:1px}
+    /* NO RESULTS */
+    .no-results{display:none;text-align:center;padding:64px 24px}
+    .no-results.show{display:block}
+    .no-results .ico{font-size:52px;margin-bottom:14px}
+    .no-results h3{font-family:'Playfair Display',serif;color:var(--gd);margin-bottom:8px}
+    .no-results p{color:var(--tl);font-size:14px}
+    /* LOAD MORE */
+    .load-more-wrap{text-align:center;margin-top:40px}
+    .load-more-btn{padding:13px 44px;background:var(--wh);border:2px solid var(--gm);color:var(--gd);border-radius:50px;font-family:'Lato',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+    .load-more-btn:hover{background:var(--gd);color:var(--wh);border-color:var(--gd)}
+    /* SIDEBAR */
+    .blog-sidebar{display:flex;flex-direction:column;gap:24px;position:sticky;top:76px}
+    .sb-card{background:var(--wh);border-radius:var(--r);box-shadow:var(--sh);padding:24px}
+    .sb-card h4{font-family:'Playfair Display',serif;font-size:1rem;color:var(--gd);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--cd)}
+    .sb-search{display:flex;gap:8px}
+    .sb-search input{flex:1;padding:9px 13px;border:1.5px solid #c8d8c5;border-radius:8px;font-family:'Lato',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
+    .sb-search input:focus{border-color:var(--gm)}
+    .sb-search button{padding:9px 14px;background:var(--gm);color:var(--wh);border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:700;transition:background .2s}
+    .sb-search button:hover{background:var(--gd)}
+    .cat-list{list-style:none}
+    .cat-list li{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--cd);cursor:pointer;transition:color .2s}
+    .cat-list li:last-child{border-bottom:none}
+    .cat-list li:hover .cat-nm{color:var(--gm)}
+    .cat-nm{font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
+    .cat-cnt{background:var(--cd);color:var(--tl);font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px}
+    .popular-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--cd);cursor:pointer}
+    .popular-item:last-child{border-bottom:none}
+    .popular-item:hover .pop-title{color:var(--gm)}
+    .pop-num{width:28px;height:28px;border-radius:50%;background:var(--cd);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--tl);flex-shrink:0;margin-top:2px}
+    .pop-title{font-size:13px;font-weight:700;color:var(--td);line-height:1.4;margin-bottom:2px;transition:color .2s}
+    .pop-meta{font-size:11px;color:var(--tl)}
+    .tags-cloud{display:flex;flex-wrap:wrap;gap:8px}
+    .tag-pill{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;border:1.5px solid #c8d8c5;background:var(--wh);color:var(--tm);cursor:pointer;transition:all .2s}
+    .tag-pill:hover{background:var(--gd);color:var(--wh);border-color:var(--gd)}
+    .nl-sb{background:var(--gd);border-radius:var(--r);padding:24px;color:var(--wh)}
+    .nl-sb h4{font-family:'Playfair Display',serif;font-size:1.05rem;margin-bottom:8px}
+    .nl-sb p{font-size:13px;color:#a8d4a4;margin-bottom:16px;line-height:1.6}
+    .nl-sb input{width:100%;padding:10px 14px;border:none;border-radius:8px;font-family:'Lato',sans-serif;font-size:13px;margin-bottom:10px;outline:none;color:var(--td)}
+    .nl-sb button{width:100%;padding:11px;background:var(--gold);color:var(--wh);border:none;border-radius:8px;font-family:'Lato',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s}
+    .nl-sb button:hover{background:#b5831f}
+    .nl-ok{display:none;font-size:13px;color:#a8d4a4;text-align:center;padding:8px 0}
+    .nl-ok.show{display:block}
+    /* MODAL */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,20,8,.65);z-index:500;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto}
+    .modal-overlay.open{display:flex}
+    .modal-box{background:var(--wh);border-radius:20px;max-width:780px;width:100%;margin:auto;box-shadow:var(--shl);animation:slideUp .35s cubic-bezier(.22,.68,0,1.2);position:relative}
+    @keyframes slideUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+    .modal-header{background:linear-gradient(135deg,var(--gd),#1a3d16);border-radius:20px 20px 0 0;padding:32px 36px;color:var(--wh);position:relative}
+    .modal-close{position:absolute;top:16px;right:20px;background:rgba(255,255,255,.15);border:none;color:var(--wh);font-size:18px;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;font-family:'Lato',sans-serif}
+    .modal-close:hover{background:rgba(255,255,255,.3)}
+    .m-badge{display:inline-block;background:rgba(200,151,42,.3);border:1px solid var(--gol);color:var(--gol);font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+    .modal-header h2{font-family:'Playfair Display',serif;font-size:clamp(1.35rem,3vw,1.85rem);line-height:1.3;margin-bottom:14px}
+    .modal-meta{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:#a8d4a4}
+    .modal-body{padding:36px}
+    .article-content h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gd);margin:24px 0 10px}
+    .article-content p{font-size:15px;color:var(--tm);line-height:1.88;margin-bottom:14px}
+    .article-content ul{list-style:none;margin:0 0 16px}
+    .article-content ul li{font-size:14px;color:var(--tm);padding:5px 0 5px 22px;position:relative;line-height:1.7;border-bottom:1px solid var(--cd)}
+    .article-content ul li:last-child{border-bottom:none}
+    .article-content ul li::before{content:'🌿';position:absolute;left:0;top:6px;font-size:12px}
+    .hb{background:#f0fbf0;border-left:4px solid var(--gm);border-radius:0 10px 10px 0;padding:16px 20px;margin:18px 0}
+    .hb p{font-style:italic;color:var(--td);font-size:14px;margin:0}
+    .modal-cta{background:var(--cd);border-radius:0 0 20px 20px;padding:24px 36px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;border-top:2px solid #e8d8b0}
+    .modal-cta strong{display:block;color:var(--gd);font-size:15px;margin-bottom:2px}
+    .modal-cta p{font-size:13px;color:var(--tm);margin:0}
+    .modal-cta a{display:inline-block;padding:12px 28px;background:var(--gold);color:var(--wh);border-radius:50px;font-size:13px;font-weight:700;white-space:nowrap;transition:background .2s}
+    .modal-cta a:hover{background:#b5831f}
+    /* FOOTER */
+    footer{background:var(--gd);color:#b8d9b2;padding:56px 24px 28px}
+    .footer-grid{max-width:1200px;margin:auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+    .footer-brand h3{font-family:'Playfair Display',serif;color:var(--wh);font-size:1.4rem;margin-bottom:10px}
+    .footer-brand p{font-size:13px;line-height:1.8}
+    .footer-col h4{color:var(--gol);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px}
+    .footer-col ul{list-style:none}
+    .footer-col ul li{margin-bottom:8px}
+    .footer-col ul li a{color:#b8d9b2;font-size:13px;transition:color .2s}
+    .footer-col ul li a:hover{color:var(--gol)}
+    .footer-bottom{max-width:1200px;margin:auto;border-top:1px solid rgba(255,255,255,.12);padding-top:24px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px}
+    .footer-bottom p{font-size:12px}
+    .disclaimer-text{font-size:11px;color:#7aaa74;max-width:700px;line-height:1.6}
+    /* RESPONSIVE */
+    @media(max-width:980px){.blog-layout{grid-template-columns:1fr}.blog-sidebar{position:static}}
+    @media(max-width:680px){.featured-article{grid-template-columns:1fr}.feat-thumb{min-height:160px}.footer-grid{grid-template-columns:1fr 1fr}.modal-header,.modal-body,.modal-cta{padding:24px 20px}}
+    @media(max-width:440px){.footer-grid{grid-template-columns:1fr}}
+  </style>
 </head>
-
 <body>
-  <div class="fix_top top_top">
-    <div class="container_top">
-      <div class="container">
-        <!--top_navbar-->
-        <div class="navbar_top">
-          <ul>
-            <li><a href="cart.html">Cart</a></li>
-            <li>|</li>
-            <li><a href="mailto:info@chakradavayurveda.com">Email</a></li>
-            <li>|</li>
-            <li><a href="Tel:+91XXXXXXXXXX">Call us</a></li>
-            <li>|</li>
-            <li><a href="login-signup.html">Login</a></li>
-            <li>|</li>
-            <li><a href="login-signup.html">Sign Up</a></li>
-          </ul>
-        </div>
-        <!--centerlogo-->
-        <div class="logo_top">
-          <img src="image/ganesh.png" alt="" WIDTH="120" HEIGHT="120">
-          <p>The Opener of all good things in life</p>
-        </div>
-        <!-- Navbar -->
-        <div class="navbar">
-          <ul>
-            <li class="thick"><a href="index.html">🏡Home</a></li>
-            <li class="thick"><a href="consultant.html">Consultants</a></li>
-            <li class="thick active"><a href="dosha-analysis.html">Dosha Analysis</a></li>
-            <li class="thick"><a href="e-shop.html">E-Shope</a></li>
-            <li class="thick"><a href="book_consultation.html">Book You Online Consultation</a></li>
-            <li class="thick"><a href="diet.html">Diet</a></li>
-            <li class="thick"><a href="blog.html">Blog</a></li>
-          </ul>
-        </div>
+<!-- ANNOUNCEMENT BAR -->
+<div style="background:#c8972a;color:#fff;text-align:center;font-size:13px;font-weight:700;padding:9px 24px;">
+  🎁 First consultation is completely FREE — <a href="book_consultation.html" style="color:#fff;text-decoration:underline;margin-left:8px;">Book yours today →</a>
+</div>
+
+<div class="top-bar"><div class="inner"><div><a href="tel:+918825499283">📞 Call Us: +91-8825499283</a><a href="mailto:chakradev239@gmail.com">✉ chakradev239@gmail.com</a></div><div><a href="cart.html">🛒 Cart</a><a href="login-signup.html">Login</a><a href="login-signup.html?tab=signup">Sign Up</a></div></div></div>
+
+<header class="site-header"><div class="inner"><div class="logo-wrap"><a href="index.html"><img src="image/ganesh.png" alt="Chakradev Ayurveda Logo"></a></div><h1 class="brand">Chakradev Ayurveda</h1><p class="tagline">Heal Naturally · Live Harmoniously</p></div></header>
+
+<nav class="main-nav"><ul><li><a href="index.html">🏡 Home</a></li><li><a href="consultant.html">Consultants</a></li><li><a href="dosha-analysis.html">Dosha Analysis</a></li><li><a href="e-shop.html">E-Shop</a></li><li><a href="book_consultation.html">Book Consultation</a></li><li><a href="diet.html">Diet &amp; Nutrition</a></li><li><a href="blog.html" class="active">Blog</a></li></ul></nav>
+
+<div class="page-hero">
+  <div class="badge">📖 Ayurvedic Knowledge Hub</div>
+  <h2>Learn, Heal &amp; Thrive</h2>
+  <p>Expert articles on Dosha balancing, diet, herbs, Panchakarma, and Ayurvedic living — written by our certified doctors.</p>
+  <div class="hero-search">
+    <input type="text" id="heroSearch" placeholder="Search articles, topics, herbs…" onkeyup="if(event.key==='Enter')doSearch()">
+    <button onclick="doSearch()">🔍 Search</button>
+  </div>
+</div>
+
+<div class="blog-layout">
+  <div class="blog-main">
+
+    <!-- FEATURED -->
+    <div class="featured-article">
+      <div class="feat-thumb">🌿</div>
+      <div class="feat-body">
+        <div class="feat-meta"><span class="feat-label">⭐ Featured</span><span class="feat-cat">Dosha</span><span class="feat-date">12 Jan 2025</span></div>
+        <h2>Understanding Vata, Pitta &amp; Kapha — A Complete Guide to Ayurvedic Doshas</h2>
+        <p class="feat-excerpt">Your unique combination of the three Doshas determines everything — from how you digest food to how you handle stress. This comprehensive guide explains each Dosha, its qualities, and how to restore balance.</p>
+        <div class="feat-author"><div class="feat-avatar">👩‍⚕️</div><div class="feat-author-info"><p class="name">Dr. Preetha Vasudevan</p><p class="role">B.A.M.S · 8 min read</p></div></div>
+        <button class="read-btn" onclick="openArticle(0)">Read Full Article →</button>
       </div>
     </div>
+
+    <!-- TABS -->
+    <div class="cat-tabs" id="catTabs">
+      <button class="cat-tab active" onclick="filterCat('all',this)">All Articles</button>
+      <button class="cat-tab" onclick="filterCat('dosha',this)">🌬 Dosha</button>
+      <button class="cat-tab" onclick="filterCat('diet',this)">🍽 Diet &amp; Nutrition</button>
+      <button class="cat-tab" onclick="filterCat('lifestyle',this)">🌅 Lifestyle</button>
+      <button class="cat-tab" onclick="filterCat('herbs',this)">🌱 Herbs &amp; Remedies</button>
+      <button class="cat-tab" onclick="filterCat('wellness',this)">🌸 Women's Wellness</button>
+      <button class="cat-tab" onclick="filterCat('panchakarma',this)">💧 Panchakarma</button>
+    </div>
+
+    <div class="no-results" id="noResults"><div class="ico">🔍</div><h3>No articles found</h3><p>Try a different search term or browse a category.</p></div>
+    <div class="articles-grid" id="articlesGrid"></div>
+    <div class="load-more-wrap" id="loadMoreWrap" style="display:none;"><button class="load-more-btn" onclick="loadMore()">Load More Articles ↓</button></div>
   </div>
 
-  <div class="main">
-    <h1 class="construction">This Site is Under Construction</h1>
+  <!-- SIDEBAR -->
+  <aside class="blog-sidebar">
+    <div class="sb-card"><h4>🔍 Search Articles</h4><div class="sb-search"><input type="text" id="sbSearch" placeholder="Search…" onkeyup="if(event.key==='Enter')doSearch()"><button onclick="doSearch()">→</button></div></div>
+    <div class="sb-card"><h4>📂 Categories</h4><ul class="cat-list">
+      <li onclick="filterCat('all',null)"><span class="cat-nm">🌿 All Articles</span><span class="cat-cnt">12</span></li>
+      <li onclick="filterCat('dosha',null)"><span class="cat-nm">🌬 Dosha</span><span class="cat-cnt">3</span></li>
+      <li onclick="filterCat('diet',null)"><span class="cat-nm">🍽 Diet &amp; Nutrition</span><span class="cat-cnt">2</span></li>
+      <li onclick="filterCat('lifestyle',null)"><span class="cat-nm">🌅 Lifestyle</span><span class="cat-cnt">2</span></li>
+      <li onclick="filterCat('herbs',null)"><span class="cat-nm">🌱 Herbs &amp; Remedies</span><span class="cat-cnt">2</span></li>
+      <li onclick="filterCat('wellness',null)"><span class="cat-nm">🌸 Women's Wellness</span><span class="cat-cnt">2</span></li>
+      <li onclick="filterCat('panchakarma',null)"><span class="cat-nm">💧 Panchakarma</span><span class="cat-cnt">1</span></li>
+    </ul></div>
+    <div class="sb-card"><h4>🔥 Popular Articles</h4>
+      <div class="popular-item" onclick="openArticle(0)"><span class="pop-num">1</span><div><p class="pop-title">Understanding Vata, Pitta &amp; Kapha</p><p class="pop-meta">Dosha · 8 min read</p></div></div>
+      <div class="popular-item" onclick="openArticle(1)"><span class="pop-num">2</span><div><p class="pop-title">Eating According to Your Dosha</p><p class="pop-meta">Diet · 6 min read</p></div></div>
+      <div class="popular-item" onclick="openArticle(2)"><span class="pop-num">3</span><div><p class="pop-title">Dinacharya — The Ayurvedic Daily Routine</p><p class="pop-meta">Lifestyle · 5 min read</p></div></div>
+      <div class="popular-item" onclick="openArticle(4)"><span class="pop-num">4</span><div><p class="pop-title">Ashwagandha — King of Herbs</p><p class="pop-meta">Herbs · 7 min read</p></div></div>
+    </div>
+    <div class="sb-card"><h4>🏷 Popular Tags</h4><div class="tags-cloud">
+      <span class="tag-pill" onclick="searchTag('Vata')">Vata</span><span class="tag-pill" onclick="searchTag('Pitta')">Pitta</span><span class="tag-pill" onclick="searchTag('Kapha')">Kapha</span><span class="tag-pill" onclick="searchTag('Digestion')">Digestion</span><span class="tag-pill" onclick="searchTag('Immunity')">Immunity</span><span class="tag-pill" onclick="searchTag('Stress')">Stress</span><span class="tag-pill" onclick="searchTag('Herbs')">Herbs</span><span class="tag-pill" onclick="searchTag('Sleep')">Sleep</span><span class="tag-pill" onclick="searchTag('Skin')">Skin</span><span class="tag-pill" onclick="searchTag('Weight')">Weight Loss</span><span class="tag-pill" onclick="searchTag('Women')">Women's Health</span><span class="tag-pill" onclick="searchTag('Yoga')">Yoga</span>
+    </div></div>
+    <div class="nl-sb"><h4>🌿 Weekly Wellness Tips</h4><p>Get Ayurvedic health tips, seasonal advice, and exclusive content — free, every week.</p><input type="email" id="nlEmail" placeholder="your@email.com"><button onclick="subscribeNL()">Subscribe — It's Free</button><p class="nl-ok" id="nlOk">✅ Welcome to the Chakradev family!</p></div>
+  </aside>
+</div>
 
-
-        <!-- w3-content defines a container for fixed size centered content,
-      and is wrapped around the whole page content, except for the footer in this example -->
-        <div class="w3-content" style="max-width:1400px">
-
-          <!-- Header -->
-          <header class="w3-container w3-center w3-padding-32">
-            <h1><b>MY BLOG</b></h1>
-            <p>Welcome to the blog of <span class="w3-tag">unknown</span></p>
-          </header>
-
-          <!-- Grid -->
-          <div class="w3-row">
-
-            <!-- Blog entries -->
-            <div class="w3-col l8 s12">
-              <!-- Blog entry -->
-              <div class="w3-card-4 w3-margin w3-white">
-                <img src="/w3images/woods.jpg" alt="Nature" style="width:100%">
-                <div class="w3-container">
-                  <h3><b>TITLE HEADING</b></h3>
-                  <h5>Title description, <span class="w3-opacity">April 7, 2014</span></h5>
-                </div>
-
-                <div class="w3-container">
-                  <p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at. Phasellus sed ultricies mi non congue ullam corper. Praesent
-                    tincidunt sed
-                    tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-                  <div class="w3-row">
-                    <div class="w3-col m8 s12">
-                      <p><button class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></button></p>
-                    </div>
-                    <div class="w3-col m4 w3-hide-small">
-                      <p><span class="w3-padding-large w3-right"><b>Comments  </b> <span class="w3-tag">0</span></span></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <hr>
-
-              <!-- Blog entry -->
-              <div class="w3-card-4 w3-margin w3-white">
-                <img src="/w3images/bridge.jpg" alt="Norway" style="width:100%">
-                <div class="w3-container">
-                  <h3><b>BLOG ENTRY</b></h3>
-                  <h5>Title description, <span class="w3-opacity">April 2, 2014</span></h5>
-                </div>
-
-                <div class="w3-container">
-                  <p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at. Phasellus sed ultricies mi non congue ullam corper. Praesent
-                    tincidunt sed
-                    tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-                  <div class="w3-row">
-                    <div class="w3-col m8 s12">
-                      <p><button class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></button></p>
-                    </div>
-                    <div class="w3-col m4 w3-hide-small">
-                      <p><span class="w3-padding-large w3-right"><b>Comments  </b> <span class="w3-badge">2</span></span></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- END BLOG ENTRIES -->
-            </div>
-
-            <!-- Introduction menu -->
-            <div class="w3-col l4">
-              <!-- About Card -->
-              <div class="w3-card w3-margin w3-margin-top">
-                <img src="/w3images/avatar_g.jpg" style="width:100%">
-                <div class="w3-container w3-white">
-                  <h4><b>My Name</b></h4>
-                  <p>Just me, myself and I, exploring the universe of uknownment. I have a heart of love and a interest of lorem ipsum and mauris neque quam blog. I want to share my world with you.</p>
-                </div>
-              </div>
-              <hr>
-
-              <!-- Posts -->
-              <div class="w3-card w3-margin">
-                <div class="w3-container w3-padding">
-                  <h4>Popular Posts</h4>
-                </div>
-                <ul class="w3-ul w3-hoverable w3-white">
-                  <li class="w3-padding-16">
-                    <img src="/w3images/workshop.jpg" alt="Image" class="w3-left w3-margin-right" style="width:50px">
-                    <span class="w3-large">Lorem</span><br>
-                    <span>Sed mattis nunc</span>
-                  </li>
-                  <li class="w3-padding-16">
-                    <img src="/w3images/gondol.jpg" alt="Image" class="w3-left w3-margin-right" style="width:50px">
-                    <span class="w3-large">Ipsum</span><br>
-                    <span>Praes tinci sed</span>
-                  </li>
-                  <li class="w3-padding-16">
-                    <img src="/w3images/skies.jpg" alt="Image" class="w3-left w3-margin-right" style="width:50px">
-                    <span class="w3-large">Dorum</span><br>
-                    <span>Ultricies congue</span>
-                  </li>
-                  <li class="w3-padding-16 w3-hide-medium w3-hide-small">
-                    <img src="/w3images/rock.jpg" alt="Image" class="w3-left w3-margin-right" style="width:50px">
-                    <span class="w3-large">Mingsum</span><br>
-                    <span>Lorem ipsum dipsum</span>
-                  </li>
-                </ul>
-              </div>
-              <hr>
-
-              <!-- Labels / tags -->
-              <div class="w3-card w3-margin">
-                <div class="w3-container w3-padding">
-                  <h4>Tags</h4>
-                </div>
-                <div class="w3-container w3-white">
-                  <p><span class="w3-tag w3-black w3-margin-bottom">Travel</span> <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">New York</span> <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">London</span>
-                    <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">IKEA</span> <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">NORWAY</span> <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">DIY</span>
-                    <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">Ideas</span> <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">Baby</span> <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">Family</span>
-                    <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">News</span> <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">Clothing</span> <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">Shopping</span>
-                    <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">Sports</span> <span class="w3-tag w3-light-grey w3-small w3-margin-bottom">Games</span>
-                  </p>
-                </div>
-              </div>
-
-              <!-- END Introduction Menu -->
-            </div>
-
-            <!-- END GRID -->
-          </div><br>
-
-          <!-- END w3-content -->
-        </div>
-
-        <!-- Footer -->
-        <footer class="w3-container w3-dark-grey w3-padding-32 w3-margin-top">
-          <button class="w3-button w3-black w3-disabled w3-padding-large w3-margin-bottom">Previous</button>
-          <button class="w3-button w3-black w3-padding-large w3-margin-bottom">Next »</button>
-          <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
-        </footer>
+<!-- MODAL -->
+<div class="modal-overlay" id="articleModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <span class="m-badge" id="m-cat"></span>
+      <h2 id="m-title"></h2>
+      <div class="modal-meta" id="m-meta"></div>
+    </div>
+    <div class="modal-body"><div class="article-content" id="m-content"></div></div>
+    <div class="modal-cta">
+      <div><strong>Ready to start your healing journey?</strong><p>Book a free consultation with our Ayurvedic doctors and get a personalised treatment plan.</p></div>
+      <a href="book_consultation.html">Book Free Consultation →</a>
+    </div>
   </div>
-</body>
+</div>
 
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand"><h3>Chakradev Ayurveda</h3><p>Your one-stop destination for authentic Ayurvedic consultations, knowledge, and products. Heal naturally, live harmoniously.</p><p style="margin-top:16px;">📞 +91-8825499283<br>✉ <a href="mailto:chakradev239@gmail.com">chakradev239@gmail.com</a></p></div>
+    <div class="footer-col"><h4>Services</h4><ul><li><a href="book_consultation.html">Book Consultation</a></li><li><a href="dosha-analysis.html">Dosha Analysis</a></li><li><a href="consultant.html">Our Doctors</a></li><li><a href="diet.html">Diet Plans</a></li></ul></div>
+    <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="e-shop.html">E-Shop</a></li><li><a href="blog.html">Blog</a></li><li><a href="login-signup.html">Patient Login</a></li><li><a href="cart.html">Cart</a></li></ul></div>
+    <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Us</a></li><li><a href="contact.html">Contact</a></li><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms of Service</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2024 Chakradev Ayurveda. All Rights Reserved.</p><p class="disclaimer-text"><strong>Disclaimer:</strong> All articles are for informational purposes only and do not constitute medical advice. Please consult a qualified BAMS Ayurvedic doctor before starting any treatment or supplement.</p></div>
+</footer>
 
-</body>
+<script>
+const ARTICLES=[
+  {id:0,cat:'dosha',catLabel:'Dosha',icon:'🌿',title:'Understanding Vata, Pitta & Kapha — A Complete Guide to Ayurvedic Doshas',date:'12 Jan 2025',readTime:'8 min read',author:'Dr. Preetha Vasudevan',authorRole:'B.A.M.S Ayurveda',excerpt:'Your unique combination of the three Doshas determines everything — from how you digest food to how you handle stress. Discover what each Dosha means and how to identify yours.',tags:['Vata','Pitta','Kapha','Dosha','Constitution'],content:`<p>Ayurveda teaches that every human being is composed of five fundamental elements: Earth, Water, Fire, Air, and Space. These elements combine to form three bio-energies known as <strong>Doshas</strong> — Vata, Pitta, and Kapha. Understanding your Dosha is the foundation of all Ayurvedic healing.</p><div class="hb"><p>"The Doshas are not just body types — they are dynamic forces that govern every physiological and psychological process in your body." — Classical Ayurvedic Texts</p></div><h3>🌬 Vata — The Energy of Movement</h3><p>Vata is composed of Air and Space. It governs all movement in the body — nerve impulses, breathing, circulation, and elimination. People with dominant Vata are creative, energetic, and quick-thinking, but when out of balance they experience anxiety, dryness, insomnia, and irregular digestion.</p><ul><li>Physical traits: Thin frame; dry skin; cold hands and feet; prominent joints and veins</li><li>Mental traits: Creative, fast learner, enthusiastic but easily distracted</li><li>Common imbalances: Anxiety, constipation, joint pain, insomnia, irregular appetite</li><li>Balancing foods: Warm, oily, grounding foods — ghee, root vegetables, warm soups, sesame oil</li></ul><h3>🔥 Pitta — The Energy of Transformation</h3><p>Pitta combines Fire and Water. It governs digestion, metabolism, body temperature, and intelligence. Pitta-dominant individuals are sharp, focused, and natural leaders, but excess Pitta leads to inflammation, anger, skin issues, and hyperacidity.</p><ul><li>Physical traits: Medium build; warm body; sharp eyes; tendency to perspire easily</li><li>Mental traits: Intelligent, goal-oriented, decisive, naturally competitive</li><li>Common imbalances: Acid reflux, skin rashes, anger, early greying of hair</li><li>Balancing foods: Cooling foods — coconut, cucumber, sweet fruits, coriander, mint</li></ul><h3>🌍 Kapha — The Energy of Structure</h3><p>Kapha is formed from Earth and Water. It governs structure, lubrication, immunity, and stability. Kapha-dominant people are calm, compassionate, and strong, but when imbalanced become lethargic, gain weight easily, and suffer from congestion.</p><ul><li>Physical traits: Larger, well-built frame; smooth, oily skin; thick, lustrous hair</li><li>Mental traits: Patient, loyal, calm, excellent long-term memory</li><li>Common imbalances: Weight gain, sluggish digestion, depression, excess mucus</li><li>Balancing foods: Light, spicy, warm foods — ginger, mustard seeds, leafy greens, barley</li></ul><h3>Finding Your Dominant Dosha</h3><p>Most people are a combination of two Doshas, with one dominant. Your constitution (Prakriti) is determined at birth and remains constant. Your current state (Vikriti) can shift due to diet, lifestyle, stress, and seasons. Ayurvedic treatment always aims to restore your natural Prakriti. Take our free Dosha Analysis quiz to discover your unique constitution and receive personalised health recommendations.</p>`},
+  {id:1,cat:'diet',catLabel:'Diet & Nutrition',icon:'🍽️',title:'Eating According to Your Dosha — Seasonal Ayurvedic Nutrition for Optimal Health',date:'18 Jan 2025',readTime:'6 min read',author:'Dr. Preetha Vasudevan',authorRole:'B.A.M.S Ayurveda',excerpt:'Ayurvedic nutrition is not one-size-fits-all. Learn how to align your food choices with your Dosha and the changing seasons for perfect digestion and lasting energy.',tags:['Diet','Vata','Pitta','Kapha','Nutrition','Agni'],content:`<p>In Ayurveda, food is medicine. But unlike modern nutrition, Ayurveda does not believe in a universal diet. What nourishes one person may disturb another. The key is eating according to your <strong>Dosha, season, and digestive fire (Agni)</strong>.</p><div class="hb"><p>"When diet is wrong, medicine is of no use. When diet is right, medicine is of no need." — Ancient Ayurvedic Proverb</p></div><h3>The Six Tastes of Ayurveda</h3><p>Ayurveda recognises six fundamental tastes — Sweet, Sour, Salty, Pungent, Bitter, and Astringent. Each taste has specific effects on the Doshas. An ideal Ayurvedic meal includes all six tastes to satisfy the body completely and prevent cravings naturally.</p><h3>🌬 Vata Diet — Warm, Moist & Grounding</h3><ul><li>Favour warm, cooked, oily, and nourishing foods at all times</li><li>Best foods: Ghee, sesame oil, warm milk, rice, wheat, root vegetables, ripe bananas, dates</li><li>Avoid: Raw vegetables, cold drinks, dry crackers, beans without spices, excessive caffeine</li><li>Eat at regular times — Vata thrives on routine and predictability</li></ul><h3>🔥 Pitta Diet — Cooling, Sweet & Hydrating</h3><ul><li>Favour cooling, sweet, bitter, and mildly astringent foods</li><li>Best foods: Coconut, cucumber, sweet fruits, coriander, mint, basmati rice, leafy greens</li><li>Avoid: Spicy foods, alcohol, red meat, fermented foods, vinegar, excessive fried foods</li><li>Eat your largest meal at lunch when digestive fire is at its natural peak</li></ul><h3>🌍 Kapha Diet — Light, Spicy & Stimulating</h3><ul><li>Favour light, dry, warm, and stimulating foods to counter natural heaviness</li><li>Best foods: Ginger, turmeric, black pepper, honey, barley, millet, legumes, bitter greens</li><li>Avoid: Heavy dairy, wheat, cold foods, sweets, fried food, excessive salt and oil</li><li>Skip breakfast occasionally — Kapha digestion is strongest mid-morning onwards</li></ul><h3>Seasonal Eating (Ritucharya)</h3><p>Ayurveda's concept of Ritucharya teaches us to adjust our diet with each season. During winter, eat heavier nourishing foods. In summer, favour cooling hydrating foods. Monsoon calls for easily digestible warm foods — never eat raw, cold, or heavy foods during this period.</p>`},
+  {id:2,cat:'lifestyle',catLabel:'Lifestyle',icon:'🌅',title:'Dinacharya — The Ayurvedic Daily Routine for Perfect Health & Wellbeing',date:'25 Jan 2025',readTime:'5 min read',author:'Dr. Preetha Vasudevan',authorRole:'B.A.M.S Ayurveda',excerpt:"Ancient morning and evening rituals that sync your body with nature's rhythms — promoting physical health, mental clarity, and spiritual wellbeing every single day.",tags:['Lifestyle','Dinacharya','Routine','Wellness','Morning'],content:`<p>Dinacharya (दिनचर्या) translates as "daily routine." Ayurveda teaches that aligning your daily habits with the natural rhythms of the sun and the Doshas is the most powerful preventive medicine available.</p><div class="hb"><p>"He who follows the daily regimen described in Ayurveda lives long, free from disease, with sharp senses and a sound mind." — Charaka Samhita</p></div><h3>🌄 Morning Rituals (6:00 AM)</h3><ul><li><strong>Wake before sunrise (Brahma Muhurta):</strong> The most sattvic time — ideal for meditation and yoga. The mind is clearest and most receptive to positive habits.</li><li><strong>Tongue scraping (Jihwa Nirlekhana):</strong> Use a copper scraper to remove Ama (toxins) that accumulate overnight. Takes 30 seconds, transforms oral and digestive health.</li><li><strong>Oil pulling (Kavala):</strong> Swish 1 tablespoon of sesame or coconut oil for 10–15 minutes to detoxify the mouth and strengthen gums.</li><li><strong>Warm water with lemon:</strong> Gently kickstarts digestion and flushes the GI tract before food arrives.</li><li><strong>Abhyanga (self-massage):</strong> 10–15 minutes of warm oil massage calms the nervous system and deeply nourishes the skin.</li><li><strong>Yoga &amp; Pranayama:</strong> Even 20 minutes of gentle yoga and breathing sets a calm, energised tone for the entire day.</li></ul><h3>☀️ Daytime Habits</h3><ul><li>Eat breakfast only when genuinely hungry — never force breakfast before 8 AM</li><li>Eat your largest meal at noon (Pitta time) when digestive fire peaks naturally</li><li>Take a short walk after meals to aid digestion — never lie down immediately after eating</li><li>Stay hydrated with warm or room-temperature water throughout the day</li></ul><h3>🌙 Evening Rituals</h3><ul><li>Eat a light dinner before 7:30 PM — the earlier the better for digestion and restorative sleep</li><li>Avoid screens at least 1 hour before bed to allow the mind to wind down naturally</li><li>Apply warm oil to the soles of your feet (Padabhyanga) to calm Vata and promote deep sleep</li><li>Be in bed by 10 PM — Ayurveda considers 10 PM to 2 AM the most regenerative sleep window</li></ul>`},
+  {id:3,cat:'panchakarma',catLabel:'Panchakarma',icon:'💧',title:"Panchakarma — The Ultimate Ayurvedic Detox & Rejuvenation Programme",date:'2 Feb 2025',readTime:'7 min read',author:'Dr. Preetha Vasudevan',authorRole:'B.A.M.S Ayurveda',excerpt:"Panchakarma is Ayurveda's most powerful purification therapy — a complete cellular reset that eliminates deep-seated toxins and restores your natural vitality.",tags:['Panchakarma','Detox','Rejuvenation','Therapy','Basti'],content:`<p>Panchakarma (पञ्चकर्म) literally means "five actions" — five classical purification therapies that systematically eliminate Ama (toxins) from every tissue in the body. It is the crown jewel of Ayurvedic medicine.</p><div class="hb"><p>"Panchakarma not only removes disease but reverses the ageing process and restores the body's innate intelligence." — Dr. Rajan Menon</p></div><h3>The Five Karmas</h3><ul><li><strong>Vamana (Therapeutic Emesis):</strong> Medicated emesis to clear excess Kapha from the upper GI tract. Highly effective for asthma, chronic allergies, and skin disorders.</li><li><strong>Virechana (Purgation Therapy):</strong> Medicated purgation to eliminate excess Pitta from the liver and small intestine. Effective for skin diseases, hyperacidity, and liver conditions.</li><li><strong>Basti (Medicated Enema):</strong> The most important of all therapies — medicated oil or herbal decoctions administered rectally to cleanse and nourish the colon. Exceptionally effective for Vata disorders including arthritis and neurological conditions.</li><li><strong>Nasya (Nasal Administration):</strong> Medicated oils through the nasal passages to cleanse the head and sinuses. Used for migraines, sinusitis, and cervical spondylosis.</li><li><strong>Raktamokshana (Blood Purification):</strong> Used for specific chronic inflammatory skin conditions and skin disorders.</li></ul><h3>Purvakarma — The Preparation Phase</h3><p>Before Panchakarma begins, the body must be prepared through Snehana (oleation) and Swedana (herbal steam therapy). This loosens deeply embedded toxins and mobilises them to the GI tract for elimination. This phase is critical — skipping it significantly reduces Panchakarma's effectiveness.</p><h3>Who Should Consider Panchakarma?</h3><ul><li>Those with chronic digestive disorders, skin conditions, or autoimmune disease</li><li>Anyone experiencing chronic fatigue, burnout, or persistent stress</li><li>As preventive treatment — ideally once a year at seasonal junctions</li><li>For weight management, metabolic reset, and hormonal rebalancing</li></ul>`},
+  {id:4,cat:'herbs',catLabel:'Herbs & Remedies',icon:'🌱',title:'Ashwagandha — The Ancient King of Ayurvedic Herbs',date:'8 Feb 2025',readTime:'7 min read',author:'Dr. Preetha Vasudevan',authorRole:'B.A.M.S Ayurveda',excerpt:'Ashwagandha has been used in Ayurveda for over 3,000 years as a powerful adaptogen. Discover its validated benefits, correct dosage, and important contraindications.',tags:['Herbs','Ashwagandha','Stress','Immunity','Adaptogen','Vitality'],content:`<p>Ashwagandha (Withania somnifera), known in Sanskrit as the "strength of a horse," is one of the most revered herbs in the entire Ayurvedic pharmacopoeia. It is classified as a Rasayana — a rejuvenating tonic that promotes longevity, vitality, and mental clarity.</p><div class="hb"><p>"Ashwagandha bestows the strength and vigour of a horse. It rejuvenates the body, prevents ageing, and restores vitality." — Charaka Samhita</p></div><h3>Scientifically Validated Benefits</h3><ul><li><strong>Stress &amp; Anxiety Reduction:</strong> Multiple clinical trials show it significantly reduces serum cortisol and perceived stress scores by up to 44%</li><li><strong>Improved Sleep Quality:</strong> The active compound Triethylene glycol promotes sleep onset and deeper, restorative sleep cycles</li><li><strong>Enhanced Strength &amp; Endurance:</strong> Studies show significant improvements in muscle strength, cardiorespiratory endurance, and post-exercise recovery</li><li><strong>Hormonal Balance:</strong> Supports thyroid function and testosterone in men; reduces cortisol-related hormonal disruption in women</li><li><strong>Cognitive Enhancement:</strong> Improves memory, processing speed, and executive function in adults under chronic stress</li><li><strong>Immune Modulation:</strong> Enhances natural killer cell activity and increases immunoglobulin production</li></ul><h3>Correct Ayurvedic Dosage</h3><ul><li>Standard dose: 300–500mg of root extract (5% withanolides) twice daily with meals</li><li>Traditional: 1 teaspoon of Ashwagandha powder with warm milk, ghee, and honey before bed</li><li>Duration: Minimum 8 weeks for full adaptogenic and rejuvenating effect</li><li>Best taken with food — especially warm milk and ghee — to enhance bioavailability</li></ul><h3>⚠ Important Contraindications</h3><ul><li>Pregnant or breastfeeding women — strictly avoid</li><li>People with autoimmune conditions without direct doctor supervision</li><li>Those on thyroid medication or immunosuppressants — potential interactions</li><li>May increase heat in some individuals with strong Pitta — reduce dose if this occurs</li></ul>`},
+  {id:5,cat:'wellness',catLabel:"Women's Wellness",icon:'🌸',title:"PCOS & Ayurveda — A Natural Approach to Hormonal Balance",date:'14 Feb 2025',readTime:'6 min read',author:'Dr. Preetha Vasudevan',authorRole:"B.A.M.S ",excerpt:'Polycystic Ovary Syndrome affects 1 in 10 women worldwide. Discover how Ayurveda addresses the root causes through targeted diet, herbs, and lifestyle modifications.',tags:['Women','PCOS','Hormones','Fertility','Wellness','Menstrual'],content:`<p>PCOS affects an estimated 10% of women of reproductive age worldwide, making it the most common hormonal disorder in women today. While conventional medicine manages symptoms primarily through hormonal contraceptives and Metformin, Ayurveda seeks to address the <strong>root imbalance</strong> driving the condition.</p><div class="hb"><p>"In Ayurveda, PCOS is understood as a disorder rooted in Kapha and Vata imbalance, with Ama blocking the channels of the reproductive system." — Dr. Ananya Krishnan</p></div><h3>The Ayurvedic Understanding of PCOS</h3><p>Ayurveda sees PCOS as Artava Kshaya (diminished menstrual health) caused by Kapha blocking reproductive channels, aggravated Vata causing hormonal irregularity, and Ama accumulation from impaired digestion and insulin resistance.</p><h3>Ayurvedic Herbs for PCOS</h3><ul><li><strong>Shatavari (Asparagus racemosus):</strong> The primary female reproductive tonic — nourishes and regulates the ovaries and hormonal axis</li><li><strong>Triphala:</strong> Reduces Ama, improves insulin sensitivity, and supports healthy weight management</li><li><strong>Ashoka (Saraca asoca):</strong> Regulates menstrual cycles and reduces uterine inflammation significantly</li><li><strong>Fenugreek (Methi):</strong> Clinically shown to improve insulin sensitivity and regulate blood sugar — a key PCOS driver</li><li><strong>Cinnamon:</strong> Reduces insulin resistance and supports more regular ovulation cycles</li></ul><h3>Diet Modifications for PCOS</h3><ul><li>Follow a Kapha-reducing diet: light, warm, spicy foods — low in sugar and refined carbohydrates</li><li>Eliminate dairy and gluten for at least 3 months — both are significant Kapha aggravators</li><li>Include anti-inflammatory spices daily: turmeric, ginger, cumin, and coriander</li><li>Eat at regular times to stabilise blood sugar and cortisol rhythms</li></ul><h3>Lifestyle &amp; Yoga for PCOS</h3><ul><li>30–45 minutes of moderate exercise daily — yoga, brisk walking, or swimming are ideal</li><li>Specific yoga poses: Baddha Konasana (Butterfly), Supta Baddha Konasana, Viparita Karani (Legs-Up-the-Wall)</li><li>Stress management is essential — cortisol directly worsens all hormonal imbalance</li><li>Consistent sleep routine: 10 PM to 6 AM for optimal hormonal regulation</li></ul>`},
+  {id:6,cat:'herbs',catLabel:'Herbs & Remedies',icon:'🍃',title:"Triphala — Ayurveda's Most Versatile Digestive Formula",date:'20 Feb 2025',readTime:'5 min read',author:'Dr. Preetha Vasudevan',authorRole:'B.A.M.S Ayurveda',excerpt:'Triphala combines three potent fruits — Amalaki, Bibhitaki, and Haritaki — into the most widely used Ayurvedic formula for digestion, detoxification, and long-term health.',tags:['Herbs','Digestion','Detox','Triphala','Immunity','Amalaki'],content:`<p>Triphala (त्रिफला) — literally "three fruits" — is arguably the most important formulation in all of Ayurvedic medicine. Used for over 5,000 years, it is one of the few Ayurvedic compounds that simultaneously balances all three Doshas.</p><div class="hb"><p>"If a patient has no one to care for them but has Triphala, they shall not suffer." — Ancient Ayurvedic Saying</p></div><h3>The Three Fruits of Triphala</h3><ul><li><strong>Amalaki (Indian Gooseberry):</strong> The highest known natural source of Vitamin C. A potent antioxidant, liver tonic, and Pitta-balancing agent that rejuvenates all seven body tissues</li><li><strong>Bibhitaki:</strong> Targets Kapha — reduces mucus accumulation, supports respiratory health, and promotes healthy weight</li><li><strong>Haritaki:</strong> Called the "King of Medicines" in Tibetan medicine. Balances all three Doshas and is a gentle, non-habit-forming laxative</li></ul><h3>Evidence-Based Benefits</h3><ul><li>Regulates bowel movements — effective for both constipation and loose stools</li><li>Reduces Ama (toxin accumulation) throughout the gastrointestinal tract</li><li>Powerful antioxidant — reduces oxidative stress and protects cellular DNA</li><li>Supports healthy blood sugar and cholesterol levels</li><li>Improves gut microbiome diversity as a powerful natural prebiotic</li><li>Gentle eye tonic — Triphala water eye wash for tired, strained eyes</li></ul><h3>How to Take Triphala</h3><ul><li>Powder: ½–1 teaspoon in warm water before bed or first thing in the morning</li><li>Tablets: 2–3 tablets (500mg each) with warm water at night</li><li>Traditional: Mix with raw honey and ghee for enhanced absorption</li><li>Eye wash: Boil 1 teaspoon in 2 cups water, cool, strain thoroughly, use as eye rinse</li></ul>`},
+  {id:7,cat:'lifestyle',catLabel:'Lifestyle',icon:'⚖️',title:'Ayurvedic Approach to Weight Management — Beyond Calorie Counting',date:'28 Feb 2025',readTime:'6 min read',author:'Dr. Preetha Vasudevan',authorRole:'B.A.M.S Ayurveda',excerpt:'Ayurveda sees excess weight as a sign of impaired digestion and Kapha imbalance. Discover sustainable, holistic strategies for healthy weight management.',tags:['Weight','Lifestyle','Kapha','Digestion','Wellness','Metabolism'],content:`<p>In Ayurveda, weight management is never about restriction or deprivation. Instead, it focuses on strengthening digestive fire (Agni), reducing Ama (metabolic toxins), and balancing Kapha — the Dosha that governs the body's tendency to accumulate.</p><div class="hb"><p>"It is not how much you eat, but how well you digest what you eat, that determines your health and body composition." — Ayurvedic Principle</p></div><h3>Understanding Ayurvedic Weight Gain</h3><p>Ayurveda identifies three interconnected causes: impaired Agni causing Ama accumulation throughout tissues; Kapha imbalance leading to slow metabolism; and sedentary lifestyle combined with excessive consumption of heavy, cold, or sweet foods.</p><h3>Key Herbs for Weight Management</h3><ul><li><strong>Triphala:</strong> Cleanses Ama, improves digestion, and acts as a gentle metabolic stimulant</li><li><strong>Guggulu (Commiphora mukul):</strong> A powerful lipid-lowering and thermogenic herb with extensive clinical research</li><li><strong>Trikatu (Ginger, Black Pepper, Long Pepper):</strong> Stimulates Agni and measurably accelerates metabolic rate</li><li><strong>Punarnava:</strong> A natural diuretic that reduces water retention and supports kidney function</li></ul><h3>Daily Practices for Healthy Weight</h3><ul><li>Begin each day with warm water and lemon or ginger tea to kindle Agni before eating</li><li>Eat your largest meal at noon when digestive fire is naturally strongest</li><li>Skip or eat a very light dinner — heavy evening meals are the single biggest contributor to weight gain</li><li>Avoid cold drinks and refrigerated foods — they directly suppress Agni</li><li>Exercise vigorously in the morning during Kapha time (6–10 AM) for maximum metabolic benefit</li></ul>`},
+  {id:8,cat:'wellness',catLabel:"Women's Wellness",icon:'✨',title:'Ayurvedic Skin Care — Healing Your Skin from Within',date:'7 Mar 2025',readTime:'5 min read',author:'Dr. Preetha Vasudevan',authorRole:"B.A.M.S ",excerpt:"Beautiful skin in Ayurveda begins with clean blood, balanced digestion, and the right herbs — not expensive creams. Learn how each Dosha affects your skin.",tags:['Skin','Wellness','Herbs','Pitta','Beauty','Manjistha'],content:`<p>Ayurveda approaches skin health entirely from the inside out. The ancient texts teach that the skin (Twak) is a mirror of the blood (Rakta Dhatu) and liver function. No topical cream can compensate for impure blood, poor digestion, or excess heat and toxins in the body.</p><div class="hb"><p>"The skin reveals the state of the liver, blood, and digestive system. True beauty always begins in the gut." — Classical Ayurvedic Teaching</p></div><h3>Skin Types According to Dosha</h3><ul><li><strong>Vata Skin:</strong> Thin, dry, delicate, prone to premature ageing and flakiness. Needs deep moisturisation — sesame or almond oil daily</li><li><strong>Pitta Skin:</strong> Sensitive, warm, prone to redness, acne, and rashes. Needs cooling herbs — neem, rose water, sandalwood, aloe vera</li><li><strong>Kapha Skin:</strong> Thick, oily, prone to congestion, enlarged pores, and cystic acne. Needs stimulation and detoxification — turmeric and clay masks</li></ul><h3>Internal Herbs for Radiant Skin</h3><ul><li><strong>Manjistha (Rubia cordifolia):</strong> The premier Ayurvedic blood purifier — directly addresses skin eruptions, hyperpigmentation, and inflammatory conditions</li><li><strong>Neem:</strong> Powerful antibacterial, antifungal, and blood purifying herb. Essential for acne-prone skin</li><li><strong>Amalaki:</strong> The richest plant source of Vitamin C — rebuilds collagen and reverses oxidative skin damage</li><li><strong>Guduchi:</strong> A powerful adaptogen and immunomodulator — reduces inflammatory skin conditions including eczema and psoriasis</li></ul><h3>Ayurvedic External Skin Rituals</h3><ul><li>Daily Abhyanga (warm oil massage) with Dosha-appropriate oils before bathing — transforms skin texture</li><li>Ubtan (herbal paste): Mix chickpea flour, turmeric, and rose water as a gentle weekly exfoliant</li><li>Kumkumadi oil: Traditional saffron-based face oil for brightening and anti-ageing</li><li>Rose water toner: Cooling and deeply balancing for all skin types — use morning and evening</li></ul>`},
+  {id:9,cat:'dosha',catLabel:'Dosha',icon:'🧘',title:'Yoga & Pranayama for Your Dosha — A Personalised Practice Guide',date:'15 Mar 2025',readTime:'6 min read',author:'Dr. Preetha Vasudevan',authorRole:'B.A.M.S',excerpt:'Not all yoga is appropriate for every body type. Ayurveda recommends specific yoga practices and breathing exercises tailored to your Dosha for maximum healing benefit.',tags:['Yoga','Vata','Pitta','Kapha','Dosha','Pranayama'],content:`<p>Yoga and Ayurveda are sister sciences — both born from the Vedic tradition and designed to work in harmony. Ayurveda recommends that yoga practice be personalised to your Dosha constitution, just as diet and herbal medicine are personalised.</p><div class="hb"><p>"Yoga is for every body — but the right yoga for your body depends on your constitution, your current imbalances, and the season." — Ayurvedic Principle</p></div><h3>🌬 Yoga for Vata Types</h3><ul><li>Style: Slow, steady, grounding practice — classical Hatha or Restorative Yoga</li><li>Focus: Cultivating stability, warmth, and deep connection to earth and the present moment</li><li>Best poses: Tadasana (Mountain), Virabhadrasana (Warrior), Balasana (Child's Pose), long Savasana</li><li>Pranayama: Nadi Shodhana (Alternate Nostril Breathing) — profoundly calms the nervous system</li><li>Avoid: Fast Vinyasa flows, excessive inversions when fatigued, hot or intensely heating practices</li></ul><h3>🔥 Yoga for Pitta Types</h3><ul><li>Style: Moderate, cooling, non-competitive — Moon Salutations, Yin Yoga, gentle Hatha</li><li>Focus: Releasing perfectionism and intensity, cultivating surrender, compassion, and ease</li><li>Best poses: Seated forward folds, Supta Baddha Konasana, Viparita Karani (Legs Up the Wall)</li><li>Pranayama: Sheetali (Cooling Breath) and Chandra Bhedana (Left Nostril Breathing)</li><li>Avoid: Bikram or hot yoga, highly competitive classes, excessive vigorous Sun Salutations</li></ul><h3>🌍 Yoga for Kapha Types</h3><ul><li>Style: Vigorous, dynamic, and stimulating — Vinyasa Flow, Ashtanga, Power Yoga</li><li>Focus: Building energy and momentum, breaking through inertia and mental heaviness</li><li>Best poses: Surya Namaskar (Sun Salutations), Trikonasana, Utkatasana (Chair Pose), all Backbends</li><li>Pranayama: Bhastrika (Bellows Breath) and Kapalabhati (Skull-Shining Breath) — energising and clearing</li><li>Avoid: Excessive Savasana, very slow practices, over-resting between active poses</li></ul>`},
+  {id:10,cat:'lifestyle',catLabel:'Lifestyle',icon:'🌙',title:"Ayurvedic Remedies for Better Sleep — The Natural Way",date:'22 Mar 2025',readTime:'5 min read',author:'Dr. Preetha Vasudevan',authorRole:'B.A.M.S Ayurveda',excerpt:"Sleep is Ayurveda's second pillar of health. Discover ancient techniques, herbs, and nightly rituals to achieve deep, restorative sleep — without medication.",tags:['Sleep','Lifestyle','Vata','Herbs','Wellness','Insomnia'],content:`<p>Ayurveda calls sleep (Nidra) one of the three pillars of life. It is during deep, restorative sleep that the body repairs tissues, consolidates memories, detoxifies the liver, and rebalances the Doshas. Chronic poor sleep is one of the greatest accelerators of disease and ageing.</p><div class="hb"><p>"Happiness and misery, nourishment and emaciation, strength and weakness — all depend upon the quality of sleep." — Charaka Samhita</p></div><h3>The Ayurvedic Clock &amp; Sleep</h3><p>Ayurveda maps the 24-hour day into Dosha periods. The ideal sleep window is 10 PM to 6 AM. From 10 PM to 2 AM is Pitta time — during this critical phase the liver detoxifies, the brain consolidates memories, and the immune system is most active. Missing this window significantly impairs all of these processes.</p><h3>Herbs for Deep Sleep</h3><ul><li><strong>Ashwagandha:</strong> Reduces cortisol and promotes deeper, more restorative non-REM sleep stages</li><li><strong>Brahmi (Bacopa monnieri):</strong> Calms a racing, overactive mind and reduces anxiety-driven insomnia</li><li><strong>Jatamansi:</strong> The Ayurvedic equivalent of Valerian root — deeply calming to the nervous system without morning grogginess</li><li><strong>Warm milk with Ashwagandha and nutmeg:</strong> The classic Ayurvedic sleep tonic — drink 30 minutes before bed</li></ul><h3>Nightly Rituals for Restorative Sleep</h3><ul><li>Foot oil massage (Padabhyanga) with warm sesame oil — powerfully calms Vata and grounds the nervous system</li><li>Apply a few drops of Brahmi oil to the crown of the head to quiet mental chatter</li><li>Avoid screens, stimulating conversations, and heavy food after 8 PM without exception</li><li>Practice 10 minutes of Yoga Nidra (yogic sleep / body scan) as you settle in to drift off</li><li>Keep your bedroom cool, very dark, and completely free from all electronic devices</li></ul>`},
+  {id:11,cat:'diet',catLabel:'Diet & Nutrition',icon:'🛡️',title:"Building Immunity in Ayurveda — The Secret of Ojas, Your Vital Life Force",date:'1 Apr 2025',readTime:'6 min read',author:'Dr. Preetha Vasudevan',authorRole:'B.A.M.S Ayurveda',excerpt:"In Ayurveda, immunity is Ojas — the finest product of perfect digestion and the essence of all seven bodily tissues. Learn how to build and protect it.",tags:['Immunity','Diet','Ojas','Herbs','Wellness','Rasayana'],content:`<p>Modern medicine measures immunity through antibody titres. Ayurveda measures it through the quality of <strong>Ojas</strong> — the subtle essence that results from the perfect digestion of food and experience. Ojas is the foundation of immunity, vitality, and radiance.</p><div class="hb"><p>"Ojas is the supreme essence of all the Dhatus. When Ojas is present in abundance, the person shines with health, vitality, and an unmistakable inner joy." — Ashtanga Hridayam</p></div><h3>What Depletes Ojas</h3><ul><li>Chronic stress, anxiety, worry, and fear — the single greatest Ojas depleter</li><li>Overwork, chronic sleep deprivation, and insufficient recovery time</li><li>Poor quality, processed, or stale and reheated food</li><li>Chronic illness and persistent Ama accumulation</li><li>Grief, emotional trauma, and prolonged distress</li><li>Excessive consumption of alcohol, caffeine, and stimulants</li></ul><h3>Foods That Powerfully Build Ojas</h3><ul><li><strong>Ghee:</strong> The premier Ojas-building food in Ayurveda — nourishes all seven tissue layers and carries herbs deep into tissues</li><li><strong>Whole warm milk with spices:</strong> Best consumed warm with cardamom and saffron — cold dairy actually depletes Ojas</li><li><strong>Dates, figs, and raisins:</strong> Sweet fruits that directly nourish Ojas and reproductive tissue health</li><li><strong>Overnight-soaked almonds:</strong> Peel and eat 6–8 almonds in the morning — builds strength and mental clarity</li><li><strong>Saffron:</strong> Among the most powerful Ojas-building substances — add a pinch to warm milk daily</li><li><strong>Raw honey (unheated):</strong> A natural Ojas builder — never heat honey above body temperature</li></ul><h3>Rasayana Herbs for Deep Immunity</h3><ul><li>Chyawanprash: The classical Ayurvedic immune tonic — 40+ herbs in an Amalaki base, used for millennia</li><li>Ashwagandha: Reduces cortisol and builds physical and mental resilience simultaneously</li><li>Guduchi (Amrit): A powerful immunomodulator — ideal during seasonal changes and stress</li><li>Tulsi (Holy Basil): Daily Tulsi tea is one of the simplest and most effective Ojas-building habits available</li></ul>`}
+];
 
-</html>
+let visibleCount=9,activeFilter='all',activeSearch='';
+function getFiltered(){return ARTICLES.filter(a=>{const c=activeFilter==='all'||a.cat===activeFilter;const q=activeSearch.toLowerCase();const s=!q||a.title.toLowerCase().includes(q)||a.excerpt.toLowerCase().includes(q)||a.tags.some(t=>t.toLowerCase().includes(q));return c&&s;})}
+function renderArticles(){
+  const grid=document.getElementById('articlesGrid'),noRes=document.getElementById('noResults'),lmW=document.getElementById('loadMoreWrap');
+  const list=getFiltered();
+  if(!list.length){grid.innerHTML='';noRes.classList.add('show');lmW.style.display='none';return;}
+  noRes.classList.remove('show');
+  const slice=list.slice(0,visibleCount);
+  lmW.style.display=list.length>visibleCount?'block':'none';
+  grid.innerHTML=slice.map(a=>`<div class="article-card" onclick="openArticle(${a.id})"><div class="a-thumb ${a.cat}"><span>${a.icon}</span><span class="a-tag ${a.cat}">${a.catLabel}</span></div><div class="a-body"><div class="a-meta"><span>${a.date}</span><span class="a-read-time">⏱ ${a.readTime}</span></div><h3>${a.title}</h3><p class="a-excerpt">${a.excerpt}</p><div class="a-footer"><div class="a-author"><div class="dot">👩‍⚕️</div><span>${a.author.split(' ').slice(0,2).join(' ')}</span></div><span class="a-link">Read More →</span></div></div></div>`).join('');
+}
+function filterCat(cat,btn){
+  activeFilter=cat;activeSearch='';visibleCount=9;
+  document.getElementById('heroSearch').value='';document.getElementById('sbSearch').value='';
+  document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));
+  if(btn)btn.classList.add('active');else document.querySelectorAll('.cat-tab')[0].classList.add('active');
+  renderArticles();
+  const el=document.getElementById('catTabs');if(el)window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-90,behavior:'smooth'});
+}
+function doSearch(){
+  const q=document.getElementById('heroSearch').value||document.getElementById('sbSearch').value;
+  activeSearch=q.trim();activeFilter='all';visibleCount=9;
+  document.getElementById('heroSearch').value=q;document.getElementById('sbSearch').value=q;
+  document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.cat-tab')[0].classList.add('active');
+  renderArticles();
+}
+function searchTag(tag){document.getElementById('heroSearch').value=tag;document.getElementById('sbSearch').value=tag;doSearch();}
+function loadMore(){visibleCount+=3;renderArticles();}
+function openArticle(id){
+  const a=ARTICLES.find(x=>x.id===id);if(!a)return;
+  document.getElementById('m-cat').textContent=a.catLabel;
+  document.getElementById('m-title').textContent=a.title;
+  document.getElementById('m-meta').innerHTML=`<span>👩‍⚕️ ${a.author} — ${a.authorRole}</span><span>📅 ${a.date}</span><span>⏱ ${a.readTime}</span>`;
+  document.getElementById('m-content').innerHTML=a.content;
+  document.getElementById('articleModal').classList.add('open');
+  document.body.style.overflow='hidden';
+  document.getElementById('articleModal').scrollTop=0;
+}
+function closeModal(){document.getElementById('articleModal').classList.remove('open');document.body.style.overflow='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+function subscribeNL(){
+  const e=document.getElementById('nlEmail').value.trim();
+  if(!e||!/\S+@\S+\.\S+/.test(e)){alert('Please enter a valid email address.');return;}
+  document.getElementById('nlOk').classList.add('show');
+  document.getElementById('nlEmail').style.display='none';
+  document.querySelector('.nl-sb button').style.display='none';
+}
+renderArticles();
+</script>
+<!-- WHATSAPP FLOAT -->
+<div style="position:fixed;bottom:28px;right:28px;z-index:200;">
+  <a href="https://wa.me/918825499283?text=Hi%20Chakradev%20Ayurveda%2C%20I%27d%20like%20to%20book%20a%20free%20consultation." target="_blank" rel="noopener"
+     style="display:flex;align-items:center;g

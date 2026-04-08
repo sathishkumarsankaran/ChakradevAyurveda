@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | Chakradev Ayurveda</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--gd:#2d5a27;--gm:#4a8c3f;--gold:#c8972a;--gol:#f0c96b;--cream:#fdf6e3;--cd:#f5ead0;--td:#1e2a1a;--tm:#3d4d38;--tl:#6b7c65;--wh:#fff;--sh:0 4px 24px rgba(45,90,39,.10);--r:14px}
+    body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--td);line-height:1.7}
+    a{text-decoration:none;color:inherit}
+    .tb{background:var(--gd);color:#cce5c8;font-size:13px;padding:7px 0}
+    .tb .i{max-width:1200px;margin:auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+    .tb a{color:#cce5c8;margin:0 10px;transition:color .2s}.tb a:hover{color:var(--gol)}
+    .sh{background:var(--wh);border-bottom:3px solid var(--gold);padding:18px 24px}
+    .sh .i{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;text-align:center}
+    .sh img{width:80px;height:80px;object-fit:contain}
+    .sh h1{font-family:'Playfair Display',serif;font-size:1.9rem;color:var(--gd)}
+    .sh .tg{font-size:12px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;font-weight:700}
+    nav{background:var(--gm);position:sticky;top:0;z-index:100}
+    nav ul{list-style:none;max-width:1200px;margin:auto;display:flex;flex-wrap:wrap;justify-content:center;padding:0 16px}
+    nav ul li a{display:block;padding:14px 18px;color:#e8f5e3;font-size:14px;font-weight:700;transition:background .2s,color .2s}
+    nav ul li a:hover,nav ul li a.active{background:var(--gd);color:var(--gol)}
+    .hero{background:linear-gradient(135deg,var(--gd),var(--gm));padding:56px 24px 48px;text-align:center;color:var(--wh);position:relative;overflow:hidden}
+    .hero::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:48px;background:var(--cream);clip-path:ellipse(55% 100% at 50% 100%)}
+    .badge{display:inline-block;background:rgba(200,151,42,.25);border:1px solid var(--gol);color:var(--gol);font-size:12px;font-weight:700;padding:5px 18px;border-radius:30px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px}
+    .hero h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.6rem);margin-bottom:12px}
+    .hero p{color:#c8e8c4;max-width:540px;margin:0 auto;font-size:15px}
+    .wrap{max-width:1100px;margin:56px auto 72px;padding:0 24px}
+    .st{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2rem);color:var(--gd);text-align:center;margin-bottom:12px}
+    .gline{width:60px;height:3px;background:var(--gold);margin:0 auto 40px;border-radius:2px}
+    /* STORY */
+    .story-row{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-bottom:64px}
+    .story-row.rev{direction:rtl}.story-row.rev>*{direction:ltr}
+    .story-visual{background:linear-gradient(135deg,var(--gd),#1a3d16);border-radius:var(--r);padding:48px;text-align:center;font-size:80px}
+    .story-text h3{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gd);margin-bottom:14px}
+    .story-text p{font-size:14px;color:var(--tm);line-height:1.85;margin-bottom:12px}
+    /* STATS */
+    .stats-strip{background:var(--gd);border-radius:var(--r);padding:40px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center;margin-bottom:64px}
+    .stat-item .num{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--gol);display:block;margin-bottom:4px}
+    .stat-item .lbl{font-size:13px;color:#a8d4a4}
+    /* VALUES */
+    .values-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;margin-bottom:64px}
+    .val-card{background:var(--wh);border-radius:var(--r);padding:28px;box-shadow:var(--sh);text-align:center}
+    .val-card .ico{font-size:36px;margin-bottom:12px}
+    .val-card h4{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--gd);margin-bottom:8px}
+    .val-card p{font-size:13px;color:var(--tl);line-height:1.65}
+    /* TIMELINE */
+    .timeline{position:relative;padding-left:32px;margin-bottom:64px}
+    .timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:3px;background:linear-gradient(var(--gm),var(--gold))}
+    .tl-item{position:relative;margin-bottom:32px}
+    .tl-item::before{content:'';position:absolute;left:-28px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--gold);border:3px solid var(--cream)}
+    .tl-item .year{font-size:12px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+    .tl-item h4{font-family:'Playfair Display',serif;font-size:1rem;color:var(--gd);margin-bottom:4px}
+    .tl-item p{font-size:13px;color:var(--tm)}
+    footer{background:var(--gd);color:#b8d9b2;padding:24px}
+    .fb{max-width:1200px;margin:auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+    .fb p{font-size:12px}
+    @media(max-width:700px){.story-row{grid-template-columns:1fr}.stats-strip{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+<!-- ANNOUNCEMENT BAR -->
+<div style="background:#c8972a;color:#fff;text-align:center;font-size:13px;font-weight:700;padding:9px 24px;">
+  🎁 First consultation is completely FREE — <a href="book_consultation.html" style="color:#fff;text-decoration:underline;margin-left:8px;">Book yours today →</a>
+</div>
+<div class="tb"><div class="i"><div><a href="tel:+918825499283">📞 Call Us: +91-8825499283</a><a href="mailto:chakradev239@gmail.com">✉ chakradev239@gmail.com</a></div><div><a href="cart.html">🛒 Cart</a><a href="login-signup.html">Login</a></div></div></div>
+<header class="sh"><div class="i"><a href="index.html"><img src="image/ganesh.png" alt="Logo"></a><h1><a href="index.html" style="text-decoration:none;color:inherit;">Chakradev Ayurveda</a></h1><p class="tg">Heal Naturally · Live Harmoniously</p></div></header>
+<nav><ul><li><a href="index.html">🏡 Home</a></li><li><a href="consultant.html">Consultants</a></li><li><a href="dosha-analysis.html">Dosha Analysis</a></li><li><a href="e-shop.html">E-Shop</a></li><li><a href="book_consultation.html">Book Consultation</a></li><li><a href="diet.html">Diet & Nutrition</a></li><li><a href="blog.html">Blog</a></li></ul></nav>
+<div class="hero"><div class="badge">🌿 Our Story</div><h2>About Chakradev Ayurveda</h2><p>Founded on the belief that ancient wisdom and modern medicine are not opposites — they are partners in healing.</p></div>
+<div class="wrap">
+  <div class="story-row">
+    <div class="story-visual">🌿</div>
+    <div class="story-text">
+      <h3>Our Mission — Making Authentic Ayurveda Accessible</h3>
+      <p>Chakradev Ayurveda was founded with a simple but powerful mission: to make authentic, classical Ayurvedic healthcare accessible to every person, regardless of where they live.</p>
+      <p>Named after the divine healer Chakradeva — author of the Chakradatta, one of Ayurveda's foundational medical texts — our platform honours the depth and precision of classical Ayurvedic medicine while bringing it into the digital age.</p>
+      <p>We believe that genuine healing requires understanding the root cause of imbalance, not merely suppressing symptoms. Every consultation, every product, and every article on this platform reflects that philosophy.</p>
+    </div>
+  </div>
+
+  <div class="stats-strip">
+    <div class="stat-item"><span class="num">1,500+</span><span class="lbl">Patients Helped</span></div>
+    <div class="stat-item"><span class="num">3</span><span class="lbl">Expert Doctors</span></div>
+    <div class="stat-item"><span class="num">40+</span><span class="lbl">Years Combined Exp.</span></div>
+    <div class="stat-item"><span class="num">4.9★</span><span class="lbl">Average Rating</span></div>
+  </div>
+
+  <h2 class="st">Our Core Values</h2><div class="gline"></div>
+  <div class="values-grid">
+    <div class="val-card"><div class="ico">📜</div><h4>Classical Authenticity</h4><p>Every treatment protocol is grounded in the original Ayurvedic texts — Charaka Samhita, Ashtanga Hridayam, and Sushruta Samhita.</p></div>
+    <div class="val-card"><div class="ico">🎯</div><h4>Root Cause Healing</h4><p>We never treat symptoms in isolation. We seek to understand and correct the fundamental Dosha imbalance driving your condition.</p></div>
+    <div class="val-card"><div class="ico">🌱</div><h4>Natural & Pure</h4><p>All products recommended and sold through our platform are natural, lab-tested, and free from harmful additives or synthetic compounds.</p></div>
+    <div class="val-card"><div class="ico">❤️</div><h4>Patient-First Care</h4><p>Every patient is treated as an individual. There are no generic protocols — only personalised care tailored to your unique constitution.</p></div>
+    <div class="val-card"><div class="ico">🔬</div><h4>Evidence-Informed</h4><p>We respect both classical wisdom and modern research. Where Ayurveda and evidence-based medicine align, we integrate both for best outcomes.</p></div>
+    <div class="val-card"><div class="ico">🌍</div><h4>Accessible to All</h4><p>Online consultations, affordable products, and free educational content ensure that quality Ayurvedic care is available to everyone.</p></div>
+  </div>
+
+  <h2 class="st">Our Journey</h2><div class="gline"></div>
+  <div class="timeline">
+    <div class="tl-item"><div class="year">2018</div><h4>Founded in Kerala</h4><p>Chakradev Ayurveda began as a small clinic in Kerala, offering in-person consultations and herbal preparations rooted in classical Ayurveda.</p></div>
+    <div class="tl-item"><div class="year">2019</div><h4>First 100 Patients</h4><p>Within our first year, we had served over 100 patients — many referred by word of mouth after experiencing significant improvements in chronic conditions.</p></div>
+    <div class="tl-item"><div class="year">2020</div><h4>Moving Online</h4><p>Responding to the need for accessible healthcare, we launched our online consultation platform — bringing Ayurvedic care to patients across India and beyond.</p></div>
+    <div class="tl-item"><div class="year">2021</div><h4>E-Shop Launched</h4><p>We launched our curated online store, offering lab-tested, doctor-recommended Ayurvedic products sourced from certified organic farms.</p></div>
+    <div class="tl-item"><div class="year">2022</div><h4>Knowledge Hub</h4><p>Our blog and Dosha Analysis tool launched, giving thousands of users free access to authentic Ayurvedic education and personalised body-type assessments.</p></div>
+    <div class="tl-item"><div class="year">2024</div><h4>1,500+ Patients Served</h4><p>Today, Chakradev Ayurveda has helped over 1,500 patients across India and internationally achieve lasting health through authentic Ayurvedic care.</p></div>
+  </div>
+</div>
+<!-- FOOTER -->
+<footer style="background:#2d5a27;color:#b8d9b2;padding:48px 24px 24px;">
+  <div style="max-width:1200px;margin:auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:36px;">
+    <div>
+      <h3 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.3rem;margin-bottom:12px;">Chakradev Ayurveda</h3>
+      <p style="font-size:13px;line-height:1.8;">Your one-stop destination for authentic Ayurvedic consultations, knowledge, and products.</p>
+      <div style="margin-top:14px;display:flex;flex-direction:column;gap:6px;">
+        <a href="tel:+918825499283" style="color:#b8d9b2;font-size:13px;">📞 Call Us: +91-8825499283</a>
+        <a href="mailto:chakradev239@gmail.com" style="color:#b8d9b2;font-size:13px;">✉ chakradev239@gmail.com</a>
+        <a href="contact.html" style="color:#b8d9b2;font-size:13px;">💬 Send us a message</a>
+      </div>
+    </div>
+    <div>
+      <h4 style="color:#f0c96b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;">Services</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+        <li><a href="book_consultation.html" style="color:#b8d9b2;font-size:13px;">Book Consultation</a></li>
+        <li><a href="dosha-analysis.html" style="color:#b8d9b2;font-size:13px;">Dosha Analysis</a></li>
+        <li><a href="consultant.html" style="color:#b8d9b2;font-size:13px;">Our Doctors</a></li>
+        <li><a href="diet.html" style="color:#b8d9b2;font-size:13px;">Diet Plans</a></li>
+        <li><a href="e-shop.html" style="color:#b8d9b2;font-size:13px;">E-Shop</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color:#f0c96b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;">Knowledge</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+        <li><a href="blog.html" style="color:#b8d9b2;font-size:13px;">Ayurveda Blog</a></li>
+        <li><a href="dosha-analysis.html" style="color:#b8d9b2;font-size:13px;">Dosha Guide</a></li>
+        <li><a href="diet.html" style="color:#b8d9b2;font-size:13px;">Nutrition Guide</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color:#f0c96b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;">Company</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+        <li><a href="about.html" style="color:#b8d9b2;font-size:13px;">About Us</a></li>
+        <li><a href="contact.html" style="color:#b8d9b2;font-size:13px;">Contact</a></li>
+        <li><a href="login-signup.html" style="color:#b8d9b2;font-size:13px;">Patient Login</a></li>
+        <li><a href="cart.html" style="color:#b8d9b2;font-size:13px;">Cart</a></li>
+        <li><a href="privacy.html" style="color:#b8d9b2;font-size:13px;">Privacy Policy</a></li>
+        <li><a href="terms.html" style="color:#b8d9b2;font-size:13px;">Terms of Service</a></li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width:1200px;margin:auto;border-top:1px solid rgba(255,255,255,.1);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+    <p style="font-size:12px;">© 2024 Chakradev Ayurveda Pvt. Ltd. All Rights Reserved.</p>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;">
+      <a href="about.html" style="color:#7aaa74;font-size:12px;">About</a>
+      <a href="contact.html" style="color:#7aaa74;font-size:12px;">Contact</a>
+      <a href="privacy.html" style="color:#7aaa74;font-size:12px;">Privacy</a>
+      <a href="terms.html" style="color:#7aaa74;font-size:12px;">Terms</a>
+    </div>
+  </div>
+  <p style="max-width:1200px;margin:12px auto 0;font-size:11px;color:#5a8a54;line-height:1.7;"><strong>Disclaimer:</strong> Content on this website is for informational purposes only and does not constitute medical advice. Always consult a qualified Ayurvedic doctor before starting any treatment. Products are not intended to diagnose, treat, cure, or prevent any disease.</p>
+</footer>
+<!-- WHATSAPP FLOAT -->
+<div style="position:fixed;bottom:28px;right:28px;z-index:200;">
+  <a href="https://wa.me/918825499283?text=Hi%20Chakradev%20Ayurveda%2C%20I%27d%20like%20to%20book%20a%20free%20consultation." target="_blank" rel="noopener"
+     style="display:flex;align-items:center;gap:10px;background:#25D366;color:#fff;padding:12px 20px;border-radius:50px;font-size:14

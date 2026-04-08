@@ -1,325 +1,2032 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" style="100%">
-
+<html lang="en" dir="ltr">
 <head>
-  <meta charset="utf-8">
-  <title>Dosha Analysis</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Discover your Ayurvedic body type with the Chakradev Ayurveda Dosha Self-Test. Find out if you are Vata, Pitta or Kapha.">
+  <title>Dosha Analysis | Chakradev Ayurveda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark:  #2d5a27;
+      --green-mid:   #4a8c3f;
+      --green-light: #7dbf72;
+      --gold:        #c8972a;
+      --gold-light:  #f0c96b;
+      --cream:       #fdf6e3;
+      --cream-dark:  #f5ead0;
+      --vata-color:  #7c5cbf;
+      --pitta-color: #c05621;
+      --kapha-color: #2f855a;
+      --text-dark:   #1e2a1a;
+      --text-mid:    #3d4d38;
+      --text-light:  #6b7c65;
+      --white:       #ffffff;
+      --border:      #ddebd8;
+      --shadow:      0 4px 24px rgba(45,90,39,0.10);
+      --radius:      14px;
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      line-height: 1.7;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      background: var(--green-dark);
+      color: #cce5c8;
+      font-size: 13px;
+      padding: 7px 0;
+    }
+    .top-bar .inner {
+      max-width: 1200px; margin: auto; padding: 0 24px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+    }
+    .top-bar a { color: #cce5c8; margin: 0 10px; transition: color .2s; }
+    .top-bar a:hover { color: var(--gold-light); }
+
+    /* ── HEADER ── */
+    .site-header {
+      background: var(--white);
+      border-bottom: 3px solid var(--gold);
+      padding: 18px 24px;
+    }
+    .site-header .inner {
+      max-width: 1200px; margin: auto;
+      display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; text-align: center;
+    }
+    .site-header .logo-wrap img { width: 80px; height: 80px; object-fit: contain; }
+    .site-header h1.brand { font-family: 'Playfair Display', serif; font-size: 1.9rem; color: var(--green-dark); }
+    .site-header .tagline { font-size: 12px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
+
+    /* ── NAV ── */
+    nav.main-nav { background: var(--green-mid); position: sticky; top: 0; z-index: 100; }
+    nav.main-nav ul { list-style: none; max-width: 1200px; margin: auto; display: flex; flex-wrap: wrap; justify-content: center; padding: 0 16px; }
+    nav.main-nav ul li a { display: block; padding: 14px 18px; color: #e8f5e3; font-size: 14px; font-weight: 700; transition: background .2s, color .2s; }
+    nav.main-nav ul li a:hover, nav.main-nav ul li a.active { background: var(--green-dark); color: var(--gold-light); }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+      padding: 52px 24px 44px;
+      text-align: center;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::after {
+      content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+      height: 44px; background: var(--cream);
+      clip-path: ellipse(55% 100% at 50% 100%);
+    }
+    .page-hero .badge {
+      display: inline-block;
+      background: rgba(200,151,42,.25); border: 1px solid var(--gold-light);
+      color: var(--gold-light); font-size: 12px; font-weight: 700;
+      padding: 5px 18px; border-radius: 30px; letter-spacing: 1.5px;
+      text-transform: uppercase; margin-bottom: 14px;
+    }
+    .page-hero h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.6rem); margin-bottom: 10px; }
+    .page-hero p { color: #c8e8c4; max-width: 540px; margin: 0 auto; font-size: 15px; }
+
+    /* ── DOSHA PILLS IN HERO ── */
+    .dosha-pills { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 22px; }
+    .dosha-pill {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 20px; border-radius: 30px;
+      font-size: 13px; font-weight: 700; border: 2px solid;
+    }
+    .dosha-pill.vata  { background: rgba(124,92,191,.2); border-color: #b39ddb; color: #d4c5f9; }
+    .dosha-pill.pitta { background: rgba(192,86,33,.2);  border-color: #f6a97a; color: #fbd3b7; }
+    .dosha-pill.kapha { background: rgba(47,133,90,.2);  border-color: #68d391; color: #c6f6d5; }
+
+    /* ── MAIN CONTENT LAYOUT ── */
+    .page-body {
+      max-width: 1200px; margin: 48px auto 64px; padding: 0 24px;
+      display: grid; grid-template-columns: 300px 1fr; gap: 32px; align-items: start;
+    }
+
+    /* ── LEFT SIDEBAR ── */
+    .sidebar-left { display: flex; flex-direction: column; gap: 20px; position: sticky; top: 72px; }
+
+    .info-card {
+      background: var(--white); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 24px;
+    }
+    .info-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; color: var(--green-dark); margin-bottom: 12px;
+      padding-bottom: 10px; border-bottom: 2px solid var(--cream-dark);
+    }
+    .info-card p { font-size: 13px; color: var(--text-mid); margin-bottom: 10px; line-height: 1.7; }
+
+    .dosha-info-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 0; border-bottom: 1px solid var(--cream-dark);
+    }
+    .dosha-info-item:last-child { border-bottom: none; }
+    .dosha-info-item .dot {
+      width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; margin-top: 5px;
+    }
+    .dosha-info-item .dot.vata  { background: var(--vata-color); }
+    .dosha-info-item .dot.pitta { background: var(--pitta-color); }
+    .dosha-info-item .dot.kapha { background: var(--kapha-color); }
+    .dosha-info-item .text strong { font-size: 13px; color: var(--text-dark); display: block; }
+    .dosha-info-item .text span { font-size: 11px; color: var(--text-light); }
+
+    /* Share card */
+    .share-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; }
+    .share-card h3 { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--green-dark); margin-bottom: 16px; }
+    .share-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+    .share-field label { font-size: 12px; font-weight: 700; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.5px; }
+    .share-field input {
+      padding: 9px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+      font-family: 'Lato', sans-serif; font-size: 13px; color: var(--text-dark);
+      background: #fafff9; outline: none; transition: border-color .2s;
+    }
+    .share-field input:focus { border-color: var(--green-mid); }
+    .share-btn {
+      width: 100%; padding: 10px; border-radius: 8px; border: none;
+      font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: background .2s, transform .2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-bottom: 8px;
+    }
+    .share-btn:hover { transform: translateY(-1px); }
+    .share-btn.email { background: var(--green-dark); color: var(--white); }
+    .share-btn.email:hover { background: var(--green-mid); }
+    .share-btn.whatsapp { background: #25D366; color: var(--white); }
+    .share-btn.whatsapp:hover { background: #1ebe5c; }
+
+    /* ── ILLUSTRATED QUIZ CARDS ── */
+    .quiz-sections { display: flex; flex-direction: column; gap: 32px; }
+    .quiz-section {}
+    .section-header {
+      display: flex; flex-direction: column; gap: 3px;
+      padding: 12px 18px; margin-bottom: 16px;
+      background: linear-gradient(90deg, var(--green-dark), var(--green-mid));
+      border-radius: 10px; color: var(--white);
+    }
+    .sec-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; }
+    .sec-sub   { font-size: 11px; color: #c8e8c4; }
+
+    /* Question card */
+    .q-card {
+      background: var(--white); border-radius: 14px;
+      border: 2px solid var(--cream-dark);
+      padding: 18px 20px 20px; margin-bottom: 12px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .q-card.answered-vata  { border-color: #b39ddb; background: rgba(124,92,191,.04); }
+    .q-card.answered-pitta { border-color: #f6a97a; background: rgba(192,86,33,.04);  }
+    .q-card.answered-kapha { border-color: #68d391; background: rgba(47,133,90,.04);  }
+    .q-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 14px; flex-wrap: wrap;
+    }
+    .q-num {
+      font-size: 10px; font-weight: 700; color: var(--text-light);
+      background: var(--cream-dark); padding: 2px 9px;
+      border-radius: 20px; letter-spacing: .5px;
+    }
+    .q-label {
+      font-size: 14px; font-weight: 700; color: var(--text-dark); flex: 1;
+    }
+    .q-tick {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--green-mid); color: var(--white);
+      font-size: 12px; font-weight: 700;
+      display: none; align-items: center; justify-content: center;
+    }
+    .q-card.answered-vata .q-tick,
+    .q-card.answered-pitta .q-tick,
+    .q-card.answered-kapha .q-tick { display: flex; }
+
+    /* Options row */
+    .q-options {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
+    }
+    .q-opt {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 8px; padding: 14px 10px 12px;
+      border-radius: 12px; border: 2px solid var(--cream-dark);
+      cursor: pointer; transition: all .2s; position: relative;
+      background: var(--cream); user-select: none; text-align: center;
+    }
+    .q-opt:hover { border-color: #b0d4a8; background: #f4fbf2; transform: translateY(-2px); }
+    .q-opt input[type="radio"] { display: none; }
+
+    /* Visual area */
+    .opt-visual { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; }
+    .opt-emoji  { font-size: 32px; line-height: 1; }
+    .opt-dosha-tag {
+      font-size: 9px; font-weight: 700; padding: 2px 8px;
+      border-radius: 10px; letter-spacing: .5px; text-transform: uppercase;
+    }
+    .vata-tag  { background: rgba(124,92,191,.15); color: #7c5cbf; }
+    .pitta-tag { background: rgba(192,86,33,.15);  color: #c05621; }
+    .kapha-tag { background: rgba(47,133,90,.15);  color: #2f855a; }
+
+    .opt-text {
+      font-size: 11.5px; font-weight: 700; color: var(--text-mid);
+      line-height: 1.3; text-align: center;
+    }
+
+    /* Check mark */
+    .opt-check {
+      position: absolute; top: 6px; right: 8px;
+      font-size: 12px; font-weight: 900;
+      opacity: 0; transition: opacity .2s;
+    }
+
+    /* Selected states */
+    .q-opt.selected-vata {
+      border-color: #7c5cbf; background: rgba(124,92,191,.09);
+      box-shadow: 0 0 0 1px rgba(124,92,191,.3);
+    }
+    .q-opt.selected-vata .opt-text { color: #7c5cbf; }
+    .q-opt.selected-vata .opt-check { opacity: 1; color: #7c5cbf; }
+    .q-opt.selected-pitta {
+      border-color: #c05621; background: rgba(192,86,33,.09);
+      box-shadow: 0 0 0 1px rgba(192,86,33,.3);
+    }
+    .q-opt.selected-pitta .opt-text { color: #c05621; }
+    .q-opt.selected-pitta .opt-check { opacity: 1; color: #c05621; }
+    .q-opt.selected-kapha {
+      border-color: #2f855a; background: rgba(47,133,90,.1);
+      box-shadow: 0 0 0 1px rgba(47,133,90,.3);
+    }
+    .q-opt.selected-kapha .opt-text { color: #2f855a; }
+    .q-opt.selected-kapha .opt-check { opacity: 1; color: #2f855a; }
+
+    .q-grid { display: flex; flex-direction: column; gap: 10px; }
+
+    /* Action buttons */
+        /* Action buttons */
+    .test-actions { display: flex; gap: 12px; margin-top: 22px; flex-wrap: wrap; }
+    .btn {
+      padding: 12px 28px; border-radius: 50px; border: none;
+      font-family: 'Lato', sans-serif; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: transform .2s, box-shadow .2s;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.12); }
+    .btn-primary { background: var(--green-mid); color: var(--white); }
+    .btn-gold    { background: var(--gold); color: var(--white); }
+    .btn-outline { background: transparent; border: 2px solid var(--green-mid); color: var(--green-dark); }
+
+    /* ── RESULTS PANEL ── */
+    .results-card {
+      background: var(--white); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 28px;
+      display: none;
+    }
+    .results-card.visible { display: block; }
+    .results-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; color: var(--green-dark); margin-bottom: 20px;
+    }
+
+    /* Score bars */
+    .score-bars { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+    .score-row .score-label {
+      display: flex; justify-content: space-between;
+      font-size: 13px; font-weight: 700; margin-bottom: 6px;
+    }
+    .score-row .score-label .name { color: var(--text-dark); }
+    .score-row .score-label .pct  { color: var(--text-light); }
+    .score-bar-track { background: var(--cream-dark); border-radius: 10px; height: 12px; overflow: hidden; }
+    .score-bar-fill  { height: 100%; border-radius: 10px; transition: width .8s cubic-bezier(.22,.68,0,1.2); }
+    .score-bar-fill.vata  { background: linear-gradient(90deg, #9c7cd4, var(--vata-color)); }
+    .score-bar-fill.pitta { background: linear-gradient(90deg, #e8956a, var(--pitta-color)); }
+    .score-bar-fill.kapha { background: linear-gradient(90deg, #68d391, var(--kapha-color)); }
+
+    /* Dominant badge */
+    .dominant-banner {
+      border-radius: 10px; padding: 16px 20px; margin-bottom: 24px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .dominant-banner.vata  { background: rgba(124,92,191,.1); border: 2px solid var(--vata-color); }
+    .dominant-banner.pitta { background: rgba(192,86,33,.1);  border: 2px solid var(--pitta-color); }
+    .dominant-banner.kapha { background: rgba(47,133,90,.1);  border: 2px solid var(--kapha-color); }
+    .dominant-banner .dom-icon { font-size: 36px; flex-shrink: 0; }
+    .dominant-banner .dom-text .dom-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); }
+    .dominant-banner .dom-text .dom-name  { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; }
+    .dominant-banner.vata  .dom-text .dom-name  { color: var(--vata-color); }
+    .dominant-banner.pitta .dom-text .dom-name  { color: var(--pitta-color); }
+    .dominant-banner.kapha .dom-text .dom-name  { color: var(--kapha-color); }
+    .dominant-banner .dom-text .dom-sub { font-size: 13px; color: var(--text-mid); margin-top: 2px; }
+
+    /* Chart */
+    .chart-wrap { max-width: 280px; margin: 0 auto 28px; }
+
+    /* Interpretation */
+    .interpretation-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
+    .interp-item {
+      border-radius: 10px; padding: 14px 16px;
+      border-left: 4px solid;
+    }
+    .interp-item.positive { background: #f0fbf0; border-color: var(--kapha-color); }
+    .interp-item.caution  { background: #fff8f0; border-color: var(--gold); }
+    .interp-item h5 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-light); margin-bottom: 6px; }
+    .interp-item ul { list-style: none; }
+    .interp-item ul li { font-size: 13px; color: var(--text-mid); padding: 2px 0; }
+    .interp-item ul li::before { content: '• '; color: var(--green-mid); font-weight: 700; }
+
+    /* CTA */
+    .result-cta {
+      background: var(--green-dark); border-radius: 10px; padding: 20px 24px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;
+    }
+    .result-cta p { color: #c8e8c4; font-size: 14px; max-width: 380px; }
+    .result-cta p strong { color: var(--white); display: block; font-size: 15px; margin-bottom: 4px; }
+    .result-cta a {
+      background: var(--gold); color: var(--white);
+      padding: 12px 24px; border-radius: 30px;
+      font-size: 14px; font-weight: 700; white-space: nowrap;
+      transition: background .2s;
+    }
+    .result-cta a:hover { background: #b5831f; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--green-dark); color: #b8d9b2; padding: 32px 24px 20px; margin-top: 20px; }
+    .footer-bottom { max-width: 1200px; margin: auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    .footer-bottom p { font-size: 12px; }
+    .disclaimer-text { font-size: 11px; color: #7aaa74; max-width: 680px; line-height: 1.6; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .page-body { grid-template-columns: 1fr; }
+      .sidebar-left { position: static; }
+    }
+    @media (max-width: 600px) {
+      .interpretation-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
-
 <body>
-
-  <div class="fix_top top_top">
-    <div class="container_top">
-      <div class="container">
-        <!--top_navbar-->
-        <div class="navbar_top">
-          <ul>
-            <li><a href="cart.html">Cart</a></li>
-            <li>|</li>
-            <li><a href="mailto:info@chakradavayurveda.com">Email</a></li>
-            <li>|</li>
-            <li><a href="Tel:+91XXXXXXXXXX">Call us</a></li>
-            <li>|</li>
-            <li><a href="login-signup.html">Login</a></li>
-            <li>|</li>
-            <li><a href="login-signup.html">Sign Up</a></li>
-          </ul>
-        </div>
-        <!--centerlogo-->
-        <div class="logo_top">
-          <img src="image/ganesh.png" alt="" WIDTH="120" HEIGHT="120">
-          <p>The Opener of all good things in life</p>
-        </div>
-        <!-- Navbar -->
-          <div class="navbar">
-          <ul>
-            <li class="thick"><a href="index.html">🏡Home</a></li>
-            <li class="thick"><a href="consultant.html">Consultants</a></li>
-            <li class="thick active"><a href="dosha-analysis.html">Dosha Analysis</a></li>
-            <li class="thick"><a href="e-shop.html">E-Shope</a></li>
-            <li class="thick"><a href="book_consultation.html">Book You Online Consultation</a></li>
-            <li class="thick"><a href="diet.html">Diet</a></li>
-            <li class="thick"><a href="blog.html">Blog</a></li>
-          </ul>
-          </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="main">
-    <h1 class="construction">This Site is Under Construction</h1>
-    <h1>DOSHA ANALYSIS</h1>
-    <p>The Science of dosha's to know your indivduality, It will help you to support your nature, better understanding of your children or parants. It will reveal, what measures to be taken in daily routine. </p>
-    <p> Ayurveda - Heathy lifesyle system that people in India have used for more than 5000 years. It emphasize good health & preventiv and treatment of illness through lifestylr practices and use of harbal remedies.</p>
-    <h2>WHY TO ANALYSI</h2>
-    <p>Every human body is different and madeup of 5 elements (Earth, Wind, Water, Fire and Space). The combination of these elements in a body determine the personality and dosha's of the person.</p>
-    <p>dosha's are the basis of ayurvedic diagnosis.</p>
-    <h2>TAKE YOUR TEST</h2>
-
-    <div class="dosha_table">
-      <div class="container">
-        <table cellspacing="40">
-          <th class="teble_header">
-            <tr>
-              <td><img src="image/observation.png" alt="" WIDTH="150" HEIGHT="150"><br><strong>OBSERVAIONS</strong></td>
-              <td><img src="image/vata.png" alt="" WIDTH="150" HEIGHT="150"><br><strong>VATA</strong></td>
-              <td><img src="image/pitta.png" alt="" WIDTH="150" HEIGHT="150"><br><strong>PITTA</strong></td>
-              <td><img src="image/kapha.png" alt="" WIDTH="150" HEIGHT="150"><br><strong>KAPHA</strong></td>
-            </tr>
-          </th>
-          <tbody>
-            <tr>
-              <td>Body Size</td>
-              <td><input type="checkbox" name="" value="">Slim</td>
-              <td><input type="checkbox" name="" value="">Medium</td>
-              <td><input type="checkbox" name="" value="">Large</td>
-            </tr>
-            <tr>
-              <td>Body Weight</td>
-              <td><input type="checkbox" name="" value="">Low</td>
-              <td><input type="checkbox" name="" value="">Medium</td>
-              <td><input type="checkbox" name="" value="">Overweight</td>
-            </tr>
-            <tr>
-              <td>Chin</td>
-              <td><input type="checkbox" name="" value="">Thin, Angular</td>
-              <td><input type="checkbox" name="" value="">Tapering</td>
-              <td><input type="checkbox" name="" value="">Rounded, Double</td>
-            </tr>
-            <tr>
-              <td>Cheeks</td>
-              <td><input type="checkbox" name="" value="">Wrinkled, Sunken</td>
-              <td><input type="checkbox" name="" value="">Smooth flat</td>
-              <td><input type="checkbox" name="" value="">Rounded, Plump</td>
-            </tr>
-            <tr>
-              <td>Eyes</td>
-              <td><input type="checkbox" name="" value="">Smal, Sunken, Dry, Active, Black, Brown, Nervous</td>
-              <td><input type="checkbox" name="" value="">Sharp, Bright, Gray, Green, Yellow/red, Sensitive to light</td>
-              <td><input type="checkbox" name="" value="">Big, Beautiful, Blue, Clam, Loving</td>
-            </tr>
-            <tr>
-              <td>Nose</td>
-              <td><input type="checkbox" name="" value="">Uneven Shape, Deviated septum</td>
-              <td><input type="checkbox" name="" value="">Long Pointed, Red Nose-tip</td>
-              <td><input type="checkbox" name="" value="">Short rounded, Button nose</td>
-            </tr>
-            <tr>
-              <td>Lips</td>
-              <td><input type="checkbox" name="" value="">Dry, Craked, Black/Brown tinge</td>
-              <td><input type="checkbox" name="" value="">Red, Inflamed, Yellowish</td>
-              <td><input type="checkbox" name="" value="">Smooth, Oily, Pale, whitish</td>
-            </tr>
-            <tr>
-              <td>Teeth</td>
-              <td><input type="checkbox" name="" value="">Stick out, Big, Roomy, Thin gums</td>
-              <td><input type="checkbox" name="" value="">Medium, Soft, tender gums</td>
-              <td><input type="checkbox" name="" value="">Healthy, white, strong gums</td>
-            </tr>
-            <tr>
-              <td>Skin</td>
-              <td><input type="checkbox" name="" value="">Thin, dry, cold, rough, dark</td>
-              <td><input type="checkbox" name="" value="">Smooth, oily, warm, rosy</td>
-              <td><input type="checkbox" name="" value="">Thick, oily, cool, white, pale</td>
-            </tr>
-            <tr>
-              <td>Hair</td>
-              <td><input type="checkbox" name="" value="">Dry, brown, black, knotted, brittle, scarce</td>
-              <td><input type="checkbox" name="" value="">Straight, oily, blond, gray, red, bald</td>
-              <td><input type="checkbox" name="" value="">Thick, curly, oily, wavy, luxuriant</td>
-            </tr>
-            <tr>
-              <td>Nails</td>
-              <td><input type="checkbox" name="" value="">Dry, rough, brittle, break easily</td>
-              <td><input type="checkbox" name="" value="">Sharp, flexible, pink, lustrous</td>
-              <td><input type="checkbox" name="" value="">Thick, oily, smooth, polished</td>
-            </tr>
-            <tr>
-              <td>Neck</td>
-              <td><input type="checkbox" name="" value="">Thin, tall</td>
-              <td><input type="checkbox" name="" value="">Medium</td>
-              <td><input type="checkbox" name="" value="">Big, folded</td>
-            </tr>
-            <tr>
-              <td>Chest</td>
-              <td><input type="checkbox" name="" value="">Flat, sunken</td>
-              <td><input type="checkbox" name="" value="">Moderate</td>
-              <td><input type="checkbox" name="" value="">Expanded, round</td>
-            </tr>
-            <tr>
-              <td>Belly</td>
-              <td><input type="checkbox" name="" value="">Thin, flat, sunken</td>
-              <td><input type="checkbox" name="" value="">Moderate</td>
-              <td><input type="checkbox" name="" value="">Big, pot-bellied</td>
-            </tr>
-            <tr>
-              <td>Belly-button</td>
-              <td><input type="checkbox" name="" value="">Small, irregular, herniated</td>
-              <td><input type="checkbox" name="" value="">Oval, superficial</td>
-              <td><input type="checkbox" name="" value="">Big, deep, round, stretched</td>
-            </tr>
-            <tr>
-              <td>Hips</td>
-              <td><input type="checkbox" name="" value="">Slender, thin</td>
-              <td><input type="checkbox" name="" value="">Moderate</td>
-              <td><input type="checkbox" name="" value="">Heavy, big</td>
-            </tr>
-            <tr>
-              <td>Joints</td>
-              <td><input type="checkbox" name="" value="">Cold, cracking</td>
-              <td><input type="checkbox" name="" value="">Moderate</td>
-              <td><input type="checkbox" name="" value="">Large, lubricated</td>
-            </tr>
-            <tr>
-              <td>Appetite</td>
-              <td><input type="checkbox" name="" value="">Irregular, scanty</td>
-              <td><input type="checkbox" name="" value="">Strong, unbearable</td>
-              <td><input type="checkbox" name="" value="">Slow but steady</td>
-            </tr>
-            <tr>
-              <td>Digestion</td>
-              <td><input type="checkbox" name="" value="">Irregular, forms gas</td>
-              <td><input type="checkbox" name="" value="">Quick, causes burning</td>
-              <td><input type="checkbox" name="" value="">Prolonged, forms mucous</td>
-            </tr>
-            <tr>
-              <td>Taste</td>
-              <td><input type="checkbox" name="" value="">Sweet, sour, salty</td>
-              <td><input type="checkbox" name="" value="">Sweet, bitter, astringent</td>
-              <td><input type="checkbox" name="" value="">Bitter, pungent, astringent</td>
-            </tr>
-            <tr>
-              <td>Thirst</td>
-              <td><input type="checkbox" name="" value="">Changeable</td>
-              <td><input type="checkbox" name="" value="">Surplus</td>
-              <td><input type="checkbox" name="" value="">Sparse</td>
-            </tr>
-            <tr>
-              <td>Elimination</td>
-              <td><input type="checkbox" name="" value="">Constipation</td>
-              <td><input type="checkbox" name="" value="">Loose</td>
-              <td><input type="checkbox" name="" value="">Thick, oily, sluggish</td>
-            </tr>
-            <tr>
-              <td>Physical Activity</td>
-              <td><input type="checkbox" name="" value="">Hyperactive</td>
-              <td><input type="checkbox" name="" value="">Moderate</td>
-              <td><input type="checkbox" name="" value="">Slow</td>
-            </tr>
-            <tr>
-              <td>Mental Activity</td>
-              <td><input type="checkbox" name="" value="">Hyperactive</td>
-              <td><input type="checkbox" name="" value="">Moderate</td>
-              <td><input type="checkbox" name="" value="">Dull, slow</td>
-            </tr>
-            <tr>
-              <td>Emotions</td>
-              <td><input type="checkbox" name="" value="">Anxiety, fear, uncertainty</td>
-              <td><input type="checkbox" name="" value="">Anger, hate, jealousy</td>
-              <td><input type="checkbox" name="" value="">Calm, greedy, attachment</td>
-            </tr>
-            <tr>
-              <td>Faith</td>
-              <td><input type="checkbox" name="" value="">Variable</td>
-              <td><input type="checkbox" name="" value="">Extremist</td>
-              <td><input type="checkbox" name="" value="">Consistent</td>
-            </tr>
-            <tr>
-              <td>Intellect</td>
-              <td><input type="checkbox" name="" value="">Quick but faulty response</td>
-              <td><input type="checkbox" name="" value="">Accurate response</td>
-              <td><input type="checkbox" name="" value="">Slow, Exact</td>
-            </tr>
-            <tr>
-              <td>Recollection</td>
-              <td><input type="checkbox" name="" value="">Recent good, Remote poor</td>
-              <td><input type="checkbox" name="" value="">Distinct</td>
-              <td><input type="checkbox" name="" value="">Slow and sustained</td>
-            </tr>
-            <tr>
-              <td>Dreams</td>
-              <td><input type="checkbox" name="" value="">Quick, active, many, fearful</td>
-              <td><input type="checkbox" name="" value="">Fiery, war, violence</td>
-              <td><input type="checkbox" name="" value="">Lakes, Snow, Romantic</td>
-            </tr>
-            <tr>
-              <td>Sleep</td>
-              <td><input type="checkbox" name="" value="">Scanty, Broken up, Sleeplessness</td>
-              <td><input type="checkbox" name="" value="">Little but sound</td>
-              <td><input type="checkbox" name="" value="">Deep, Prolonged</td>
-            </tr>
-            <tr>
-              <td>Speech</td>
-              <td><input type="checkbox" name="" value="">Rapid, unclear</td>
-              <td><input type="checkbox" name="" value="">Sharp, penetrating</td>
-              <td><input type="checkbox" name="" value="">Slow, monotonous</td>
-            </tr>
-            <tr>
-              <td>Financial</td>
-              <td><input type="checkbox" name="" value="">Poor, spends on trifles</td>
-              <td><input type="checkbox" name="" value="">Spends money on luxuries</td>
-              <td><input type="checkbox" name="" value="">Rich, good money preserver</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <!--need to look how to calculate-->
-<div class="">
-    <button type="button" name="button">Calculate</button>
-    <br>
-    <form action="mailto:drpreet86@gmail.com" method="post" enctype="text/plain">
-      <label for="">
-        <h1>Ayurveda Dosha Test Results (Basic constitution)</h1>
-      </label>
-      <label for="">Vata:</label>
-      <input type="Calculate" name="Vata" value="">
-      <br>
-      <label for="">Pitta:</label>
-      <input type="Calculate" name="Pitta" value="">
-      <br>
-      <label for="">Kapha:</label>
-      <input type="Calculate" name="Kalpha" value="">
-      <br>
-      <label for="">Your Name:</label>
-      <input type="text" name="Your Name" value="">
-      <br>
-      <label for="">Your Email:</label>
-      <input type="email" name="Your Email" value="">
-      <br>
-      <input type="submit" name="">
-      <p>or</p>
-      <label for="">whatsup the results:</label>
-      <input type="number: " name="" value="">
-      <button type="button" name="button"><img src="image/whatsup_logo.png" alt="" width="30" height="30">Send in WhatsApp</button>
-      <br>
-
-      <br>
-      you can share this with docture during your consultation
-      <br>
-
-      <p>According to dosha condition, simple home remedies and daily routines recomendad by Doctor.</p>
-      <h3>Better health is a result of just a little extra planning</h3>
-
-      <!-- need to simnplyfy this statments -->
-      <h1>Daily Routines</h1>
-      <ol>
-        <li>Improve your mentel health by reducing your stress level.</li>
-        <li>Feels secure.</li>
-        <li>Life Savers.</li>
-        <li>It is good thing, How much time you spend on each activity.</li>
-        <li>You will be more efficient in setting and achieving goals.</li>
-        <li>It's best, if you can maintain a consistenet time for waking and going to bed.</li>
-      </ol>
-      <!-- need to simnplyfy this statments -->
-      <h1>Simple home Remedies</h1>
-      <p>Natural home remedies are nothing but treating the problems wqith simple organic things or with items that we are using in our daily routine. it is not a new technique. it was applied from our ancestors. Thier food and remedies can have a
-        good
-        scientific reason for some problems, surely using natural remedies is for better to go with medication because it has no side effects.</p>
-      <p>following both daily routine and home remedies help the body to heal safely tested by real people.</p>
-  </div>
+<!-- ANNOUNCEMENT BAR -->
+<div style="background:#c8972a;color:#fff;text-align:center;font-size:13px;font-weight:700;padding:9px 24px;">
+  🎁 First consultation is completely FREE — <a href="book_consultation.html" style="color:#fff;text-decoration:underline;margin-left:8px;">Book yours today →</a>
 </div>
-</body>
 
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="inner">
+      <div>
+        <a href="tel:+918825499283">📞 Call Us: +91-8825499283</a>
+        <a href="/cdn-cgi/l/email-protection#42212a2329302326273470717b02252f232b2e6c212d2f">✉ <span class="__cf_email__" data-cfemail="315259505a435055544703020871565c50585d1f525e5c">[email&#160;protected]</span></a>
+      </div>
+      <div>
+        <a href="cart.html">🛒 Cart</a>
+        <a href="login-signup.html">Login</a>
+        <a href="login-signup.html">Sign Up</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="inner">
+      <div class="logo-wrap">
+        <a href="index.html"><img src="image/ganesh.png" alt="Chakradev Ayurveda"></a>
+      </div>
+      <h1 class="brand"><a href="index.html" style="text-decoration:none;color:inherit;">Chakradev Ayurveda</a></h1>
+      <p class="tagline">Heal Naturally · Live Harmoniously</p>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav class="main-nav">
+    <ul>
+      <li><a href="index.html">🏡 Home</a></li>
+      <li><a href="consultant.html">Consultants</a></li>
+      <li><a href="dosha-analysis.html" class="active">Dosha Analysis</a></li>
+      <li><a href="e-shop.html">E-Shop</a></li>
+      <li><a href="book_consultation.html">Book Consultation</a></li>
+      <li><a href="diet.html">Diet & Nutrition</a></li>
+      <li><a href="blog.html">Blog</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="badge">🌿 Free Self-Assessment</div>
+    <h2>Discover Your Dosha</h2>
+    <p>Understand your unique mind-body constitution through this classical Ayurvedic self-test. Select one option per row that best describes you.</p>
+    <div class="dosha-pills">
+      <span class="dosha-pill vata">🌬 Vata — Air + Space</span>
+      <span class="dosha-pill pitta">🔥 Pitta — Fire + Water</span>
+      <span class="dosha-pill kapha">🌍 Kapha — Earth + Water</span>
+    </div>
+  </div>
+
+  <!-- PAGE BODY -->
+  <div class="page-body">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar-left">
+
+      <div class="info-card">
+        <h3>The Three Doshas</h3>
+        <p>Every person has a unique blend of all three Doshas. Your dominant Dosha shapes your physical traits, emotions, digestion, and personality.</p>
+        <div class="dosha-info-item">
+          <span class="dot vata"></span>
+          <div class="text">
+            <strong>Vata — Air & Space</strong>
+            <span>Creative, quick, light, dry, cold, mobile</span>
+          </div>
+        </div>
+        <div class="dosha-info-item">
+          <span class="dot pitta"></span>
+          <div class="text">
+            <strong>Pitta — Fire & Water</strong>
+            <span>Sharp, intense, warm, oily, focused</span>
+          </div>
+        </div>
+        <div class="dosha-info-item">
+          <span class="dot kapha"></span>
+          <div class="text">
+            <strong>Kapha — Earth & Water</strong>
+            <span>Stable, heavy, cool, smooth, compassionate</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3>How to Take the Test</h3>
+        <p>For each of the 32 observations, choose the option that <strong>most accurately</strong> describes your natural tendencies — not how you feel today. Think of your whole life.</p>
+        <p>Each row allows only one selection. When done, press <strong>Calculate My Dosha</strong>.</p>
+      </div>
+
+      <!-- SHARE CARD -->
+      <div class="share-card">
+        <h3>Share Your Results</h3>
+        <div class="share-field">
+          <label>Your Name</label>
+          <input type="text" id="nameInput" placeholder="Enter your name">
+        </div>
+        <div class="share-field">
+          <label>Email Address</label>
+          <input type="email" id="emailInput" placeholder="you@example.com">
+        </div>
+        <button class="share-btn email" onclick="sendEmailResults()">
+          ✉ Send Results by Email
+        </button>
+        <div class="share-field" style="margin-top:10px;">
+          <label>WhatsApp Number</label>
+          <input type="tel" id="whatsappInput" placeholder="+91 8825499283">
+        </div>
+        <button class="share-btn whatsapp" id="whatsappBtn">
+          💬 Send via WhatsApp
+        </button>
+      </div>
+
+    </aside>
+
+    <!-- MAIN TEST AREA -->
+    <div class="test-area">
+
+      <!-- Progress -->
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span>Questions answered</span>
+          <span id="progress-count">0 / 32</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+
+      <!-- Illustrated Quiz Cards -->
+      <div class="test-card">
+        <div class="card-header">
+          <h3>Dosha Self-Test</h3>
+          <p class="card-sub">Tap the option that best describes your natural constitution. Each card highlights your selection with its Dosha colour.</p>
+        </div>
+        <div class="quiz-sections">
+          <div class="quiz-section">
+            <div class="section-header"><span class="sec-title">🧬 Physical Body</span><span class="sec-sub">Physical characteristics that reflect your natural Prakriti</span></div>
+            <div class="q-grid">
+        <div class="q-card" id="qcard-1" data-q="1">
+          <div class="q-header">
+            <span class="q-num">Q01</span>
+            <span class="q-label">Body Size</span>
+            <span class="q-tick" id="qtick-1">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,1,'vata')">
+              <input type="radio" name="q1" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">🪶</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Slim</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,1,'pitta')">
+              <input type="radio" name="q1" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">⚖️</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Medium</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,1,'kapha')">
+              <input type="radio" name="q1" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🏋️</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Large</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-2" data-q="2">
+          <div class="q-header">
+            <span class="q-num">Q02</span>
+            <span class="q-label">Body Weight</span>
+            <span class="q-tick" id="qtick-2">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,2,'vata')">
+              <input type="radio" name="q2" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌿</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Low</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,2,'pitta')">
+              <input type="radio" name="q2" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">⚖️</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Medium</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,2,'kapha')">
+              <input type="radio" name="q2" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🪨</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Overweight</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-3" data-q="3">
+          <div class="q-header">
+            <span class="q-num">Q03</span>
+            <span class="q-label">Chin</span>
+            <span class="q-tick" id="qtick-3">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,3,'vata')">
+              <input type="radio" name="q3" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">📐</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Thin, Angular</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,3,'pitta')">
+              <input type="radio" name="q3" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">🔻</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Tapering</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,3,'kapha')">
+              <input type="radio" name="q3" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌕</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Rounded, Double</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-4" data-q="4">
+          <div class="q-header">
+            <span class="q-num">Q04</span>
+            <span class="q-label">Cheeks</span>
+            <span class="q-tick" id="qtick-4">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,4,'vata')">
+              <input type="radio" name="q4" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">🍂</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Wrinkled, Sunken</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,4,'pitta')">
+              <input type="radio" name="q4" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">✨</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Smooth, Flat</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,4,'kapha')">
+              <input type="radio" name="q4" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🍑</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Rounded, Plump</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-5" data-q="5">
+          <div class="q-header">
+            <span class="q-num">Q05</span>
+            <span class="q-label">Eyes</span>
+            <span class="q-tick" id="qtick-5">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,5,'vata')">
+              <input type="radio" name="q5" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌾</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Small, Dry</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,5,'pitta')">
+              <input type="radio" name="q5" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">⚡</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Sharp, Bright</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,5,'kapha')">
+              <input type="radio" name="q5" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌊</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Big, Calm</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-6" data-q="6">
+          <div class="q-header">
+            <span class="q-num">Q06</span>
+            <span class="q-label">Nose</span>
+            <span class="q-tick" id="qtick-6">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,6,'vata')">
+              <input type="radio" name="q6" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">〰️</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Uneven Shape</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,6,'pitta')">
+              <input type="radio" name="q6" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌶️</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Long, Red Tip</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,6,'kapha')">
+              <input type="radio" name="q6" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌸</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Short, Rounded</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-7" data-q="7">
+          <div class="q-header">
+            <span class="q-num">Q07</span>
+            <span class="q-label">Lips</span>
+            <span class="q-tick" id="qtick-7">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,7,'vata')">
+              <input type="radio" name="q7" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">🏜️</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Dry, Cracked</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,7,'pitta')">
+              <input type="radio" name="q7" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">🔴</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Red, Inflamed</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,7,'kapha')">
+              <input type="radio" name="q7" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌙</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Smooth, Pale</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-8" data-q="8">
+          <div class="q-header">
+            <span class="q-num">Q08</span>
+            <span class="q-label">Teeth</span>
+            <span class="q-tick" id="qtick-8">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,8,'vata')">
+              <input type="radio" name="q8" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">🦷</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Big, Spaced</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,8,'pitta')">
+              <input type="radio" name="q8" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">🟡</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Medium, Soft</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,8,'kapha')">
+              <input type="radio" name="q8" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">💪</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Strong, White</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+            </div>
+          </div>
+          <div class="quiz-section">
+            <div class="section-header"><span class="sec-title">🌿 Body Features</span><span class="sec-sub">External features shaped by your dominant elemental energy</span></div>
+            <div class="q-grid">
+        <div class="q-card" id="qcard-9" data-q="9">
+          <div class="q-header">
+            <span class="q-num">Q09</span>
+            <span class="q-label">Skin</span>
+            <span class="q-tick" id="qtick-9">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,9,'vata')">
+              <input type="radio" name="q9" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">🍃</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Thin, Dry</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,9,'pitta')">
+              <input type="radio" name="q9" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">🔥</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Warm, Oily</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,9,'kapha')">
+              <input type="radio" name="q9" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">💧</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Thick, Cool</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-10" data-q="10">
+          <div class="q-header">
+            <span class="q-num">Q10</span>
+            <span class="q-label">Hair</span>
+            <span class="q-tick" id="qtick-10">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,10,'vata')">
+              <input type="radio" name="q10" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌪️</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Dry, Brittle</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,10,'pitta')">
+              <input type="radio" name="q10" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">✨</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Straight, Oily</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,10,'kapha')">
+              <input type="radio" name="q10" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌊</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Thick, Wavy</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-11" data-q="11">
+          <div class="q-header">
+            <span class="q-num">Q11</span>
+            <span class="q-label">Nails</span>
+            <span class="q-tick" id="qtick-11">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,11,'vata')">
+              <input type="radio" name="q11" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">🍂</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Dry, Brittle</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,11,'pitta')">
+              <input type="radio" name="q11" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌸</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Sharp, Pink</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,11,'kapha')">
+              <input type="radio" name="q11" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">💎</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Thick, Smooth</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-12" data-q="12">
+          <div class="q-header">
+            <span class="q-num">Q12</span>
+            <span class="q-label">Neck</span>
+            <span class="q-tick" id="qtick-12">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,12,'vata')">
+              <input type="radio" name="q12" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">🦒</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Thin, Tall</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,12,'pitta')">
+              <input type="radio" name="q12" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">📏</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Medium</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,12,'kapha')">
+              <input type="radio" name="q12" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🐘</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Big, Folded</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-13" data-q="13">
+          <div class="q-header">
+            <span class="q-num">Q13</span>
+            <span class="q-label">Chest</span>
+            <span class="q-tick" id="qtick-13">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,13,'vata')">
+              <input type="radio" name="q13" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">🪶</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Flat, Sunken</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,13,'pitta')">
+              <input type="radio" name="q13" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">⚖️</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Moderate</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,13,'kapha')">
+              <input type="radio" name="q13" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🛡️</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Expanded, Round</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-14" data-q="14">
+          <div class="q-header">
+            <span class="q-num">Q14</span>
+            <span class="q-label">Belly</span>
+            <span class="q-tick" id="qtick-14">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,14,'vata')">
+              <input type="radio" name="q14" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌿</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Thin, Flat</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,14,'pitta')">
+              <input type="radio" name="q14" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">⚖️</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Moderate</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,14,'kapha')">
+              <input type="radio" name="q14" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🫙</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Big, Pot-bellied</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-15" data-q="15">
+          <div class="q-header">
+            <span class="q-num">Q15</span>
+            <span class="q-label">Belly-button</span>
+            <span class="q-tick" id="qtick-15">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,15,'vata')">
+              <input type="radio" name="q15" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">〰️</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Small, Irregular</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,15,'pitta')">
+              <input type="radio" name="q15" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">⭕</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Oval, Superficial</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,15,'kapha')">
+              <input type="radio" name="q15" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌀</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Big, Deep</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-16" data-q="16">
+          <div class="q-header">
+            <span class="q-num">Q16</span>
+            <span class="q-label">Hips</span>
+            <span class="q-tick" id="qtick-16">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,16,'vata')">
+              <input type="radio" name="q16" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌾</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Slender</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,16,'pitta')">
+              <input type="radio" name="q16" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">⚖️</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Moderate</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,16,'kapha')">
+              <input type="radio" name="q16" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🪨</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Heavy, Big</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-17" data-q="17">
+          <div class="q-header">
+            <span class="q-num">Q17</span>
+            <span class="q-label">Joints</span>
+            <span class="q-tick" id="qtick-17">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,17,'vata')">
+              <input type="radio" name="q17" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">❄️</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Cold, Cracking</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,17,'pitta')">
+              <input type="radio" name="q17" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">⚖️</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Moderate</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,17,'kapha')">
+              <input type="radio" name="q17" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">💧</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Large, Lubricated</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+            </div>
+          </div>
+          <div class="quiz-section">
+            <div class="section-header"><span class="sec-title">🔥 Digestion & Energy</span><span class="sec-sub">How your body processes food, energy, and physical activity</span></div>
+            <div class="q-grid">
+        <div class="q-card" id="qcard-18" data-q="18">
+          <div class="q-header">
+            <span class="q-num">Q18</span>
+            <span class="q-label">Appetite</span>
+            <span class="q-tick" id="qtick-18">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,18,'vata')">
+              <input type="radio" name="q18" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">〰️</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Irregular</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,18,'pitta')">
+              <input type="radio" name="q18" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">🔥</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Strong</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,18,'kapha')">
+              <input type="radio" name="q18" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🐢</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Slow</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-19" data-q="19">
+          <div class="q-header">
+            <span class="q-num">Q19</span>
+            <span class="q-label">Digestion</span>
+            <span class="q-tick" id="qtick-19">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,19,'vata')">
+              <input type="radio" name="q19" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">💨</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Irregular, Gas</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,19,'pitta')">
+              <input type="radio" name="q19" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">🔥</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Quick, Burning</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,19,'kapha')">
+              <input type="radio" name="q19" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌊</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Slow, Mucus</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-20" data-q="20">
+          <div class="q-header">
+            <span class="q-num">Q20</span>
+            <span class="q-label">Taste Preference</span>
+            <span class="q-tick" id="qtick-20">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,20,'vata')">
+              <input type="radio" name="q20" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">🍯</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Sweet, Sour, Salty</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,20,'pitta')">
+              <input type="radio" name="q20" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">🍋</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Sweet, Bitter</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,20,'kapha')">
+              <input type="radio" name="q20" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌿</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Bitter, Astringent</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-21" data-q="21">
+          <div class="q-header">
+            <span class="q-num">Q21</span>
+            <span class="q-label">Thirst</span>
+            <span class="q-tick" id="qtick-21">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,21,'vata')">
+              <input type="radio" name="q21" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">〰️</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Changeable</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,21,'pitta')">
+              <input type="radio" name="q21" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">💧</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Surplus</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,21,'kapha')">
+              <input type="radio" name="q21" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🏜️</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Sparse</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-22" data-q="22">
+          <div class="q-header">
+            <span class="q-num">Q22</span>
+            <span class="q-label">Elimination</span>
+            <span class="q-tick" id="qtick-22">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,22,'vata')">
+              <input type="radio" name="q22" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">🪨</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Constipation</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,22,'pitta')">
+              <input type="radio" name="q22" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">💧</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Loose</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,22,'kapha')">
+              <input type="radio" name="q22" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🐢</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Thick, Sluggish</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-23" data-q="23">
+          <div class="q-header">
+            <span class="q-num">Q23</span>
+            <span class="q-label">Physical Activity</span>
+            <span class="q-tick" id="qtick-23">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,23,'vata')">
+              <input type="radio" name="q23" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">⚡</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Hyperactive</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,23,'pitta')">
+              <input type="radio" name="q23" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">🏃</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Moderate</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,23,'kapha')">
+              <input type="radio" name="q23" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🐢</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Slow</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-24" data-q="24">
+          <div class="q-header">
+            <span class="q-num">Q24</span>
+            <span class="q-label">Mental Activity</span>
+            <span class="q-tick" id="qtick-24">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,24,'vata')">
+              <input type="radio" name="q24" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">⚡</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Hyperactive</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,24,'pitta')">
+              <input type="radio" name="q24" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">🧠</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Moderate</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,24,'kapha')">
+              <input type="radio" name="q24" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🐢</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Slow</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+            </div>
+          </div>
+          <div class="quiz-section">
+            <div class="section-header"><span class="sec-title">🧠 Mind & Behaviour</span><span class="sec-sub">Mental patterns, emotions, and behavioural tendencies</span></div>
+            <div class="q-grid">
+        <div class="q-card" id="qcard-25" data-q="25">
+          <div class="q-header">
+            <span class="q-num">Q25</span>
+            <span class="q-label">Emotions</span>
+            <span class="q-tick" id="qtick-25">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,25,'vata')">
+              <input type="radio" name="q25" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌪️</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Anxiety, Fear</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,25,'pitta')">
+              <input type="radio" name="q25" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">🔥</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Anger, Jealousy</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,25,'kapha')">
+              <input type="radio" name="q25" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🕊️</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Calm, Attachment</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-26" data-q="26">
+          <div class="q-header">
+            <span class="q-num">Q26</span>
+            <span class="q-label">Faith</span>
+            <span class="q-tick" id="qtick-26">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,26,'vata')">
+              <input type="radio" name="q26" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">〰️</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Variable</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,26,'pitta')">
+              <input type="radio" name="q26" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">⚡</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Extremist</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,26,'kapha')">
+              <input type="radio" name="q26" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🏔️</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Consistent</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-27" data-q="27">
+          <div class="q-header">
+            <span class="q-num">Q27</span>
+            <span class="q-label">Intellect</span>
+            <span class="q-tick" id="qtick-27">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,27,'vata')">
+              <input type="radio" name="q27" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">⚡</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Quick but Faulty</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,27,'pitta')">
+              <input type="radio" name="q27" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">🎯</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Accurate</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,27,'kapha')">
+              <input type="radio" name="q27" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🏔️</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Slow, Exact</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-28" data-q="28">
+          <div class="q-header">
+            <span class="q-num">Q28</span>
+            <span class="q-label">Recollection</span>
+            <span class="q-tick" id="qtick-28">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,28,'vata')">
+              <input type="radio" name="q28" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌬️</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Recent Good</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,28,'pitta')">
+              <input type="radio" name="q28" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">🎯</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Distinct</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,28,'kapha')">
+              <input type="radio" name="q28" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🏔️</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Slow, Sustained</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-29" data-q="29">
+          <div class="q-header">
+            <span class="q-num">Q29</span>
+            <span class="q-label">Dreams</span>
+            <span class="q-tick" id="qtick-29">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,29,'vata')">
+              <input type="radio" name="q29" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌪️</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Many, Fearful</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,29,'pitta')">
+              <input type="radio" name="q29" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">🔥</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Fiery, Violent</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,29,'kapha')">
+              <input type="radio" name="q29" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">❄️</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Lakes, Snow</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-30" data-q="30">
+          <div class="q-header">
+            <span class="q-num">Q30</span>
+            <span class="q-label">Sleep</span>
+            <span class="q-tick" id="qtick-30">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,30,'vata')">
+              <input type="radio" name="q30" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌬️</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Light, Broken</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,30,'pitta')">
+              <input type="radio" name="q30" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">⚡</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Little but Sound</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,30,'kapha')">
+              <input type="radio" name="q30" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌊</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Deep, Prolonged</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-31" data-q="31">
+          <div class="q-header">
+            <span class="q-num">Q31</span>
+            <span class="q-label">Speech</span>
+            <span class="q-tick" id="qtick-31">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,31,'vata')">
+              <input type="radio" name="q31" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">💨</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Rapid, Unclear</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,31,'pitta')">
+              <input type="radio" name="q31" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">🎯</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Sharp, Penetrating</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,31,'kapha')">
+              <input type="radio" name="q31" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🐢</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Slow, Monotonous</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+        <div class="q-card" id="qcard-32" data-q="32">
+          <div class="q-header">
+            <span class="q-num">Q32</span>
+            <span class="q-label">Financial</span>
+            <span class="q-tick" id="qtick-32">✓</span>
+          </div>
+          <div class="q-options">
+            <label class="q-opt vata-opt" onclick="selectOpt(this,32,'vata')">
+              <input type="radio" name="q32" data-dosha="vata">
+              <div class="opt-visual">
+                <div class="opt-emoji">🌬️</div>
+                <div class="opt-dosha-tag vata-tag">🌬 Vata</div>
+              </div>
+              <div class="opt-text">Spends on Trifles</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt pitta-opt" onclick="selectOpt(this,32,'pitta')">
+              <input type="radio" name="q32" data-dosha="pitta">
+              <div class="opt-visual">
+                <div class="opt-emoji">💎</div>
+                <div class="opt-dosha-tag pitta-tag">🔥 Pitta</div>
+              </div>
+              <div class="opt-text">Spends on Luxuries</div>
+              <div class="opt-check">✓</div>
+            </label>
+            <label class="q-opt kapha-opt" onclick="selectOpt(this,32,'kapha')">
+              <input type="radio" name="q32" data-dosha="kapha">
+              <div class="opt-visual">
+                <div class="opt-emoji">🏦</div>
+                <div class="opt-dosha-tag kapha-tag">🌍 Kapha</div>
+              </div>
+              <div class="opt-text">Saves Money</div>
+              <div class="opt-check">✓</div>
+            </label>
+          </div>
+        </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="test-actions">
+          <button class="btn btn-gold" id="calculateBtn">🔮 Calculate My Dosha</button>
+          <button class="btn btn-outline" id="resetBtn">↺ Reset All</button>
+        </div>
+      </div>
+
+      <!-- RESULTS CARD (hidden until calculated) -->
+      <div class="results-card" id="resultsCard">
+        <h3>Your Dosha Analysis Results</h3>
+
+        <!-- Dominant banner -->
+        <div class="dominant-banner" id="dominantBanner">
+          <span class="dom-icon" id="domIcon"></span>
+          <div class="dom-text">
+            <p class="dom-label">Your Dominant Dosha</p>
+            <p class="dom-name" id="domName"></p>
+            <p class="dom-sub" id="domSub"></p>
+          </div>
+        </div>
+
+        <!-- Score bars -->
+        <div class="score-bars">
+          <div class="score-row">
+            <div class="score-label"><span class="name">🌬 Vata</span><span class="pct" id="vataPct">0%</span></div>
+            <div class="score-bar-track"><div class="score-bar-fill vata" id="vataBar" style="width:0%"></div></div>
+          </div>
+          <div class="score-row">
+            <div class="score-label"><span class="name">🔥 Pitta</span><span class="pct" id="pittaPct">0%</span></div>
+            <div class="score-bar-track"><div class="score-bar-fill pitta" id="pittaBar" style="width:0%"></div></div>
+          </div>
+          <div class="score-row">
+            <div class="score-label"><span class="name">🌍 Kapha</span><span class="pct" id="kaphaPct">0%</span></div>
+            <div class="score-bar-track"><div class="score-bar-fill kapha" id="kaphaBar" style="width:0%"></div></div>
+          </div>
+        </div>
+
+        <!-- Pie chart -->
+        <div class="chart-wrap">
+          <canvas id="doshaChart"></canvas>
+        </div>
+
+        <!-- Interpretation grid -->
+        <div class="interpretation-grid" id="interpGrid"></div>
+
+        <!-- Book consultation CTA -->
+        <div class="result-cta">
+          <p>
+            <strong>Get a personalised Ayurvedic treatment plan</strong>
+            Book a free consultation with Dr. Preetha Vasudavan to discuss your Dosha and receive a tailored wellness plan.
+          </p>
+          <a href="book_consultation.html">Book Free Consultation →</a>
+        </div>
+      </div>
+
+    </div><!-- /test-area -->
+  </div><!-- /page-body -->
+
+  <!-- FOOTER -->
+  <!-- FOOTER -->
+<footer style="background:#2d5a27;color:#b8d9b2;padding:48px 24px 24px;">
+  <div style="max-width:1200px;margin:auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:36px;">
+    <div>
+      <h3 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.3rem;margin-bottom:12px;">Chakradev Ayurveda</h3>
+      <p style="font-size:13px;line-height:1.8;">Your one-stop destination for authentic Ayurvedic consultations, knowledge, and products.</p>
+      <div style="margin-top:14px;display:flex;flex-direction:column;gap:6px;">
+        <a href="tel:+918825499283" style="color:#b8d9b2;font-size:13px;">📞 Call Us: +91-8825499283</a>
+        <a href="/cdn-cgi/l/email-protection#57343f363c253633322165646e17303a363e3b7934383a" style="color:#b8d9b2;font-size:13px;">✉ <span class="__cf_email__" data-cfemail="33505b5258415257564501000a73545e525a5f1d505c5e">[email&#160;protected]</span></a>
+        <a href="contact.html" style="color:#b8d9b2;font-size:13px;">💬 Send us a message</a>
+      </div>
+    </div>
+    <div>
+      <h4 style="color:#f0c96b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;">Services</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+        <li><a href="book_consultation.html" style="color:#b8d9b2;font-size:13px;">Book Consultation</a></li>
+        <li><a href="dosha-analysis.html" style="color:#b8d9b2;font-size:13px;">Dosha Analysis</a></li>
+        <li><a href="consultant.html" style="color:#b8d9b2;font-size:13px;">Our Doctors</a></li>
+        <li><a href="diet.html" style="color:#b8d9b2;font-size:13px;">Diet Plans</a></li>
+        <li><a href="e-shop.html" style="color:#b8d9b2;font-size:13px;">E-Shop</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color:#f0c96b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;">Knowledge</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+        <li><a href="blog.html" style="color:#b8d9b2;font-size:13px;">Ayurveda Blog</a></li>
+        <li><a href="dosha-analysis.html" style="color:#b8d9b2;font-size:13px;">Dosha Guide</a></li>
+        <li><a href="diet.html" style="color:#b8d9b2;font-size:13px;">Nutrition Guide</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color:#f0c96b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;">Company</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+        <li><a href="about.html" style="color:#b8d9b2;font-size:13px;">About Us</a></li>
+        <li><a href="contact.html" style="color:#b8d9b2;font-size:13px;">Contact</a></li>
+        <li><a href="login-signup.html" style="color:#b8d9b2;font-size:13px;">Patient Login</a></li>
+        <li><a href="cart.html" style="color:#b8d9b2;font-size:13px;">Cart</a></li>
+        <li><a href="privacy.html" style="color:#b8d9b2;font-size:13px;">Privacy Policy</a></li>
+        <li><a href="terms.html" style="color:#b8d9b2;font-size:13px;">Terms of Service</a></li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width:1200px;margin:auto;border-top:1px solid rgba(255,255,255,.1);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+    <p style="font-size:12px;">© 2024 Chakradev Ayurveda Pvt. Ltd. All Rights Reserved.</p>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;">
+      <a href="about.html" style="color:#7aaa74;font-size:12px;">About</a>
+      <a href="contact.html" style="color:#7aaa74;font-size:12px;">Contact</a>
+      <a href="privacy.html" style="color:#7aaa74;font-size:12px;">Privacy</a>
+      <a href="terms.html" style="color:#7aaa74;font-size:12px;">Terms</a>
+    </div>
+  </div>
+  <p style="max-width:1200px;margin:12px auto 0;font-size:11px;color:#5a8a54;line-height:1.7;"><strong>Disclaimer:</strong> Content on this website is for informational purposes only and does not constitute medical advice. Always consult a qualified Ayurvedic doctor before starting any treatment. Products are not intended to diagnose, treat, cure, or prevent any disease.</p>
+</footer>
+
+  <script>
+    /* ── PROGRESS TRACKING ── */
+    const TOTAL_Q = 32;
+    let answeredCount = 0;
+    const answered = {};
+
+    function updateProgress() {
+      answeredCount = Object.keys(answered).length;
+      document.getElementById('progress-count').textContent = answeredCount + ' / ' + TOTAL_Q;
+      document.getElementById('progress-fill').style.width = Math.round((answeredCount / TOTAL_Q) * 100) + '%';
+    }
+
+    /* ── ILLUSTRATED OPTION SELECTION ── */
+    function selectOpt(label, qNum, dosha) {
+      // Clear siblings
+      const card = document.getElementById('qcard-' + qNum);
+      card.querySelectorAll('.q-opt').forEach(function(opt) {
+        opt.classList.remove('selected-vata', 'selected-pitta', 'selected-kapha');
+      });
+      // Mark selected
+      label.classList.add('selected-' + dosha);
+      // Check the radio
+      label.querySelector('input[type="radio"]').checked = true;
+      // Mark card as answered
+      card.classList.remove('answered-vata', 'answered-pitta', 'answered-kapha');
+      card.classList.add('answered-' + dosha);
+      answered[qNum] = dosha;
+      updateProgress();
+    }
+
+    /* ── DOSHA DATA ── */
+    
+    const DOSHA_DATA = {
+      Vata: {
+        icon: '🌬',
+        sub: 'Air & Space · Creative, Light, Mobile',
+        cls: 'vata',
+        strengths: ['Creative & quick thinker', 'Enthusiastic & lively', 'Adaptable & flexible', 'Quick to learn new things'],
+        cautions: ['Prone to anxiety & worry', 'Tendency to dryness & cold', 'Irregular digestion & sleep', 'Can become scattered or restless'],
+        tips: 'Eat warm, oily, grounding foods. Maintain regular daily routines. Favour oil massage (Abhyanga). Avoid raw, cold, or dry foods.'
+      },
+      Pitta: {
+        icon: '🔥',
+        sub: 'Fire & Water · Focused, Sharp, Intense',
+        cls: 'pitta',
+        strengths: ['Sharp intellect & focus', 'Strong digestion & metabolism', 'Natural leader & achiever', 'Goal-oriented & decisive'],
+        cautions: ['Prone to anger & irritability', 'Tendency to overheat', 'Can be overly critical', 'Susceptible to skin inflammation'],
+        tips: 'Favour cooling, sweet, and bitter foods. Avoid spicy, oily, and fried foods. Spend time in nature. Practice relaxation and meditation.'
+      },
+      Kapha: {
+        icon: '🌍',
+        sub: 'Earth & Water · Stable, Calm, Nurturing',
+        cls: 'kapha',
+        strengths: ['Calm, steady & compassionate', 'Strong immunity & endurance', 'Loyal and reliable', 'Good long-term memory'],
+        cautions: ['Prone to sluggishness & lethargy', 'Tendency to weight gain', 'Can become stubborn or possessive', 'Slow digestion & congestion'],
+        tips: 'Favour light, warm, and spicy foods. Exercise regularly and vigorously. Avoid heavy, cold, or sweet foods. Vary your routine to stay stimulated.'
+      }
+    };
+
+    /* ── CHART INSTANCE ── */
+    let doshaChart = null;
+
+    /* ── CALCULATE ── */
+    document.getElementById('calculateBtn').addEventListener('click', () => {
+      const radios = document.querySelectorAll('input[type="radio"]:checked');
+      let vata = 0, pitta = 0, kapha = 0;
+
+      radios.forEach(r => {
+        const d = r.getAttribute('data-dosha');
+        if (d === 'vata')  vata++;
+        if (d === 'pitta') pitta++;
+        if (d === 'kapha') kapha++;
+      });
+
+      const total = vata + pitta + kapha;
+      if (total < 5) {
+        alert('Please answer at least 5 questions before calculating your Dosha.');
+        return;
+      }
+
+      const vPct  = Math.round((vata  / total) * 100);
+      const piPct = Math.round((pitta / total) * 100);
+      const kPct  = Math.round((kapha / total) * 100);
+
+      /* Score bars */
+      document.getElementById('vataPct').textContent  = vPct  + '%';
+      document.getElementById('pittaPct').textContent = piPct + '%';
+      document.getElementById('kaphaPct').textContent = kPct  + '%';
+      setTimeout(() => {
+        document.getElementById('vataBar').style.width  = vPct  + '%';
+        document.getElementById('pittaBar').style.width = piPct + '%';
+        document.getElementById('kaphaBar').style.width = kPct  + '%';
+      }, 60);
+
+      /* Dominant */
+      const max = Math.max(vata, pitta, kapha);
+      const dominants = [];
+      if (vata  === max) dominants.push('Vata');
+      if (pitta === max) dominants.push('Pitta');
+      if (kapha === max) dominants.push('Kapha');
+      const primary = dominants[0];
+      const data = DOSHA_DATA[primary];
+
+      const banner = document.getElementById('dominantBanner');
+      banner.className = 'dominant-banner ' + data.cls;
+      document.getElementById('domIcon').textContent = data.icon;
+      document.getElementById('domName').textContent = dominants.join(' + ');
+      document.getElementById('domSub').textContent  = data.sub;
+
+      /* Interpretation grid */
+      const grid = document.getElementById('interpGrid');
+      grid.innerHTML =
+        '<div class="interp-item positive"><h5>✅ Your Strengths</h5><ul>' +
+        data.strengths.map(s => '<li>' + s + '</li>').join('') +
+        '</ul></div>' +
+        '<div class="interp-item caution"><h5>⚠ Watch Out For</h5><ul>' +
+        data.cautions.map(c => '<li>' + c + '</li>').join('') +
+        '</ul></div>' +
+        '<div class="interp-item positive" style="grid-column:1/-1;border-left-color:var(--gold);">' +
+        '<h5>🌿 Ayurvedic Tips for Your Dosha</h5>' +
+        '<p style="font-size:13px;color:var(--text-mid);line-height:1.7;">' + data.tips + '</p></div>';
+
+      /* Pie chart */
+      const ctx = document.getElementById('doshaChart').getContext('2d');
+      if (doshaChart) doshaChart.destroy();
+      doshaChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Vata', 'Pitta', 'Kapha'],
+          datasets: [{ data: [vata, pitta, kapha], backgroundColor: ['#7c5cbf','#c05621','#2f855a'], borderWidth: 3, borderColor: '#fdf6e3' }]
+        },
+        options: {
+          responsive: true,
+          cutout: '60%',
+          plugins: { legend: { position: 'bottom', labels: { padding: 16, font: { family: "'Lato', sans-serif", size: 13 } } } }
+        }
+      });
+
+      /* Show results */
+      const card = document.getElementById('resultsCard');
+      card.classList.add('visible');
+      setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    });
+
+    /* ── RESET ── */
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+      document.querySelectorAll('.q-opt').forEach(o => {
+        o.classList.remove('selected-vata', 'selected-pitta', 'selected-kapha');
+      });
+      document.querySelectorAll('.q-card').forEach(c => {
+        c.classList.remove('answered-vata', 'answered-pitta', 'answered-kapha');
+      });
+      Object.keys(answered).forEach(k => delete answered[k]);
+      document.getElementById('progress-count').textContent = '0 / ' + TOTAL_Q;
+      document.getElementById('progress-fill').style.width = '0%';
+      ['vataBar','pittaBar','kaphaBar'].forEach(id => document.getElementById(id).style.width = '0%');
+      document.getElementById('resultsCard').classList.remove('visible');
+      if (doshaChart) { doshaChart.destroy(); doshaChart = null; }
+    });
+
+    /* ── EMAIL SHARE ── */
+    function sendEmailResults() {
+      const name     = document.getElementById('nameInput').value || 'User';
+      const email    = document.getElementById('emailInput').value;
+      const domName  = document.getElementById('domName').textContent || 'Not calculated yet';
+      const vPct     = document.getElementById('vataPct').textContent;
+      const piPct    = document.getElementById('pittaPct').textContent;
+      const kPct     = document.getElementById('kaphaPct').textContent;
+
+      if (!email) { alert('Please enter your email address.'); return; }
+
+      const subject = 'My Ayurveda Dosha Results — Chakradev Ayurveda';
+      const body =
+        'Ayurveda Dosha Analysis Results\n\n' +
+        'Name: ' + name + '\n\n' +
+        'Scores:\n' +
+        '  Vata:  ' + vPct + '\n' +
+        '  Pitta: ' + piPct + '\n' +
+        '  Kapha: ' + kPct + '\n\n' +
+        'Dominant Dosha: ' + domName + '\n\n' +
+        'Book a free consultation: https://chakradevayurveda.familyds.com/book_consultation.html\n\n' +
+        'Shared from Chakradev Ayurveda';
+
+      window.location.href = 'mailto:' + email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    }
+    window.sendEmailResults = sendEmailResults;
+
+    /* ── WHATSAPP SHARE ── */
+
+    /* ── WHATSAPP SHARE ── */
+    document.getElementById('whatsappBtn').addEventListener('click', () => {
+      const name    = document.getElementById('nameInput').value || 'User';
+      const phone   = document.getElementById('whatsappInput').value.replace(/\D/g, '');
+      const domName = document.getElementById('domName').textContent || 'Not calculated yet';
+      const vPct    = document.getElementById('vataPct').textContent;
+      const piPct   = document.getElementById('pittaPct').textContent;
+      const kPct    = document.getElementById('kaphaPct').textContent;
+
+      if (!phone) { alert('Please enter your WhatsApp number.'); return; }
+
+      const msg =
+        '🌿 *My Ayurveda Dosha Results — Chakradev Ayurveda*\n\n' +
+        'Name: ' + name + '\n\n' +
+        '📊 *Scores:*\n' +
+        '🌬 Vata:  ' + vPct + '\n' +
+        '🔥 Pitta: ' + piPct + '\n' +
+        '🌍 Kapha: ' + kPct + '\n\n' +
+        '✨ *Dominant Dosha: ' + domName + '*\n\n' +
+        '📅 Book a free consultation:\nhttps://chakradevayurveda.familyds.com/book_consultation.html\n\n' +
+        '_Shared from Chakradev Ayurveda_';
+
+      window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(msg), '_blank');
+    });
+
+  </script>
+
+<!-- WHATSAPP FLOAT -->
+<div style="position:fixed;bottom:28px;right:28px;z-index:200;">
+  <a href="https://wa.me/918825499283?text=Hi%20Chakradev%20Ayurveda%2C%20I%27d%20like%20to%20book%20a%20free%20consultation." target="_blank" rel="noopener"
+     style="display:flex;align-items:center;gap:10px;background:#25D366;color:#fff;padding:12px 20px;border-radius:50px;font-size:14px;font-weight:700;box-shadow:0 4px 20px rgba(0,0,0,.2);text-decoration:none;">
+    <span style="font-size:22px;">💬</span>
+    <span id="wa-dosha-label" style="display:none;">WhatsApp Us</span>
+  </a>
+</div>
+<style>@media(min-width:640px){#wa-dosha-label{display:block!important}}</style>
+
+</body>
 </html>
